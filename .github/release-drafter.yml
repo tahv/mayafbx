@@ -1,0 +1,6 @@
+name-template: '$NEXT_MINOR_VERSION'
+tag-template: '$RESOLVED_VERSION'
+template: |
+  ## Changes
+
+  $CHANGES

@@ -1,0 +1,27 @@
+name: Tests Runner
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run_tests:
+    runs-on: ubuntu-latest
+    container:
+      image: mottosso/maya:2020
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Get Pip
+        run: wget https://bootstrap.pypa.io/2.7/get-pip.py && mayapy get-pip.py
+
+      - name: Install Dependencies
+        run: mayapy -m pip install pytest
+
+      - name: Run Tests
+        run: mayapy -m pytest -vv

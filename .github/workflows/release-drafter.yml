@@ -1,0 +1,31 @@
+name: Release Drafter
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update_release_draft:
+
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Build Project
+        run: zip -r mayafbx.zip mayafbx/
+
+      - name: Draft Release
+        id: draft_release
+        uses: release-drafter/release-drafter@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Release Asset
+        uses: shogo82148/actions-upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.draft_release.outputs.upload_url }}
+          asset_path: mayafbx.zip
+          overwrite: true
