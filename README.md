@@ -7,10 +7,49 @@
 
 Python wrapper for the FBX plugin of Maya.
 
-FBX options as objects for importing and exporting FBX files.
+Visit the [github repo](https://github.com/tahv/mayafbx/) for source code
+and the [command reference](https://tahv.github.io/mayafbx/) for documentation.
 
-Visit the [github repo](https://github.com/tahv/mayafbx/) for sources
-and [command reference](https://tahv.github.io/mayafbx/) for more documentation.
+Before:
+
+```python
+from maya import mel
+
+mel.eval("FBXResetExport")  # Reset options.
+mel.eval("FBXProperty Export|IncludeGrp|Animation -v true")
+mel.eval("FBXProperty Export|IncludeGrp|Animation|ExtraGrp|RemoveSingleKey -v true")
+mel.eval("FBXProperty Export|IncludeGrp|CameraGrp|Camera -v false")
+
+mel.eval('FBXExport -f "C:/outfile.fbx" -s')  # '-s' for selected.
+```
+
+After:
+
+```python
+from mayafbx import FbxExportOptions, export_fbx
+
+options = FbxExportOptions()
+options.animation = True
+options.remove_single_key = True
+options.cameras = True
+options.selected = True
+
+export_fbx("C:/outfile.fbx", options)
+```
+
+Alternative:
+
+```python
+from mayafbx import FbxExportOptions, export_fbx
+
+options = FbxExportOptions(
+    animation=True,
+    remove_single_key=True,
+    cameras=True,
+    selected=True)
+
+export_fbx("C:/outfile.fbx", options)
+```
 
 ## Installation
 
@@ -18,9 +57,9 @@ and [command reference](https://tahv.github.io/mayafbx/) for more documentation.
 
 - Or use pip:
 
-    ```bash
-    pip install git+git://github.com/tahv/mayafbx#egg=mayafbx
-    ```
+```bash
+pip install git+git://github.com/tahv/mayafbx#egg=mayafbx
+```
 
 ## Requirements
 
@@ -67,10 +106,9 @@ import_fbx(filepath, options)
 
 Pull requests are welcome. Please make sure to update tests as appropriate.
 
-The main purpose of this package is to have clear documentation, and I didn't
-had the opportunity to try them all on different softwares. Don't hesitate
-to improve the docstring of the properties if you have a better example.
+The main purpose of this package is to have clear documentation, and I did not
+had the opportunity to try all export on different softwares, so don't hesitate
+to improve the docstrings if you have a better example.
 
 The ``FbxExportOptions`` and ``FbxImportOptions`` are not feature complete yet,
-mainly because I couldn't find good documentation for some of the command, so I
-did not include them.
+mainly because I couldn't find good documentation for some of the commands.
