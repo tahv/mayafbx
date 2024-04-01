@@ -1,0 +1,114 @@
+#:schema https://json.schemastore.org/pyproject.json
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mayafbx"
+description = "Python wrapper for Autodesk Maya FBX plugin"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.7"
+keywords = ["maya", "fbx"]
+authors = [{ name = "Thibaud Gambier" }]
+dynamic = ["version"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: CPython",
+]
+
+[project.urls]
+Github = "https://github.com/tahv/mayafbx"
+# Changelog = 
+# Documentation = 
+
+[project.optional-dependencies]
+tests = ["pytest", "coverage"]
+style = ["ruff"]
+mypy = ["mypy", "pytest"]
+docs = ["sphinx", "furo", "myst-parser"]
+dev = ["pyforce-p4[tests,style,mypy,docs]", "sphinx-autobuild"]
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules"
+testpaths = ["src", "tests"]
+
+[tool.coverage.run]
+source = ["src/"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+exclude_lines = [
+  "# pragma: no cover",
+  "if (False|0|TYPE_CHECKING):",
+  "if __name__ == ['\"]__main__['\"]:",
+]
+
+[tool.coverage.paths]
+source = ["src/", "*/src"]
+
+[tool.mypy]
+plugins = ["pydantic.mypy"]
+disallow_untyped_defs = true
+check_untyped_defs = true
+disallow_any_unimported = true
+no_implicit_optional = true
+warn_return_any = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+show_error_codes = true
+# disallow_any_generics = true
+# implicit_reexport = false
+
+[tool.ruff]
+line-length = 88
+select = ["ALL"]
+ignore = [
+  # ANN101: Missing type annotation for `self` in method
+  "ANN101",
+  # ANN102: Missing type annotation for `cls` in classmethod
+  "ANN102",
+  # D105: Missing docstring in magic method
+  "D105",
+  # D107: Missing docstring in `__init__`
+  "D107",
+  # TD002: Missing author in TODO
+  "TD002",
+  # TD003: Missing issue link on the line following this TODO
+  "TD003",
+]
+unfixable = [
+  # ERA001: Found commented-out code
+  "ERA001",
+  # F401: Unused import
+  "F401",
+]
+
+# [tool.ruff.isort]
+# known-first-party = ["_"]
+
+[tool.ruff.flake8-tidy-imports]
+ban-relative-imports = "all"
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.per-file-ignores]
+"tests/**/*" = [
+  # PLR2004: Magic value used in comparison, consider replacing with a constant variable
+  "PLR2004",
+  # S101: Use of assert detected
+  "S101",
+]
