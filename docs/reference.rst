@@ -21,3 +21,5 @@ Official Maya 2025 Documentation:
    :members:
    :member-order: bysource
    :show-inheritance:
+
+.. autoenum:: mayafbx.NurbsSurfaceAs

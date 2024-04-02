@@ -24,10 +24,11 @@ version = ".".join(release.split(".", 2)[0:2])
 extensions = [
     "myst_parser",               # markdown
     "sphinx.ext.autodoc",        # docstring
-    # "enum_tools.autoenum",     # docstring, enum compatibility
+    "enum_tools.autoenum",       # docstring, enums
     "sphinx.ext.napoleon",       # dosctring, google style
     "sphinx.ext.intersphinx",    # cross-projects references
     "autodoc_fbxpropertyfield",  # docstring, FbxPropertyField
+    "autoenum_patch",            # docstring, patching 'EnumMemberDocumenter'
 ]
 # fmt: on
 
@@ -43,7 +44,6 @@ intersphinx_mapping = {
 }
 
 autodoc_mock_imports = ["maya"]
-autodoc_class_signature = "separated"
 autodoc_default_options = {
     "exclude-members": "__new__",
 }

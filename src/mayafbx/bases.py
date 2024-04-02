@@ -3,6 +3,7 @@ from __future__ import annotations
 from contextlib import contextmanager
 from typing import Callable, Generic, Iterator, TypeVar, cast, overload
 
+from mayafbx.enums import StrEnum
 from mayafbx.utils import run_mel_command
 
 __all__ = [
@@ -10,11 +11,11 @@ __all__ = [
     "FbxOptions",
 ]
 
-T = TypeVar("T", bool, str, float, int)
+T = TypeVar("T", bool, str, float, int, StrEnum)
 
 
 class FbxProperty(Generic[T]):
-    """Wrapper of a FbxProperty command."""
+    """Wrapper of a ``FBXProperty`` mel command."""
 
     def __init__(
         self,

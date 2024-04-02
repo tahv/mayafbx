@@ -1,4 +1,5 @@
 from mayafbx.bases import FbxOptions, FbxPropertyField
+from mayafbx.enums import NurbsSurfaceAs
 
 __all__ = [
     "FbxExportOptions",
@@ -64,14 +65,11 @@ class FbxExportOptions(FbxOptions):
     Default to `False`.
 
     Note:
-        Your geometry must have UV information.
-
-    Note:
-        There is a known FBX limitation where exported binormal and/or tangent 
-        information does not appear, even if you activate this option.
-
-        This option only works on meshes that have only triangle polygons,
-        so you may need to `.triangulate` the mesh.
+        - Your geometry must have UV information.
+        - There is a known FBX limitation where exported binormal and/or tangent 
+          information does not appear, even if you activate this option.
+        - This option only works on meshes that have only triangle polygons,
+          so you may need to `triangulate` the mesh.
 
     Mel Command:
         ``FBXExportTangents``
@@ -137,4 +135,86 @@ class FbxExportOptions(FbxOptions):
 
     .. _Blind data:
         https://help.autodesk.com/view/MAYAUL/2025/ENU/?guid=GUID-6B2E2B87-C990-416F-B772-D0CED101F5E6
+    """
+
+    convert_to_null = FbxPropertyField(
+        command="FBXProperty Export|IncludeGrp|Geometry|AnimationOnly",
+        type=bool,
+        default=False,
+    )
+    """Convert all geometry into locators (dummy objects).
+
+    This option is often used for animation only files.
+    It creates a smaller file size,
+    and is supported by FBX Importer when you import it into the original scene.
+
+    Default to `False`.
+
+    Note:
+        - If you import the file into the original scene,
+          the plug-in only imports animation onto the original geometries,
+          and does not add incoming Nulls to the existing scene.
+        - If you import the file into a new scene,
+          the plug-in imports the Nulls with the animation applied.
+
+    Mel Command:
+        ``FBXExportAnimationOnly``
+    """
+
+    preserve_instances = FbxPropertyField(
+        command="FBXProperty Export|IncludeGrp|Geometry|Instances",
+        type=bool,
+        default=False,
+    )
+    """Preserve Maya instances in the FBX export
+
+    If you disable this option, instances are converted to objects.
+
+    Default to `False`.
+
+    Note:
+        The Maya FBX plug-in does not support the duplication of input connections.
+        The use of Instances is supported but duplicating the inputs is not.
+
+    Mel Command:
+        ``FBXExportInstances``
+    """
+
+    # TODO
+    # referenced_asset_content = FbxPropertyField(
+    #     command="FBXProperty Export|IncludeGrp|Geometry|ContainerObjects",
+    #     # "FBXExportReferencedContainersContent" if VERSION < 2014 else "FBXExportReferencedAssetsContent"
+    #     type=bool,
+    #     default=True,
+    # )
+
+    triangulate = FbxPropertyField(
+        command="FBXProperty Export|IncludeGrp|Geometry|Triangulate",
+        type=bool,
+        default=False,
+    )
+    """Tessellates exported polygon geometry.
+
+    Default to `False`.
+
+    Note:
+        This option affects Polygon Meshes, not NURBS.
+
+    Mel Command:
+        ``FBXExportTriangulate``
+    """
+
+    convert_nurbs_surface_as = FbxPropertyField(
+        command="FBXProperty Export|IncludeGrp|Geometry|GeometryNurbsSurfaceAs",
+        type=NurbsSurfaceAs,
+        default=NurbsSurfaceAs.NURBS,
+    )
+    """Convert NURBS geometry into a mesh during the export process.
+
+    Use this option if you are exporting to a software that does not support
+    NURBS.
+
+    Default to `.NurbsSurfaceAs.NURBS`.
+
+    See `.NurbsSurfaceAs` for possible values.
     """

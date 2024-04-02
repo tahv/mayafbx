@@ -1,5 +1,6 @@
 """Autodoc extension for documenting `FbxPropertyField` descriptor."""
 
+from enum import Enum
 from typing import Any, cast
 
 from sphinx.application import Sphinx
@@ -38,8 +39,11 @@ class FbxPropertyFieldDocumenter(AttributeDocumenter):
         default = fbx_prop.default
         typename = fbx_prop._type.__name__
 
+        if isinstance(default, Enum):
+            default = default.value
+
         self.add_line(f"   :type: {typename}", source_name)
-        self.add_line(f"   :value: {default}", source_name)
+        self.add_line(f"   :value: {default!r}", source_name)
 
 
 def setup(app: Sphinx) -> None:
