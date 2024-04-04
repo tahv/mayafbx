@@ -282,3 +282,50 @@ class FbxExportOptions(FbxOptions):
     Mel Command:
         ``FBXExportQuaternion``
     """
+
+    bake_complexe_animation = FbxPropertyField(
+        command="FBXProperty Export|IncludeGrp|Animation|BakeComplexAnimation",
+        type=bool,
+        default=False,
+    )
+    """Bakes (plot) all **unsupported** constraints into animation curves.
+
+    You can then import these curves into another application
+    that does not support these Maya constraints.
+
+    Note:
+        - This option alone won't bake supported animated elements, for a full
+          bake you must also set `bake_resample_all` to `True`.
+        - By default the plug-in takes the Start and End values automatically
+          from Timeline. You can manually set `bake_animation_start`,
+          `bake_animation_end` and `bake_animation_step`
+          to bake a specific section of time.
+
+    Default to `False`.
+
+    Require `animation`.
+
+    Mel Command:
+        ``FBXExportBakeComplexAnimation``
+    """
+
+    # TODO: Is `bake_resample_all` automatically set to True when `bake_complexe_animation` is set to True ?
+    bake_resample_all = FbxPropertyField(
+        command="FBXProperty Export|IncludeGrp|Animation|BakeComplexAnimation|ResampleAnimationCurves",
+        type=bool,
+        default=False,
+    )
+    """Bake even the **supported** animated elements.
+
+    This is unlike `bake_complexe_animation`
+    which selectively bakes unsupported elements only.
+
+    Default to `False`.
+
+    Require `animation`.
+
+    See `constraints` for a list of supported constraints elements.
+
+    Mel Command:
+        ``FBXExportBakeResampleAnimation``
+    """
