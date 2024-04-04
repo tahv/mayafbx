@@ -28,7 +28,6 @@ extensions = [
     "sphinx.ext.napoleon",       # dosctring, google style
     "sphinx.ext.intersphinx",    # cross-projects references
     "autodoc_fbxpropertyfield",  # docstring, FbxPropertyField
-    "autoenum_patch",            # docstring, patching 'EnumMemberDocumenter'
 ]
 # fmt: on
 
@@ -43,6 +42,7 @@ intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
 }
 
+autodoc_class_signature = "separated"
 autodoc_mock_imports = ["maya"]
 autodoc_default_options = {
     "exclude-members": "__new__",

@@ -1,5 +1,5 @@
 from mayafbx.bases import FbxOptions, FbxPropertyField
-from mayafbx.enums import NurbsSurfaceAs
+from mayafbx.enums import NurbsSurfaceAs, QuaternionInterpolation
 
 __all__ = [
     "FbxExportOptions",
@@ -214,7 +214,71 @@ class FbxExportOptions(FbxOptions):
     Use this option if you are exporting to a software that does not support
     NURBS.
 
-    Default to `.NurbsSurfaceAs.NURBS`.
+    Default to `NurbsSurfaceAs.NURBS`.
 
-    See `.NurbsSurfaceAs` for possible values.
+    See `NurbsSurfaceAs` for possible values.
+    """
+
+    animation = FbxPropertyField(
+        command="FBXProperty Export|IncludeGrp|Animation",
+        type=bool,
+        default=True,
+    )
+    """Export animation.
+
+    Default to `True`.
+    """
+
+    use_scene_name = FbxPropertyField(
+        command="FBXProperty Export|IncludeGrp|Animation|ExtraGrp|UseSceneName",
+        type=bool,
+        default=False,
+    )
+    """Save the scene animation using the scene name as take name.
+
+    If `False`, the plug-in saves Maya scene animation as ``Take 001``.
+
+    Default to `False`.
+
+    Require `animation`.
+
+    Mel Command:
+        ``FBXExportUseSceneName``
+    """
+
+    remove_single_key = FbxPropertyField(
+        command="FBXProperty Export|IncludeGrp|Animation|ExtraGrp|RemoveSingleKey",
+        type=bool,
+        default=False,
+    )
+    """Removes keys from objects on export if the animation has only one key.
+
+    When two or more keys exist in the file, the keys are exported.
+
+    Note:
+        Sometimes, even though objects in a file contain no animation,
+        they have a single key assigned to them for use as a locator.
+        If you do not need these single keys in your file,
+        you can reduce the file size by activating this option to discard them.
+
+    Default to `False`.
+
+    Require `animation`.
+    """
+
+    quaternion_interpolation = FbxPropertyField(
+        command="FBXProperty Export|IncludeGrp|Animation|ExtraGrp|Quaternion",
+        type=QuaternionInterpolation,
+        default=QuaternionInterpolation.RESAMPLE_AS_EULER,
+    )
+    """How to export quaternion interpolations from the host application.
+
+    Default to `QuaternionInterpolation.kResampleAsEuler`.
+
+    See `QuaternionInterpolation` for possible values.
+
+    Require `animation`.
+
+    Mel Command:
+        ``FBXExportQuaternion``
     """

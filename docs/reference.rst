@@ -9,17 +9,30 @@ Official Maya 2025 Documentation:
     - `FBX Export MEL commands`_
     - `FBX Export options`_
 
-
-.. autoclass:: mayafbx.FbxProperty
-    :members:
-    :inherited-members:
-
-.. autoclass:: mayafbx.FbxOptions
-    :members:
+Export
+------
 
 .. autoclass:: mayafbx.FbxExportOptions
    :members:
    :member-order: bysource
    :show-inheritance:
 
-.. autoenum:: mayafbx.NurbsSurfaceAs
+Bases
+-----
+
+.. autoclass:: mayafbx.FbxProperty
+   :members:
+   :inherited-members:
+
+.. autoclass:: mayafbx.FbxOptions
+    :members:
+
+Enums
+-----
+
+.. autoclass:: mayafbx.NurbsSurfaceAs
+   :members:
+   :undoc-members:
+
+.. autoclass:: mayafbx.QuaternionInterpolation
+   :members:
