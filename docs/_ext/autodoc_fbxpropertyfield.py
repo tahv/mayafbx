@@ -36,16 +36,21 @@ class FbxPropertyFieldDocumenter(AttributeDocumenter):
 
         source_name = self.get_sourcename()
         fbx_prop = cast(FbxPropertyField, self.object).fbx_property
-        default = fbx_prop.default
+
         typename = fbx_prop._type.__name__
-
-        if isinstance(default, Enum):
-            default = f"{default.__class__.__name__}.{default.name}"
-        else:
-            default = repr(default)
-
         self.add_line(f"   :type: {typename}", source_name)
-        self.add_line(f"   :value: {default}", source_name)
+
+        try:
+            default = fbx_prop.default
+        except Exception:
+            # TODO: log
+            pass
+        else:
+            if isinstance(default, Enum):
+                default = f"{default.__class__.__name__}.{default.name}"
+            else:
+                default = repr(default)
+            self.add_line(f"   :value: {default}", source_name)
 
 
 def setup(app: Sphinx) -> None:

@@ -7,7 +7,7 @@ import re
 from typing import TYPE_CHECKING
 
 from maya import mel
-from maya.api import OpenMaya
+from maya.api import OpenMaya, OpenMayaAnim
 
 from mayafbx.exceptions import MelEvalError
 
@@ -37,6 +37,16 @@ def run_mel_command(command: str) -> object:
         return mel.eval(command)
     except RuntimeError as exception:
         raise MelEvalError(command) from exception
+
+
+def get_anim_control_start_time() -> int:
+    """Return Animation Control start time."""
+    return int(OpenMayaAnim.MAnimControl.animationStartTime().value)
+
+
+def get_anim_control_end_time() -> int:
+    """Return Animation Control end time."""
+    return int(OpenMayaAnim.MAnimControl.animationEndTime().value)
 
 
 def collect_fbx_properties() -> list[FbxPropDict]:

@@ -9,6 +9,7 @@ from mayafbx.utils import run_mel_command
 __all__ = [
     "FbxProperty",
     "FbxOptions",
+    "FbxPropertyField",
 ]
 
 T = TypeVar("T", bool, str, float, int, StrEnum)
@@ -60,9 +61,11 @@ class FbxProperty(Generic[T]):
 class FbxPropertyField(Generic[T]):
     """Access a value for a `FbxProperty` on a class like a python `property`."""
 
+    # TODO: example
     def __init__(
         self,
         command: str,
+        *,
         type: type[T],  # noqa: A002
         default: T | Callable[[], T],
     ) -> None:
@@ -92,7 +95,23 @@ class FbxPropertyField(Generic[T]):
 
 
 class FbxOptions:
-    """Base class for defining and manipulating a set of `FbxProperty`."""
+    """Base class for declaring and manipulating a collection of `FbxProperty`.
+
+    Example::
+
+        import mayafbx
+
+        class MyFbxOptionClass(mayafbx.FbxOptions):
+
+            triangulate = mayafbx.FbxPropertyField(
+                "FBXProperty Export|IncludeGrp|Geometry|Triangulate",
+                default=False,
+                type=bool,
+            )
+
+        options = MyFbxOptions()
+        options.triangulate = True
+    """
 
     @classmethod
     def from_scene(cls) -> FbxOptions:

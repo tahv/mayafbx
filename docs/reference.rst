@@ -1,3 +1,5 @@
+:tocdepth: 3
+
 API Reference
 =============
 
@@ -12,20 +14,28 @@ Official Maya 2025 Documentation:
 Export
 ------
 
+.. autofunction:: mayafbx.export_fbx
+
 .. autoclass:: mayafbx.FbxExportOptions
    :members:
+   :undoc-members:
    :member-order: bysource
    :show-inheritance:
 
 Bases
 -----
 
+.. autoclass:: mayafbx.FbxOptions
+   :members:
+   :undoc-members:
+
 .. autoclass:: mayafbx.FbxProperty
    :members:
-   :inherited-members:
+   :undoc-members:
 
-.. autoclass:: mayafbx.FbxOptions
-    :members:
+.. autoclass:: mayafbx.FbxPropertyField
+   :members:
+   :undoc-members:
 
 Enums
 -----
@@ -36,3 +46,4 @@ Enums
 
 .. autoclass:: mayafbx.QuaternionInterpolation
    :members:
+   :undoc-members:
