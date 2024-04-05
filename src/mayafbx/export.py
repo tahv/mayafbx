@@ -226,7 +226,6 @@ class FbxExportOptions(FbxOptions):
         ``FBXExportInstances``
     """
 
-    # TODO: documentation
     referenced_asset_content = FbxPropertyField(
         "FBXProperty Export|IncludeGrp|Geometry|ContainerObjects",
         type=bool,
@@ -853,10 +852,10 @@ class FbxExportOptions(FbxOptions):
         ``FBXExportIncludeChildren``
     """
 
-    selected_input_connections = FbxPropertyField(
+    input_connections = FbxPropertyField(
         "FBXProperty Export|IncludeGrp|InputConnectionsGrp|InputConnections",
-        default=True,
         type=bool,
+        default=True,
     )
     """Include all related input connections when exporting selection.
 
