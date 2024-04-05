@@ -1,3 +1,5 @@
+"""Export FBX."""
+
 from __future__ import annotations
 
 import os
@@ -5,7 +7,15 @@ import os
 from maya.api import OpenMaya
 
 from mayafbx.bases import FbxOptions, FbxPropertyField, applied_options
-from mayafbx.enums import NurbsSurfaceAs, QuaternionInterpolation
+from mayafbx.enums import (
+    AxisConversionMethod,
+    ConvertUnit,
+    FileFormat,
+    FileVersion,
+    NurbsSurfaceAs,
+    QuaternionInterpolation,
+    UpAxis,
+)
 from mayafbx.utils import (
     get_anim_control_end_time,
     get_anim_control_start_time,
@@ -49,7 +59,7 @@ def export_fbx(
     with applied_options(options):
         run_mel_command(" ".join(command))
 
-    logger.info("Exported %s to '%s'", "selection" if selection else "scene", filename)
+    logger.info("Exported %s to '%s'", "selection" if selection else "scene", path)
 
 
 class FbxExportOptions(FbxOptions):
@@ -341,7 +351,7 @@ class FbxExportOptions(FbxOptions):
     )
     """How to export quaternion interpolations from the host application.
 
-    Default to `QuaternionInterpolation.kResampleAsEuler`.
+    Default to `QuaternionInterpolation.RESAMPLE_AS_EULER`.
 
     See `QuaternionInterpolation` for possible values.
 
@@ -575,7 +585,7 @@ class FbxExportOptions(FbxOptions):
     )
     """Threshold for rotation curves in generic units.
 
-    Default to `0.009`.
+    Default to ``0.009``.
 
     Require `constant_key_reducer`.
     """
@@ -587,7 +597,7 @@ class FbxExportOptions(FbxOptions):
     )
     """Threshold for scaling curves in generic units.
 
-    Default to `0.004`.
+    Default to ``0.004``.
 
     Require `constant_key_reducer`.
     """
@@ -601,7 +611,7 @@ class FbxExportOptions(FbxOptions):
 
     Other includes transforms like Blend Shapes and custom attribute curves.
 
-    Default to `0.009`.
+    Default to ``0.009``.
 
     Require `constant_key_reducer`.
     """
@@ -866,3 +876,171 @@ class FbxExportOptions(FbxOptions):
     Mel Command:
         ``FBXExportInputConnections``
     """
+
+    automatic_units = FbxPropertyField(
+        "FBXProperty Export|AdvOptGrp|UnitsGrp|DynamicScaleConversion",
+        default=True,
+        type=bool,
+    )
+    """Automatically set the units of the exported file to match the units of the scene.
+
+    If `True`, the plug-in applies no conversion (scale factor of 1.0).
+
+    If you apply this option, the `convert_units_to` option won't have any effect.
+
+    Default to `True`.
+    """
+
+    # TODO: "FBXExportScaleFactor" (float) is only queryable, create get_export_scale_factor ?
+
+    convert_units_to = FbxPropertyField(
+        # "FBXProperty Export|AdvOptGrp|UnitsGrp|UnitsSelector",
+        "FBXExportConvertUnitString",
+        type=ConvertUnit,
+        default=ConvertUnit.from_scene,
+    )
+    """Specify the units to which you want to convert your exported scene.
+
+    This settings affects the **Scale Factor** value applied to the exported data.
+
+    Default to the **Maya System Units** as set in
+    ``Window > Settings/Preferences > Preferences > Settings``.
+
+    Only evaluated if `automatic_units` is `False`.
+
+    See `ConvertUnit` for possible values.
+
+    Mel Command:
+        ``FBXExportConvertUnitString``
+    """
+
+    up_axis = FbxPropertyField(
+        "FBXProperty Export|AdvOptGrp|AxisConvGrp|UpAxis",
+        type=UpAxis,
+        default=UpAxis.from_scene,
+    )
+    """Up axis conversion.
+
+    Default to the the **Scene Up Axis** as set in
+    ``Window > Settings/Preferences > Preferences > Settings``.
+
+    See `UpAxis` for possible values.
+
+    Note:
+        - Only applies axis conversion to the root elements of the scene.
+        - If you have animation on a root object that must be converted on
+          export, these animation curves are resampled to apply the proper axis
+          conversion.
+        - To avoid resampling these animation curves, make sure to add a Root
+          Node (dummy object) as a parent of the animated object in your scene,
+          before you export to FBX.
+
+    Mel Command:
+        ``FBXExportUpAxis``
+    """
+
+    axis_conversion_method = FbxPropertyField(
+        "FBXExportAxisConversionMethod",
+        type=AxisConversionMethod,
+        default=AxisConversionMethod.CONVERT_ANIMATION,
+    )
+    """Set an export conversion method.
+
+    Default to `AxisConversionMethod.CONVERT_ANIMATION`.
+
+    See `AxisConversionMethod` for possible values.
+
+    Mel Command:
+        ``FBXExportAxisConversionMethod``
+    """
+
+    show_warning_ui = FbxPropertyField(
+        "FBXProperty Export|AdvOptGrp|UI|ShowWarningsManager",
+        default=True,
+        type=bool,
+    )
+    """Show the Warning Manager dialog if something unexpected occurs during the export.
+
+    Default to `True`.
+    """
+
+    generate_log = FbxPropertyField(
+        "FBXProperty Export|AdvOptGrp|UI|GenerateLogData",
+        default=True,
+        type=bool,
+    )
+    """Generate log data.
+
+    The Maya FBX plug-in stores log files with the FBX presets, 
+    in ``C:\\My Documents\\Maya\\FBX\\Logs``.
+
+    Default to `True`.
+
+    Mel Command:
+        ``FBXExportGenerateLog``
+    """
+
+    file_format = FbxPropertyField(
+        "FBXProperty Export|AdvOptGrp|Fbx|AsciiFbx",
+        type=FileFormat,
+        default=FileFormat.BINARY,
+    )
+    """Save file in Binary or ASCII.
+
+    Default to `FileFormat.BINARY`.
+
+    See `FileFormat` for possible values.
+
+    Mel Command:
+        ``FBXExportInAscii``, which is a `bool`.
+    """
+
+    file_version = FbxPropertyField(
+        "FBXExportFileVersion",
+        # "FBXProperty Export|AdvOptGrp|Fbx|ExportFileVersion",
+        type=str,
+        default=FileVersion.current_value,
+    )
+    """Specify an FBX version to use for export.
+
+    Change this option when you want to import your file using an older plug-in
+    version, where the source and destination plug-in versions do not match.
+
+    Default to plugin value.
+
+    See `FileVersion` for possible values. You set the value as a `str` if
+    your version is missing from the enum.
+
+    Mel Command:
+        ``FBXExportFileVersion``
+    """
+
+    # TODO "FBXExportSplitAnimationIntoTakes"
+
+
+"""
+TODO: The following properties are not implemented:
+
+Export|AdvOptGrp|FileFormat|Obj|Triangulate - Bool - True
+Export|AdvOptGrp|FileFormat|Obj|Deformation - Bool - True
+Export|AdvOptGrp|FileFormat|Motion_Base|MotionFrameCount - Integer - 0
+Export|AdvOptGrp|FileFormat|Motion_Base|MotionFromGlobalPosition - Bool - True
+Export|AdvOptGrp|FileFormat|Motion_Base|MotionFrameRate - Number - 30.000000
+Export|AdvOptGrp|FileFormat|Motion_Base|MotionGapsAsValidData - Bool - False
+Export|AdvOptGrp|FileFormat|Motion_Base|MotionC3DRealFormat - Bool - False
+Export|AdvOptGrp|FileFormat|Motion_Base|MotionASFSceneOwned - Bool - True
+Export|AdvOptGrp|FileFormat|Biovision_BVH|MotionTranslation - Bool - True
+Export|AdvOptGrp|FileFormat|Acclaim_ASF|MotionTranslation - Bool - True
+Export|AdvOptGrp|FileFormat|Acclaim_ASF|MotionFrameRateUsed - Bool - True
+Export|AdvOptGrp|FileFormat|Acclaim_ASF|MotionFrameRange - Bool - True
+Export|AdvOptGrp|FileFormat|Acclaim_ASF|MotionWriteDefaultAsBaseTR - Bool - False
+Export|AdvOptGrp|FileFormat|Acclaim_AMC|MotionTranslation - Bool - True
+Export|AdvOptGrp|FileFormat|Acclaim_AMC|MotionFrameRateUsed - Bool - True
+Export|AdvOptGrp|FileFormat|Acclaim_AMC|MotionFrameRange - Bool - True
+Export|AdvOptGrp|FileFormat|Acclaim_AMC|MotionWriteDefaultAsBaseTR - Bool - False
+Export|AdvOptGrp|Dxf|Deformation - Bool - True  - FBXExportDxfTriangulate
+Export|AdvOptGrp|Dxf|Triangulate - Bool - True  - FBXExportDxfDeformation
+Export|AdvOptGrp|Collada|Triangulate - Bool - True  - FBXExportColladaTriangulate
+Export|AdvOptGrp|Collada|SingleMatrix - Bool - True  - FBXExportColladaSingleMatrix
+Export|AdvOptGrp|Collada|FrameRate - Number - 24.000000 - FBXExportColladaFrameRate
+"""
