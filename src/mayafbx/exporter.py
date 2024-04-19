@@ -25,9 +25,14 @@ from mayafbx.utils import (
 
 __all__ = [
     "export_fbx",
+    "restore_export_preset",
     "FbxExportOptions",
 ]
 
+# TODO: investigate undocumented option: FbxExportDeleteOriginalTakeOnSplitAnimation
+# https://discourse.techart.online/t/maya-fbx-take-export/11321
+
+# TODOL investigate command: FBXExportSplitAnimationIntoTakes
 
 def export_fbx(
     filename: os.PathLike,
@@ -60,6 +65,14 @@ def export_fbx(
         run_mel_command(" ".join(command))
 
     logger.info("Exported %s to '%s'", "selection" if selection else "scene", path)
+
+
+def restore_export_preset() -> None:
+    """Restores the default values of the FBX Exporter.
+
+    Values are restored by loading the "Autodesk Media & Entertainment" export preset.
+    """
+    run_mel_command("FBXResetExport")
 
 
 class FbxExportOptions(FbxOptions):

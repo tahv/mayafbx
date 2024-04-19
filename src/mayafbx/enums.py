@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import sys
 
+from maya import mel
 from maya.api import OpenMaya
 
 if sys.version_info < (3, 11):
@@ -25,6 +26,10 @@ __all__ = [
     "AxisConversionMethod",
     "FileFormat",
     "FileVersion",
+    "MergeMode",
+    "SamplingRate",
+    "SkeletonDefinition",
+    "ForcedFileAxis",
 ]
 
 
@@ -176,3 +181,98 @@ class FileVersion(StrEnum):
         """Export version currently used by the plugin."""
         # TODO: improve to get the real default value from Maya preset.
         return mel.eval("FBXExportFileVersion -q")
+
+
+class MergeMode(StrEnum):
+    """How to process imported data.
+
+    For information on how the plugin handle naming conflict,
+    see `FBX plug-in renaming strategy`_
+
+    .. _FBX plug-in renaming strategy:
+        https://help.autodesk.com/view/MAYAUL/2025/ENU/?guid=GUID-3BA8A270-7DD9-46FF-979F-C93C469D43D1
+    """
+
+    ADD = "add"  # "Add"
+    """Adds the content of the FBX file to your scene.
+
+    - Add non-existing elements to your scene.
+    - If elements exist in your scene, they are duplicated.
+    """
+
+    MERGE = "merge"  # "Add and update animation"
+    """Adds new content and updates animation from your file to matching objects
+    in your scene.
+
+    - Any node without equivalent in the scene is created.
+    - Nodes with the same name but not of the same type are replaced.
+    - Nodes with the same name and type only have their animation replaced.
+
+    If there is animation on any object in the FBX file and the object name is
+    identical to an object in the destination application, that animation is
+    replaced.
+
+    If the object with the same name does not have animation, the new animation
+    is added.
+    """
+
+    UPDATE_ANIMATION = "exmerge"  # "Update animation"
+    """Adds the content of the FBX file to your scene but only updates existing
+    animation.
+
+    - Nodes of the same name and type have only their animation curve replaced.
+    - Any objects in the file that are not already in the scene are ignored.
+    """
+
+    UPDATE_ANIMATION_KEYED_TRANSFORMS = "exmergekeyedxforms"
+    """Existing un-keyed transforms on existing scene elements are not overwritten.
+
+    Instead, they are preserved in their current state.
+    Only Keyed animation from the imported file updates the transforms on
+    open elements in scene.
+
+    Warning:
+        If you intend to exclusively-merge hierarchies containing animation data,
+        the new animation is ignored on unkeyed import transforms that are
+        identically named.
+        If identically-named transforms have keys,
+        existing import behavior is maintained.
+    """
+
+
+class SamplingRate(StrEnum):
+    """Sampling rate sources."""
+
+    SCENE = "Scene"
+    """Use scene current working units to resample animation."""
+
+    FILE = "File"
+    """Use the sampling rate defined by the FBX file to resample animation."""
+
+    CUSTOM = "Custom"
+    """Use a custom value to resample animation."""
+
+
+class SkeletonDefinition(StrEnum):
+    """Skeleton definition that can be used on import.
+
+    The ``FBXProperty`` command does not support FullBody IK
+
+    Note:
+        The command ``FBXImportSkeletonType`` also support FullBody Ik but
+        running the command raise
+        ``Cannot find procedure "FBXImportSkeletonType".``
+    """
+    NONE = "None"
+    """Do not import Skeleton definitions."""
+
+    HUMAN_IK = "HumanIK"
+    """Import Human IK Skeleton definitions."""
+
+
+class ForcedFileAxis(StrEnum):
+    """Supported policies for incoming file axis."""
+
+    DISABLED = "disabled"
+    Y = "y"
+    Z = "z"
