@@ -32,7 +32,7 @@ __all__ = [
 # TODO: investigate undocumented option: FbxExportDeleteOriginalTakeOnSplitAnimation
 # https://discourse.techart.online/t/maya-fbx-take-export/11321
 
-# TODOL investigate command: FBXExportSplitAnimationIntoTakes
+# TODO: investigate command: FBXExportSplitAnimationIntoTakes
 
 def export_fbx(
     filename: os.PathLike,
