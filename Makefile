@@ -61,10 +61,13 @@ clean:
 	rm -rf $(DOCS_BUILDDIR)
 endif
 
-# TODO: run tests in container
-# .PHONY: test  ## Run tests and coverage
-# test: $(venv)
-# 	$(python) -m coverage run -m pytest && $(python) -m coverage report
+.PHONY: tests  ## Run tests and coverage
+tests: $(venv)
+	-docker stop mayafbx-test && docker rm mayafbx-test
+	docker build --quiet -t mayafbx .
+	docker run --name mayafbx-test mayafbx mayapy -m coverage run -m pytest
+	docker cp mayafbx-test:/app/.coverage .coverage
+	$(python) -m coverage report --show-missing --skip-covered --skip-empty
 
 .PHONY: interactive  ## Run an interactive docker container
 interactive:
@@ -86,9 +89,6 @@ mypy: $(venv)
 .PHONY: build  ## Build package
 build: $(venv)
 	$(python) -m build
-
-
-# import sys, pprint; sys.path.append("src"); import mayafbx.utils; pprint.pprint(mayafbx.utils.collect_fbx_properties())
 
 .PHONY: docs  ## Build documentation
 docs: $(venv)
