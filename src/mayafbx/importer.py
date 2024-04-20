@@ -1,6 +1,10 @@
 """Import FBX."""
 
-from mayafbx.bases import FbxOptions, FbxPropertyField
+from __future__ import annotations
+
+import os
+
+from mayafbx.bases import FbxOptions, FbxPropertyField, applied_options, run_mel_command
 from mayafbx.enums import (
     ConvertUnit,
     ForcedFileAxis,
@@ -10,12 +14,43 @@ from mayafbx.enums import (
     SkeletonDefinition,
     UpAxis,
 )
+from mayafbx.utils import logger
 
 __all__ = [
+    "import_fbx",
+    "restore_import_preset",
     "FbxImportOptions",
 ]
 
 # NOTE: can only select and import a single take of animation at a time.
+
+
+def import_fbx(
+    filename: os.PathLike,
+    options: FbxImportOptions,
+) -> None:
+    """Import ``filename`` using ``options``.
+
+    Args:
+        filename: Path to a ``.fbx`` file.
+        options: Import options.
+    """
+    # NOTE: The FBXImport command only accept '/'
+    path = os.path.normpath(filename).replace("\\", "/")
+
+    command = ["FBXImport", "-f", f'"{path}"']
+    with applied_options(options):
+        run_mel_command(" ".join(command))
+
+    logger.info("Imported '%s' to scene", path)
+
+
+def restore_import_preset() -> None:
+    """Restores the default values of the FBX Importer.
+
+    Values are restored by loading the "Autodesk Media & Entertainment" import preset.
+    """
+    run_mel_command("FBXResetImport")
 
 
 class FbxImportOptions(FbxOptions):

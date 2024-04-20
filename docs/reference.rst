@@ -32,6 +32,10 @@ Export
 Import
 ------
 
+.. autofunction:: mayafbx.import_fbx
+
+.. autofunction:: mayafbx.restore_import_preset
+
 .. autoclass:: mayafbx.FbxImportOptions
    :members:
    :undoc-members:

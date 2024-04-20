@@ -1,15 +1,20 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
-from typing import Callable, Generic, Iterator, TypeVar, cast, overload
+from typing import TYPE_CHECKING, Callable, Generic, Iterator, TypeVar, cast, overload
 
 from mayafbx.enums import StrEnum
 from mayafbx.utils import run_mel_command
+
+if TYPE_CHECKING:
+    from typing_extensions import Self
 
 __all__ = [
     "FbxProperty",
     "FbxOptions",
     "FbxPropertyField",
+    "apply_options",
+    "applied_options",
 ]
 
 T = TypeVar("T", bool, str, float, int, StrEnum)
@@ -114,7 +119,7 @@ class FbxOptions:
     """
 
     @classmethod
-    def from_scene(cls) -> FbxOptions:
+    def from_scene(cls) -> Self:
         """Initialize a new instance from scene values."""
         self = cls()
         for descriptor in self.__class__.__dict__.values():
