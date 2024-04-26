@@ -1,10 +1,12 @@
+"""Pytest configuration."""
 from typing import Generator
 
 import pytest
 
 
 @pytest.fixture(scope="session", autouse=True)
-def initialize_maya() -> Generator[None, None, None]:
+def initialize_maya_and_fbx() -> Generator[None, None, None]:
+    """Initialize Maya standalone and load fbx plugin."""
     import maya.standalone
 
     maya.standalone.initialize()
@@ -15,3 +17,13 @@ def initialize_maya() -> Generator[None, None, None]:
     yield
 
     maya.standalone.uninitialize()
+
+
+@pytest.fixture(autouse=True)
+def reset_scene_and_fbx() -> None:
+    """Create a new file and restore default FBX options before each test."""
+    from maya import cmds, mel
+
+    cmds.file(new=True, force=True)
+    mel.eval("FBXResetExport")
+    mel.eval("FBXResetImport")

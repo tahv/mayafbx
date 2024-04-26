@@ -1,5 +1,8 @@
+"""Test suite for the mayafbx package."""
+
 import mayafbx
 from maya import mel
+from mayafbx.utils import get_anim_control_end_time
 
 
 def test_fbxproperty_default() -> None:
@@ -11,6 +14,13 @@ def test_fbxproperty_default() -> None:
 
     fbx_prop = mayafbx.FbxProperty(command, type=bool, default=lambda: True)
     assert fbx_prop.default is True
+
+
+def test_fbxproperty_command() -> None:
+    """It returns command."""
+    command = "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups"
+    fbx_prop = mayafbx.FbxProperty(command, type=bool, default=True)
+    assert fbx_prop.command == command
 
 
 def test_fbxproperty_get() -> None:
@@ -106,3 +116,28 @@ def test_applied_options() -> None:
 
     assert mel.eval(f"{command} -q") == 0
 
+
+def test_fbxexportoptions_valid_defaults() -> None:
+    """It has valid default values."""
+
+    exceptions = {
+        # NOTE: End frame is reset to 48 when calling 'FBXResetExport'.
+        "FBXProperty Export|IncludeGrp|Animation|BakeComplexAnimation|BakeFrameEnd": get_anim_control_end_time(),
+    }
+
+    options = mayafbx.FbxExportOptions()
+    for prop, _ in options:
+        value = exceptions.get(prop.command, prop.get())
+        assert value == prop.default
+
+
+def test_fbximportoptions_valid_defaults() -> None:
+    """It has valid default values."""
+
+    exceptions = {
+    }
+
+    options = mayafbx.FbxImportOptions()
+    for prop, _ in options:
+        value = exceptions.get(prop.command, prop.get())
+        assert value == prop.default
