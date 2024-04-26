@@ -83,32 +83,32 @@ class QuaternionInterpolation(StrEnum):
 class ConvertUnit(StrEnum):
     """Supported units, change the scale factor on import/export."""
 
-    MILLIMETERS = "mm"  # "Millimeters"
-    CENTIMETERS = "cm"  # "Centimeters"
-    DECIMETERS = "dm"  # "Decimeters"
-    METERS = "m"  # "Meters"
-    KILOMETERS = "km"  # "Kilometers"
-    INCHES = "In"  # "Inches"
-    FEET = "ft"  # "Feet"
-    YARDS = "yd"  # "Yards"
-    MILES = "mi"  # "Miles"
+    MILLIMETERS = "Millimeters"
+    CENTIMETERS = "Centimeters"
+    DECIMETERS = "Decimeters"
+    METERS = "Meters"
+    KILOMETERS = "Kilometers"
+    INCHES = "Inches"
+    FEET = "Feet"
+    YARDS = "Yards"
+    MILES = "Miles"
 
-    @staticmethod
-    def from_scene() -> ConvertUnit:
+    @classmethod
+    def from_scene(cls) -> ConvertUnit:
         """Current Maya UI Unit.
 
         As set in ``Window > Settings/Preferences > Preferences > Settings``.
         """
         return {
-            OpenMaya.MDistance.kMillimeters: ConvertUnit.MILLIMETERS,
-            OpenMaya.MDistance.kCentimeters: ConvertUnit.CENTIMETERS,
+            OpenMaya.MDistance.kMillimeters: cls.MILLIMETERS,
+            OpenMaya.MDistance.kCentimeters: cls.CENTIMETERS,
             # NOTE: 'OpenMaya.MDistance.kDecimeters' doesn't exists
-            OpenMaya.MDistance.kMeters: ConvertUnit.METERS,
-            OpenMaya.MDistance.kKilometers: ConvertUnit.KILOMETERS,
-            OpenMaya.MDistance.kInches: ConvertUnit.INCHES,
-            OpenMaya.MDistance.kFeet: ConvertUnit.FEET,
-            OpenMaya.MDistance.kYards: ConvertUnit.YARDS,
-            OpenMaya.MDistance.kMiles: ConvertUnit.MILES,
+            OpenMaya.MDistance.kMeters: cls.METERS,
+            OpenMaya.MDistance.kKilometers: cls.KILOMETERS,
+            OpenMaya.MDistance.kInches: cls.INCHES,
+            OpenMaya.MDistance.kFeet: cls.FEET,
+            OpenMaya.MDistance.kYards: cls.YARDS,
+            OpenMaya.MDistance.kMiles: cls.MILES,
         }[OpenMaya.MDistance.uiUnit()]
 
 
@@ -263,6 +263,7 @@ class SkeletonDefinition(StrEnum):
         running the command raise
         ``Cannot find procedure "FBXImportSkeletonType".``
     """
+
     NONE = "None"
     """Do not import Skeleton definitions."""
 

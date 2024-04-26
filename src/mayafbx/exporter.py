@@ -9,7 +9,6 @@ from maya.api import OpenMaya
 from mayafbx.bases import FbxOptions, FbxPropertyField, applied_options
 from mayafbx.enums import (
     AxisConversionMethod,
-    ConvertUnit,
     FileFormat,
     FileVersion,
     NurbsSurfaceAs,
@@ -906,26 +905,26 @@ class FbxExportOptions(FbxOptions):
 
     # TODO: "FBXExportScaleFactor" (float) is only queryable, create get_export_scale_factor ?
 
-    convert_units_to = FbxPropertyField(
-        # "FBXProperty Export|AdvOptGrp|UnitsGrp|UnitsSelector",
-        "FBXExportConvertUnitString",
-        type=ConvertUnit,
-        default=ConvertUnit.from_scene,
-    )
-    """Specify the units to which you want to convert your exported scene.
-
-    This settings affects the **Scale Factor** value applied to the exported data.
-
-    Default to the **Maya System Units** as set in
-    ``Window > Settings/Preferences > Preferences > Settings``.
-
-    Only evaluated if `automatic_units` is `False`.
-
-    See `ConvertUnit` for possible values.
-
-    Mel Command:
-        ``FBXExportConvertUnitString``
-    """
+    # convert_units_to = FbxPropertyField(
+    #     # "FBXProperty Export|AdvOptGrp|UnitsGrp|UnitsSelector",
+    #     "FBXExportConvertUnitString",
+    #     type=ConvertUnit,
+    #     default=ConvertUnit.from_scene,
+    # )
+    # """Specify the units to which you want to convert your exported scene.
+    #
+    # This settings affects the **Scale Factor** value applied to the exported data.
+    #
+    # Default to the **Maya System Units** as set in
+    # ``Window > Settings/Preferences > Preferences > Settings``.
+    #
+    # Only evaluated if `automatic_units` is `False`.
+    #
+    # See `ConvertUnit` for possible values.
+    #
+    # Mel Command:
+    #     ``FBXExportConvertUnitString``
+    # """
 
     up_axis = FbxPropertyField(
         "FBXProperty Export|AdvOptGrp|AxisConvGrp|UpAxis",

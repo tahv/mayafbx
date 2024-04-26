@@ -77,7 +77,7 @@ class FbxImportOptions(FbxOptions):
     """
 
     smoothing_groups = FbxPropertyField(
-        "Import|IncludeGrp|Geometry|SmoothingGroups",
+        "FBXProperty Import|IncludeGrp|Geometry|SmoothingGroups",
         type=bool,
         default=False,
     )
@@ -537,8 +537,7 @@ class FbxImportOptions(FbxOptions):
     """
 
     convert_units_to = FbxPropertyField(
-        "FBXImportConvertUnitString",
-        # "FBXProperty Import|AdvOptGrp|UnitsGrp|UnitsSelector",
+        "FBXProperty Import|AdvOptGrp|UnitsGrp|UnitsSelector",
         type=ConvertUnit,
         default=ConvertUnit.from_scene,
     )
@@ -552,19 +551,16 @@ class FbxImportOptions(FbxOptions):
     Only evaluated if `automatic_units` is `False`.
 
     See `ConvertUnit` for possible values.
-
-    Mel Command:
-        ``FBXImportConvertUnitString``.
     """
 
     axis_conversion = FbxPropertyField(
         "FBXProperty Import|AdvOptGrp|AxisConvGrp|AxisConversion",
         type=bool,
-        default=True,
+        default=False,
     )
     """Enable axis conversion on import.
 
-    Default to `True`.
+    Default to `False`.
 
     Mel Command:
         ``FBXImportAxisConversionEnable``.
