@@ -33,6 +33,16 @@ class FbxProperty(Generic[T]):
         self._type = type
         self._default = default
 
+    def __repr__(self) -> str:
+        return (
+            f"{self.__class__.__name__}(command={self._command!r}, type={self._type!r})"
+        )
+
+    @property
+    def command(self) -> str:
+        """FBXProperty mel command."""
+        return self._command
+
     @property
     def default(self) -> T:
         """Default value."""
@@ -136,8 +146,8 @@ class FbxOptions:
 
 def apply_options(options: FbxOptions) -> None:
     """Apply ``options`` to scene."""
-    for fbx_property, value in options:
-        fbx_property.set(value)
+    for prop, value in options:
+        prop.set(value)
 
 
 @contextmanager
