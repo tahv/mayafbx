@@ -111,4 +111,6 @@ convention = "google"
   "PLR2004",
   # S101: Use of assert detected
   "S101",
+  # PT004: Fixture does not return anything, add leading underscore
+  "PT004"
 ]
