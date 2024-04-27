@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-import enum
 from contextlib import contextmanager
-from typing import TYPE_CHECKING, Callable, Generic, Iterator, TypeVar, cast, overload
+from typing import TYPE_CHECKING, Callable, Generic, Iterator, TypeVar, overload
 
 from mayafbx.enums import StrEnum
 from mayafbx.utils import run_mel_command
