@@ -1,4 +1,5 @@
 """Test suite for the mayafbx package."""
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -178,6 +179,32 @@ def test_collect_fbx_properties_returns_list_of_fbx_properties() -> None:
     assert "path" in data[0]
 
 
+def test_export_selected_model(tmp_path: Path) -> None:
+    """I export only selected model."""
+    cube_1 = cmds.polyCube()[0]
+    cube_2 = cmds.polyCube()[0]
+
+    cmds.select(cube_1)
+    filepath = tmp_path / "selected_model.fbx"
+    mayafbx.export_fbx(filepath, mayafbx.FbxExportOptions(), selection=True)
+
+    cmds.delete(cube_1, cube_2)
+    assert cmds.objExists(cube_1) is False
+    assert cmds.objExists(cube_2) is False
+
+    mayafbx.import_fbx(filepath, mayafbx.FbxImportOptions())
+
+    assert cmds.objExists(cube_1) is True
+    assert cmds.objExists(cube_2) is False
+
+
+def test_export_with_selection_raise_nothing_selected(tmp_path: Path) -> None:
+    """It raises an error if nothing is selected."""
+    filepath = tmp_path / "foo.fbx"
+    with pytest.raises(RuntimeError):
+        mayafbx.export_fbx(filepath, mayafbx.FbxExportOptions(), selection=True)
+
+
 def test_export_import_animated_cube(tmp_path: Path) -> None:
     """I can export and import an animated mesh."""
     cube = cmds.polyCube()[0]
@@ -208,3 +235,29 @@ def test_export_import_animated_cube(tmp_path: Path) -> None:
         timeChange=True,
     )
     assert key_values == [1.0, 0.0, 24.0, 10.0]
+
+
+def test_restore_export_preset() -> None:
+    """It reset scene export preset."""
+    command = "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups"
+
+    assert mel.eval(f"{command} -q") == 0
+
+    mel.eval(f"{command} -v true")
+    assert mel.eval(f"{command} -q") == 1
+
+    mayafbx.restore_export_preset()
+    assert mel.eval(f"{command} -q") == 0
+
+
+def test_restore_import_preset() -> None:
+    """It reset scene import preset."""
+    command = "FBXProperty Import|IncludeGrp|Geometry|SmoothingGroups"
+
+    assert mel.eval(f"{command} -q") == 0
+
+    mel.eval(f"{command} -v true")
+    assert mel.eval(f"{command} -q") == 1
+
+    mayafbx.restore_import_preset()
+    assert mel.eval(f"{command} -q") == 0
