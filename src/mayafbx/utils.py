@@ -26,7 +26,7 @@ if TYPE_CHECKING:
         possible: list[str]
 
 
-def run_mel_command(command: str) -> object:
+def run_mel_command(command: str) -> str:
     """Run a mel command and return the result.
 
     Raise:
@@ -77,9 +77,7 @@ def collect_fbx_properties() -> list[FbxPropDict]:
     result = []
     for line in lines:
         match = regex.match(line)
-        if not match:
-            logger.error("Failed to match line: %s", line)
-            continue
+        assert match, f"Failed to match line: {line}"  # noqa: S101
 
         data = {
             "path": match.group(1),

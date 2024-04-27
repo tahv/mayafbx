@@ -1,8 +1,20 @@
 """Test suite for the mayafbx package."""
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import mayafbx
-from maya import mel
-from mayafbx.utils import get_anim_control_end_time
+import pytest
+from maya import cmds, mel
+from mayafbx.exceptions import MelEvalError
+from mayafbx.utils import (
+    collect_fbx_properties,
+    get_anim_control_end_time,
+    run_mel_command,
+)
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 def test_fbxproperty_default() -> None:
@@ -119,7 +131,6 @@ def test_applied_options() -> None:
 
 def test_fbxexportoptions_valid_defaults() -> None:
     """It has valid default values."""
-
     exceptions = {
         # NOTE: End frame is reset to 48 when calling 'FBXResetExport'.
         "FBXProperty Export|IncludeGrp|Animation|BakeComplexAnimation|BakeFrameEnd": get_anim_control_end_time(),
@@ -133,11 +144,67 @@ def test_fbxexportoptions_valid_defaults() -> None:
 
 def test_fbximportoptions_valid_defaults() -> None:
     """It has valid default values."""
-
-    exceptions = {
-    }
+    exceptions = {}
 
     options = mayafbx.FbxImportOptions()
     for prop, _ in options:
         value = exceptions.get(prop.command, prop.get())
         assert value == prop.default
+
+
+def test_fbxexportoptions_can_be_applied() -> None:
+    """It can apply default `FbxExportOptions`."""
+    options = mayafbx.FbxExportOptions()
+    mayafbx.apply_options(options)
+
+
+def test_fbximportoptions_can_be_applied() -> None:
+    """It can apply default `FbxImprotOptions`."""
+    options = mayafbx.FbxImportOptions()
+    mayafbx.apply_options(options)
+
+
+def test_run_mel_command_raise_exception() -> None:
+    """It raises `MelEvalError` when a mel command is invalid."""
+    with pytest.raises(MelEvalError):
+        run_mel_command("invalid")
+
+
+def test_collect_fbx_properties_returns_list_of_fbx_properties() -> None:
+    """It returns a list of FBXProperty dict."""
+    data = collect_fbx_properties()
+    assert isinstance(data, list)
+    assert isinstance(data[0], dict)
+    assert "path" in data[0]
+
+
+def test_export_import_animated_cube(tmp_path: Path) -> None:
+    """I can export and import an animated mesh."""
+    cube = cmds.polyCube()[0]
+    cmds.setKeyframe(f"{cube}.translateX", time=1, value=0)
+    cmds.setKeyframe(f"{cube}.translateX", time=24, value=10)
+    assert cmds.keyframe(f"{cube}.translateX", query=True, keyframeCount=True) == 2
+
+    options = mayafbx.FbxExportOptions()
+    options.animation = True
+
+    filepath = tmp_path / "animated_cube.fbx"
+    mayafbx.export_fbx(filepath, options)
+
+    cmds.cutKey(f"{cube}.translateX", option="keys")
+    assert cmds.keyframe(f"{cube}.translateX", query=True, keyframeCount=True) == 0
+
+    options = mayafbx.FbxImportOptions()
+    options.merge_mode = mayafbx.MergeMode.MERGE
+    options.animation = True
+
+    mayafbx.import_fbx(filepath, options)
+    assert cmds.keyframe(f"{cube}.translateX", query=True, keyframeCount=True) == 2
+
+    key_values = cmds.keyframe(
+        f"{cube}.translateX",
+        query=True,
+        valueChange=True,
+        timeChange=True,
+    )
+    assert key_values == [1.0, 0.0, 24.0, 10.0]

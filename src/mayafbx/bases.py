@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import enum
 from contextlib import contextmanager
 from typing import TYPE_CHECKING, Callable, Generic, Iterator, TypeVar, cast, overload
 
@@ -50,25 +51,22 @@ class FbxProperty(Generic[T]):
 
     def get(self) -> T:
         """Get fbx property value from scene."""
-        value = cast(str, run_mel_command(f"{self._command} -q"))
-        value_ = {"true": True, "false": False}.get(value)
-        if value_ is None:
-            value_ = self._type(value)
-        return value_  # type: ignore[assignment]
+        value = run_mel_command(f"{self._command} -q")
+        return self._type(value)
 
     def set(self, value: T) -> None:
         """Set property value to scene."""
-        formatter: Callable[[T], str] = {
-            bool: lambda v: str(v).lower(),
-            str: lambda v: f'"{v}"',
-            float: lambda v: str(v),
-            int: lambda v: str(v),
-        }.get(self._type, lambda v: str(v))
+        if issubclass(self._type, bool):
+            value_ = {True: "true", False: "false"}[bool(value)]
+        elif issubclass(self._type, str):
+            value_ = f'"{value}"'
+        else:  # NOTE: notably float and int
+            value_ = str(value)
 
         args = [self._command]
         if self._command not in {"FBXExportUpAxis", "FBXExportAxisConversionMethod"}:
             args += ["-v"]
-        args += [formatter(value)]
+        args += [value_]
 
         run_mel_command(" ".join(args))
 
@@ -89,6 +87,7 @@ class FbxPropertyField(Generic[T]):
 
     def __set_name__(self, owner: type[object], name: str) -> None:
         self.name = name
+
 
     @overload
     def __get__(self, obj: None, objtype: None) -> FbxPropertyField[T]: ...

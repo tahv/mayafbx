@@ -54,6 +54,7 @@ exclude_lines = [
   "# pragma: no cover",
   "if (False|0|TYPE_CHECKING):",
   "if __name__ == ['\"]__main__['\"]:",
+  "@overload",  # https://github.com/nedbat/coveragepy/issues/970
 ]
 
 [tool.coverage.paths]
