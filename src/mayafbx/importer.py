@@ -28,17 +28,28 @@ __all__ = [
 def import_fbx(
     filename: os.PathLike,
     options: FbxImportOptions,
+    *,
+    take: int | None = None,
 ) -> None:
     """Import ``filename`` using ``options``.
 
     Args:
         filename: Path to a ``.fbx`` file.
         options: Import options.
+        take: Specify the appropriate take number to load the corresponding take.
+            If you specify ``0``, the plugin imports no animation.
+            If you specify ``-1``, the plugin retrieves the last take in the take array.
+            The plugin considers any number of takes greater than
+            the amount of takes contained in the file
+            or any negative value less than ``-1`` to be invalid.
     """
     # NOTE: The FBXImport command only accept '/'
     path = os.path.normpath(filename).replace("\\", "/")
 
     command = ["FBXImport", "-f", f'"{path}"']
+    if take is not None:
+        command += ["-t", f"{take}"]
+
     with applied_options(options):
         run_mel_command(" ".join(command))
 

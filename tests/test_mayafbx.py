@@ -8,7 +8,9 @@ import mayafbx
 import pytest
 from maya import cmds, mel
 from mayafbx.exceptions import MelEvalError
+from mayafbx.exporter import get_export_takes, set_export_takes
 from mayafbx.utils import (
+    Take,
     collect_fbx_properties,
     get_anim_control_end_time,
     run_mel_command,
@@ -261,3 +263,77 @@ def test_restore_import_preset() -> None:
 
     mayafbx.restore_import_preset()
     assert mel.eval(f"{command} -q") == 0
+
+
+def test_get_set_export_takes() -> None:
+    """It set and get export takes."""
+    takes = [
+        Take("foo", 1, 9),
+        Take("bar", 10, 20),
+    ]
+    set_export_takes(takes)
+
+    assert get_export_takes() == takes
+
+
+def test_set_export_takes_raise_end_lower_than_start() -> None:
+    """It raises an error when end frame is lower than start frame."""
+    take = Take("foo", 5, 1)
+    with pytest.raises(RuntimeError):
+        set_export_takes([take])
+
+
+def test_export_import_take(tmp_path: Path) -> None:
+    """I can export and import takes."""
+    cube = cmds.polyCube()[0]
+    cmds.setKeyframe(f"{cube}.translateX", time=0, value=1)
+    cmds.setKeyframe(f"{cube}.translateX", time=10, value=2)
+    cmds.setKeyframe(f"{cube}.translateX", time=20, value=3)
+    assert cmds.keyframe(f"{cube}.translateX", query=True, keyframeCount=True) == 3
+
+    options = mayafbx.FbxExportOptions()
+    options.animation = True
+    options.delete_original_take_on_split_animation = True
+
+    filepath = tmp_path / "takes.fbx"
+    mayafbx.export_fbx(
+        filepath,
+        options,
+        takes=[Take("foo", 0, 10), Take("bar", 10, 20)],
+    )
+
+    options = mayafbx.FbxImportOptions()
+    options.merge_mode = mayafbx.MergeMode.MERGE
+    options.animation = True
+
+    # take 'foo'
+
+    cmds.cutKey(f"{cube}.translateX", option="keys")
+    assert cmds.keyframe(f"{cube}.translateX", query=True, keyframeCount=True) == 0
+
+    mayafbx.import_fbx(filepath, options, take=1)
+    assert cmds.keyframe(f"{cube}.translateX", query=True, keyframeCount=True) == 2
+
+    key_values = cmds.keyframe(
+        f"{cube}.translateX",
+        query=True,
+        valueChange=True,
+        timeChange=True,
+    )
+    assert key_values == [0.0, 1.0, 10.0, 2.0]
+
+    # take 'bar'
+
+    cmds.cutKey(f"{cube}.translateX", option="keys")
+    assert cmds.keyframe(f"{cube}.translateX", query=True, keyframeCount=True) == 0
+
+    mayafbx.import_fbx(filepath, options, take=2)
+    assert cmds.keyframe(f"{cube}.translateX", query=True, keyframeCount=True) == 2
+
+    key_values = cmds.keyframe(
+        f"{cube}.translateX",
+        query=True,
+        valueChange=True,
+        timeChange=True,
+    )
+    assert key_values == [10.0, 2.0, 20.0, 3.0]

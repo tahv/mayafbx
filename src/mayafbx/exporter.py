@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import os
+from contextlib import contextmanager
+from typing import Generator, cast
 
 from maya.api import OpenMaya
 
@@ -16,6 +18,7 @@ from mayafbx.enums import (
     UpAxis,
 )
 from mayafbx.utils import (
+    Take,
     get_anim_control_end_time,
     get_anim_control_start_time,
     logger,
@@ -28,16 +31,13 @@ __all__ = [
     "FbxExportOptions",
 ]
 
-# TODO: investigate undocumented option: FbxExportDeleteOriginalTakeOnSplitAnimation
-# https://discourse.techart.online/t/maya-fbx-take-export/11321
-
-# TODO: investigate command: FBXExportSplitAnimationIntoTakes
 
 def export_fbx(
     filename: os.PathLike,
     options: FbxExportOptions,
     *,
     selection: bool = False,
+    takes: list[Take] | None = None,
 ) -> None:
     """Export to specified ``filename`` location using ``options``.
 
@@ -46,12 +46,14 @@ def export_fbx(
         options: Export options.
         selection: Export only selected elements.
             Default to `False`, which export the whole scene.
+        takes: An optional list of animation `Take` to export.
 
     Raises:
         RuntimeError: If ``selection`` is `True` and nothing is selected.
     """
     # NOTE: The FBXExport command only accept '/'
     path = os.path.normpath(filename).replace("\\", "/")
+    takes = takes or []
 
     command = ["FBXExport", "-f", f'"{path}"']
     if selection:
@@ -60,7 +62,7 @@ def export_fbx(
             raise RuntimeError(msg)
         command += ["-s"]
 
-    with applied_options(options):
+    with applied_options(options), applied_export_takes(takes):
         run_mel_command(" ".join(command))
 
     logger.info("Exported %s to '%s'", "selection" if selection else "scene", path)
@@ -72,6 +74,50 @@ def restore_export_preset() -> None:
     Values are restored by loading the "Autodesk Media & Entertainment" export preset.
     """
     run_mel_command("FBXResetExport")
+
+
+def get_export_takes() -> list[Take]:
+    """Get a list of export takes from ``FBXExportSplitAnimationIntoTakes`` command."""
+    output = run_mel_command("FBXExportSplitAnimationIntoTakes -q")
+    if output == 0:
+        return []
+
+    takes: list[Take] = []
+    for line in cast("list[str]", output):
+        name, start, end = line.split()
+        _, _, name = name.partition("=")
+        _, _, start = start.partition("=")
+        _, _, end = end.partition("=")
+        takes.append(Take(name=name, start=int(start), end=int(end)))
+
+    return takes
+
+
+def set_export_takes(takes: list[Take]) -> None:
+    """Set export takes using ``FBXExportSplitAnimationIntoTakes`` command.
+
+    Warning:
+        All existing export takes will be cleared beforehand.
+
+    Raises:
+        RuntimeError: Take end frame < start frame.
+    """
+    run_mel_command("FBXExportSplitAnimationIntoTakes -c")  # clear takes
+    for take in takes:
+        if take.end < take.start:
+            message = f"Take end ({take.end}) < Take start ({take.start})"
+            raise RuntimeError(message)
+        cmd = f"FBXExportSplitAnimationIntoTakes -v {take.name} {take.start} {take.end}"
+        run_mel_command(cmd)
+
+
+@contextmanager
+def applied_export_takes(takes: list[Take]) -> Generator[None, None, None]:
+    """Apply export takes during context."""
+    backup = get_export_takes()
+    set_export_takes(takes)
+    yield
+    set_export_takes(backup)
 
 
 class FbxExportOptions(FbxOptions):
@@ -317,6 +363,16 @@ class FbxExportOptions(FbxOptions):
     """Export animation.
 
     Default to `True`.
+    """
+
+    delete_original_take_on_split_animation = FbxPropertyField(
+        command="FBXExportDeleteOriginalTakeOnSplitAnimation",
+        type=bool,
+        default=False,
+    )
+    """Remove the default ``Take 001`` when exporting takes.
+
+    Default to `False`.
     """
 
     use_scene_name = FbxPropertyField(

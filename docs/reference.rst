@@ -5,6 +5,7 @@
 .. _FBX Import MEL commands: https://help.autodesk.com/view/MAYAUL/2025/ENU/?guid=GUID-699CDF74-3D64-44B0-967E-7427DF800290
 .. _FBX Import options: https://help.autodesk.com/view/MAYAUL/2025/ENU/?guid=GUID-0CD41066-4C27-48AE-9776-366DB11B4FDF
 .. _FBX Limitations: https://help.autodesk.com/view/MAYAUL/2025/ENU/?guid=GUID-AA3B8EA4-DDFB-4B0F-9654-2BF6B8781AE7
+.. _Game Exporter: https://help.autodesk.com/view/MAYAUL/2025/ENU/?guid=GUID-2DB6E7B0-04B8-4585-91E9-7D64B02D0338
 
 API Reference
 =============
@@ -15,6 +16,7 @@ Official Maya 2025 Documentation:
    - `FBX Import MEL commands`_
    - `FBX Import options`_
    - `FBX Limitations`_
+   - `Game Exporter`_
 
 Export
 ------
@@ -28,6 +30,8 @@ Export
    :undoc-members:
    :member-order: bysource
    :show-inheritance:
+
+.. autoclass:: mayafbx.utils.Take
 
 Import
 ------

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 import re
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, NamedTuple
 
 from maya import mel
 from maya.api import OpenMaya, OpenMayaAnim
@@ -26,7 +26,20 @@ if TYPE_CHECKING:
         possible: list[str]
 
 
-def run_mel_command(command: str) -> str:
+__all__ = [
+    "Take",
+]
+
+
+class Take(NamedTuple):
+    """FBX take description."""
+
+    name: str
+    start: int
+    end: int
+
+
+def run_mel_command(command: str) -> str | list[str] | int:
     """Run a mel command and return the result.
 
     Raise:
