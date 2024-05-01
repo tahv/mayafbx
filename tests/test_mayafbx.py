@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 import mayafbx
 import pytest
 from maya import cmds, mel
+from maya.api import OpenMaya
 from mayafbx.exceptions import MelEvalError
 from mayafbx.exporter import get_export_takes, set_export_takes
 from mayafbx.utils import (
@@ -135,8 +136,8 @@ def test_applied_options() -> None:
 def test_fbxexportoptions_valid_defaults() -> None:
     """It has valid default values."""
     exceptions = {
-        # NOTE: End frame is reset to 48 when calling 'FBXResetExport'.
-        "FBXProperty Export|IncludeGrp|Animation|BakeComplexAnimation|BakeFrameEnd": get_anim_control_end_time(),
+        # End frame is reset to 48 when calling 'FBXResetExport'.
+        "FBXProperty Export|IncludeGrp|Animation|BakeComplexAnimation|BakeFrameEnd": get_anim_control_end_time(),  # noqa: E501
     }
 
     options = mayafbx.FbxExportOptions()
@@ -337,3 +338,11 @@ def test_export_import_take(tmp_path: Path) -> None:
         timeChange=True,
     )
     assert key_values == [10.0, 2.0, 20.0, 3.0]
+
+def test_up_axis_from_scene() -> None:
+    """It returns scene up axis."""
+    OpenMaya.MGlobal.setYAxisUp()
+    assert mayafbx.UpAxis.from_scene() == mayafbx.UpAxis.Y
+
+    OpenMaya.MGlobal.setZAxisUp()
+    assert mayafbx.UpAxis.from_scene() == mayafbx.UpAxis.Z

@@ -180,7 +180,7 @@ class FbxExportOptions(FbxOptions):
 
     Note:
         - Your geometry must have UV information.
-        - There is a known FBX limitation where exported binormal and/or tangent 
+        - There is a known FBX limitation where exported binormal and/or tangent
           information does not appear, even if you activate this option.
         - This option only works on meshes that have only triangle polygons,
           so you may need to `triangulate` the mesh.
@@ -306,7 +306,7 @@ class FbxExportOptions(FbxOptions):
     in the exported FBX file.
 
     Note:
-        - You can only use this option when you export an FBX file. 
+        - You can only use this option when you export an FBX file.
           If you import this file back into Maya,
           the contents of your asset are imported as well.
           Disable this option and the content of the referenced asset is not exported.
@@ -528,13 +528,6 @@ class FbxExportOptions(FbxOptions):
         ``FBXExportBakeResampleAnimation``
     """
 
-    # # TODO:
-    # hide_bake_warnings = FbxPropertyField(
-    #     "FBXProperty Export|IncludeGrp|Animation|BakeComplexAnimation|HideComplexAnimationBakedWarning",
-    #     type=bool,
-    #     default=False,
-    # )
-
     deformation = FbxPropertyField(
         "FBXProperty Export|IncludeGrp|Animation|Deformation",
         type=bool,
@@ -542,7 +535,7 @@ class FbxExportOptions(FbxOptions):
     )
     """Export Skin and Blend Shape deformations.
 
-    You can choose to export Skins and Bend Shapes specifically with 
+    You can choose to export Skins and Bend Shapes specifically with
     `deformation_skins` and `deformation_shapes`.
 
     Default to `True`.
@@ -583,18 +576,8 @@ class FbxExportOptions(FbxOptions):
     # (BiNormals, VertexColor and UV) called "Modern Style".
     # See the class documentation and the ShapeAttributes sample code
     # for more information.
-
-    # deformation_shape_attributes = FbxPropertyField(
-    #     "FBXProperty Export|IncludeGrp|Animation|Deformation|ShapeAttributes",
-    #     type=bool,
-    #     default=False,
-    # )
-    #
-    # deformation_shape_attributes_values = FbxPropertyField(
-    #     "FBXProperty Export|IncludeGrp|Animation|Deformation|ShapeAttributes|ShapeAttributesValues",
-    #     type=str,
-    #     default="Relative",  # ["Relative" "Absolute"]
-    # )
+    # deformation_shape_attributes = FbxPropertyField("FBXProperty Export|IncludeGrp|Animation|Deformation|ShapeAttributes", type=bool, default=False)
+    # deformation_shape_attributes_values = FbxPropertyField("FBXProperty Export|IncludeGrp|Animation|Deformation|ShapeAttributes|ShapeAttributesValues", type=str, default="Relative")  # ["Relative" "Absolute"]
 
     curve_filter = FbxPropertyField(
         "FBXProperty Export|IncludeGrp|Animation|CurveFilter",
@@ -704,19 +687,52 @@ class FbxExportOptions(FbxOptions):
         To ensure that constant key reducing occurs, set this to ``False``.
     """
 
-    # TODO: point_cache
-    # point_cache = FbxPropertyField(
-    #     "FBXProperty Export|IncludeGrp|Animation|PointCache",
-    #     default=False,
-    #     type=bool,
-    # )  # "FBXExportCacheFile"
+    point_cache = FbxPropertyField(
+        "FBXProperty Export|IncludeGrp|Animation|PointCache",
+        type=bool,
+        default=False,
+    )
+    """Create a geometry cache file of a chosen selection set.
 
-    # TODO: selection_set_name_as_point_cache
-    # selection_set_name_as_point_cache = FbxPropertyField(
-    #     "FBXProperty Export|IncludeGrp|Animation|PointCache|SelectionSetNameAsPointCache",
-    #     default="",
-    #     type=str,
-    # )  # "FBXExportQuickSelectSetAsCache"
+    To use this option, create a selection set of the objects for which
+    you want to retain the vertex animation.
+
+    Note:
+        You must apply the set to the Objects Transform node and not the Shape node.
+        By default, any Geometry cache files created are in .MCX format.
+
+     When you activate this option, three files are generated:
+        - an FBX file
+        - an XML file
+        - an MCX file
+
+    The Maya FBX plug-in stores the XML and MCX files in a subfolder
+    named after the FBX file and has the suffix ``_fpc``.
+
+    Use `selection_set_name_as_point_cache` to select an appropriate set to export.
+
+    Defaul to `False`.
+
+    Mel Command:
+        ``FBXExportCacheFile``
+    """
+
+    selection_set_name_as_point_cache = FbxPropertyField(
+        "FBXExportQuickSelectSetAsCache",
+        type=str,
+        default=" ",
+    )
+    """The set to be used when exporting the cache file.
+
+    This command does not validate the received string.
+    However, if the string used here does not correspond to
+    an existing (and valid) set in the Maya scene, the cache export fails.
+
+    Require `point_cache`.
+
+    Mel Command:
+        ``FBXExportQuickSelectSetAsCache``
+    """
 
     constraints = FbxPropertyField(
         "FBXProperty Export|IncludeGrp|Animation|ConstraintsGrp|Constraint",
@@ -959,29 +975,6 @@ class FbxExportOptions(FbxOptions):
     Default to `True`.
     """
 
-    # TODO: "FBXExportScaleFactor" (float) is only queryable, create get_export_scale_factor ?
-
-    # convert_units_to = FbxPropertyField(
-    #     # "FBXProperty Export|AdvOptGrp|UnitsGrp|UnitsSelector",
-    #     "FBXExportConvertUnitString",
-    #     type=ConvertUnit,
-    #     default=ConvertUnit.from_scene,
-    # )
-    # """Specify the units to which you want to convert your exported scene.
-    #
-    # This settings affects the **Scale Factor** value applied to the exported data.
-    #
-    # Default to the **Maya System Units** as set in
-    # ``Window > Settings/Preferences > Preferences > Settings``.
-    #
-    # Only evaluated if `automatic_units` is `False`.
-    #
-    # See `ConvertUnit` for possible values.
-    #
-    # Mel Command:
-    #     ``FBXExportConvertUnitString``
-    # """
-
     up_axis = FbxPropertyField(
         "FBXProperty Export|AdvOptGrp|AxisConvGrp|UpAxis",
         type=UpAxis,
@@ -1039,7 +1032,7 @@ class FbxExportOptions(FbxOptions):
     )
     """Generate log data.
 
-    The Maya FBX plug-in stores log files with the FBX presets, 
+    The Maya FBX plug-in stores log files with the FBX presets,
     in ``C:\\My Documents\\Maya\\FBX\\Logs``.
 
     Default to `True`.
@@ -1083,32 +1076,3 @@ class FbxExportOptions(FbxOptions):
         ``FBXExportFileVersion``
     """
 
-    # TODO "FBXExportSplitAnimationIntoTakes"
-
-
-"""
-TODO: The following properties are not implemented:
-
-Export|AdvOptGrp|FileFormat|Obj|Triangulate - Bool - True
-Export|AdvOptGrp|FileFormat|Obj|Deformation - Bool - True
-Export|AdvOptGrp|FileFormat|Motion_Base|MotionFrameCount - Integer - 0
-Export|AdvOptGrp|FileFormat|Motion_Base|MotionFromGlobalPosition - Bool - True
-Export|AdvOptGrp|FileFormat|Motion_Base|MotionFrameRate - Number - 30.000000
-Export|AdvOptGrp|FileFormat|Motion_Base|MotionGapsAsValidData - Bool - False
-Export|AdvOptGrp|FileFormat|Motion_Base|MotionC3DRealFormat - Bool - False
-Export|AdvOptGrp|FileFormat|Motion_Base|MotionASFSceneOwned - Bool - True
-Export|AdvOptGrp|FileFormat|Biovision_BVH|MotionTranslation - Bool - True
-Export|AdvOptGrp|FileFormat|Acclaim_ASF|MotionTranslation - Bool - True
-Export|AdvOptGrp|FileFormat|Acclaim_ASF|MotionFrameRateUsed - Bool - True
-Export|AdvOptGrp|FileFormat|Acclaim_ASF|MotionFrameRange - Bool - True
-Export|AdvOptGrp|FileFormat|Acclaim_ASF|MotionWriteDefaultAsBaseTR - Bool - False
-Export|AdvOptGrp|FileFormat|Acclaim_AMC|MotionTranslation - Bool - True
-Export|AdvOptGrp|FileFormat|Acclaim_AMC|MotionFrameRateUsed - Bool - True
-Export|AdvOptGrp|FileFormat|Acclaim_AMC|MotionFrameRange - Bool - True
-Export|AdvOptGrp|FileFormat|Acclaim_AMC|MotionWriteDefaultAsBaseTR - Bool - False
-Export|AdvOptGrp|Dxf|Deformation - Bool - True  - FBXExportDxfTriangulate
-Export|AdvOptGrp|Dxf|Triangulate - Bool - True  - FBXExportDxfDeformation
-Export|AdvOptGrp|Collada|Triangulate - Bool - True  - FBXExportColladaTriangulate
-Export|AdvOptGrp|Collada|SingleMatrix - Bool - True  - FBXExportColladaSingleMatrix
-Export|AdvOptGrp|Collada|FrameRate - Number - 24.000000 - FBXExportColladaFrameRate
-"""

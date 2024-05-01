@@ -22,8 +22,6 @@ __all__ = [
     "FbxImportOptions",
 ]
 
-# NOTE: can only select and import a single take of animation at a time.
-
 
 def import_fbx(
     filename: os.PathLike,
@@ -73,7 +71,6 @@ class FbxImportOptions(FbxOptions):
 
     merge_mode = FbxPropertyField(
         "FBXImportMode",
-        # "FBXProperty Import|IncludeGrp|MergeMode",
         type=MergeMode,
         default=MergeMode.MERGE,
     )
@@ -642,50 +639,3 @@ class FbxImportOptions(FbxOptions):
         ``FBXImportGenerateLog``
     """
 
-
-"""
-TODO: The following properties are not implemented:
-
-Import|AdvOptGrp|FileFormat|Obj|ReferenceNode - Bool - True
-Import|AdvOptGrp|FileFormat|Max_3ds|ReferenceNode - Bool - True
-Import|AdvOptGrp|FileFormat|Max_3ds|Texture - Bool - True
-Import|AdvOptGrp|FileFormat|Max_3ds|Material - Bool - True
-Import|AdvOptGrp|FileFormat|Max_3ds|Animation - Bool - True
-Import|AdvOptGrp|FileFormat|Max_3ds|Mesh - Bool - True
-Import|AdvOptGrp|FileFormat|Max_3ds|Light - Bool - True
-Import|AdvOptGrp|FileFormat|Max_3ds|Camera - Bool - True
-Import|AdvOptGrp|FileFormat|Max_3ds|AmbientLight - Bool - True
-Import|AdvOptGrp|FileFormat|Max_3ds|Rescaling - Bool - True
-Import|AdvOptGrp|FileFormat|Max_3ds|Filter - Bool - True
-Import|AdvOptGrp|FileFormat|Max_3ds|Smoothgroup - Bool - True
-Import|AdvOptGrp|FileFormat|Motion_Base|MotionFrameCount - Integer - 0
-Import|AdvOptGrp|FileFormat|Motion_Base|MotionFrameRate - Number - 0.0
-Import|AdvOptGrp|FileFormat|Motion_Base|MotionActorPrefix - Bool - True
-Import|AdvOptGrp|FileFormat|Motion_Base|MotionRenameDuplicateNames - Bool - True
-Import|AdvOptGrp|FileFormat|Motion_Base|MotionExactZeroAsOccluded - Bool - True
-Import|AdvOptGrp|FileFormat|Motion_Base|MotionSetOccludedToLastValidPos - Bool - True
-Import|AdvOptGrp|FileFormat|Motion_Base|MotionAsOpticalSegments - Bool - True
-Import|AdvOptGrp|FileFormat|Motion_Base|MotionASFSceneOwned - Bool - True
-Import|AdvOptGrp|FileFormat|Motion_Base|MotionUpAxisUsedInFile
-Import|AdvOptGrp|FileFormat|Biovision_BVH|MotionCreateReferenceNode - Bool - True
-Import|AdvOptGrp|FileFormat|MotionAnalysis_HTR|MotionCreateReferenceNode - Bool - True
-Import|AdvOptGrp|FileFormat|MotionAnalysis_HTR|MotionBaseTInOffset - Bool - True
-Import|AdvOptGrp|FileFormat|MotionAnalysis_HTR|MotionBaseRInPrerotation - Bool - True
-Import|AdvOptGrp|FileFormat|Acclaim_ASF|MotionCreateReferenceNode - Bool - True
-Import|AdvOptGrp|FileFormat|Acclaim_ASF|MotionDummyNodes - Bool - True
-Import|AdvOptGrp|FileFormat|Acclaim_ASF|MotionLimits - Bool - True
-Import|AdvOptGrp|FileFormat|Acclaim_ASF|MotionBaseTInOffset - Bool - True
-Import|AdvOptGrp|FileFormat|Acclaim_ASF|MotionBaseRInPrerotation - Bool - True
-Import|AdvOptGrp|FileFormat|Acclaim_AMC|MotionCreateReferenceNode - Bool - True
-Import|AdvOptGrp|FileFormat|Acclaim_AMC|MotionDummyNodes - Bool - True
-Import|AdvOptGrp|FileFormat|Acclaim_AMC|MotionLimits - Bool - True
-Import|AdvOptGrp|FileFormat|Acclaim_AMC|MotionBaseTInOffset - Bool - True
-Import|AdvOptGrp|FileFormat|Acclaim_AMC|MotionBaseRInPrerotation - Bool - True
-Import|AdvOptGrp|Dxf|WeldVertices - Bool - True - FBXImportDxfWeldVertice
-Import|AdvOptGrp|Dxf|ObjectDerivation - Enum - "By layer" - ["By layer", "By entity", "By block"] - FBXImportDxfObjectDerivation [layer|entity|block]
-Import|AdvOptGrp|Dxf|ReferenceNode - Bool - True - FBXImportDxfReferenceNode
-
-
-FBXImportScaleFactorEnable bool - Cannot find procedure in 2020
-FBXImportScaleFactor float  - setter seem to have no effect
-"""

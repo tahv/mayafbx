@@ -123,7 +123,7 @@ class UpAxis(StrEnum):
         """Scene up axis."""
         if OpenMaya.MGlobal.isYAxisUp():
             return UpAxis.Y
-        if OpenMaya.MGlobal.iZAxisUp():
+        if OpenMaya.MGlobal.isZAxisUp():
             return UpAxis.Z
         message = f"Unsupported scene up axis: {OpenMaya.MGlobal.upAxis()}"
         raise RuntimeError(message)
@@ -146,7 +146,7 @@ class AxisConversionMethod(StrEnum):
     the new World system.
 
     Note:
-        If the plug-in does not detect a need for the conversion, 
+        If the plug-in does not detect a need for the conversion,
         no ``Fbx_Root`` node is added.
     """
 

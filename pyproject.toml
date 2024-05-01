@@ -75,6 +75,8 @@ show_error_codes = true
 
 [tool.ruff]
 line-length = 88
+
+[tool.ruff.lint]
 select = ["ALL"]
 ignore = [
   # ANN101: Missing type annotation for `self` in method
@@ -89,6 +91,8 @@ ignore = [
   "TD002",
   # TD003: Missing issue link on the line following this TODO
   "TD003",
+  # F403: `import *` used; unable to detect undefined names
+  "F403",
 ]
 unfixable = [
   # ERA001: Found commented-out code
@@ -97,21 +101,20 @@ unfixable = [
   "F401",
 ]
 
-# [tool.ruff.isort]
-# known-first-party = ["_"]
-
-[tool.ruff.flake8-tidy-imports]
+[tool.ruff.lint.flake8-tidy-imports]
 ban-relative-imports = "all"
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "tests/**/*" = [
   # PLR2004: Magic value used in comparison, consider replacing with a constant variable
   "PLR2004",
   # S101: Use of assert detected
   "S101",
   # PT004: Fixture does not return anything, add leading underscore
-  "PT004"
+  "PT004",
+  # INP001: File is part of an implicit namespace package. Add an `__init__.py`.
+  "INP001",
 ]
