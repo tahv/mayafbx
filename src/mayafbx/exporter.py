@@ -701,7 +701,7 @@ class FbxExportOptions(FbxOptions):
         You must apply the set to the Objects Transform node and not the Shape node.
         By default, any Geometry cache files created are in .MCX format.
 
-     When you activate this option, three files are generated:
+    When you activate this option, three files are generated:
         - an FBX file
         - an XML file
         - an MCX file
