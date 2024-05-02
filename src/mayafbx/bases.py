@@ -127,6 +127,10 @@ class FbxOptions:
         options.triangulate = True
     """
 
+    def __init__(self, **kwargs: object) -> None:
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
     @classmethod
     def from_scene(cls) -> Self:
         """Initialize a new instance from scene values."""

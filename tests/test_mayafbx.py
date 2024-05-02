@@ -77,6 +77,17 @@ def test_fbxoptions_from_scene() -> None:
     assert TestOptions.from_scene().smoothing_groups is False
 
 
+def test_fbxoptions_init_kwargs() -> None:
+    """It accept fields as init kwargs."""
+    command = "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups"
+
+    class TestOptions(mayafbx.FbxOptions):
+        smoothing_groups = mayafbx.FbxPropertyField(command, type=bool, default=False)
+
+    assert TestOptions(smoothing_groups=True).smoothing_groups is True
+    assert TestOptions(smoothing_groups=False).smoothing_groups is False
+
+
 def test_fbxoptions_iter() -> None:
     """It iter FbxProperties in FbxOptions instance."""
 
@@ -338,6 +349,7 @@ def test_export_import_take(tmp_path: Path) -> None:
         timeChange=True,
     )
     assert key_values == [10.0, 2.0, 20.0, 3.0]
+
 
 def test_up_axis_from_scene() -> None:
     """It returns scene up axis."""
