@@ -24,7 +24,6 @@ version = ".".join(release.split(".", 2)[0:2])
 extensions = [
     "myst_parser",               # markdown
     "sphinx.ext.autodoc",        # docstring
-    "enum_tools.autoenum",       # docstring, enums
     "sphinx.ext.napoleon",       # dosctring, google style
     "sphinx.ext.intersphinx",    # cross-projects references
     "autodoc_fbxpropertyfield",  # docstring, FbxPropertyField
