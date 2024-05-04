@@ -638,4 +638,3 @@ class FbxImportOptions(FbxOptions):
     Mel Command:
         ``FBXImportGenerateLog``
     """
-

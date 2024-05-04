@@ -1,4 +1,5 @@
 """Base classes and functions."""
+
 from __future__ import annotations
 
 from contextlib import contextmanager
@@ -87,7 +88,6 @@ class FbxPropertyField(Generic[T]):
 
     def __set_name__(self, owner: type[object], name: str) -> None:
         self.name = name
-
 
     @overload
     def __get__(self, obj: None, objtype: None) -> FbxPropertyField[T]: ...

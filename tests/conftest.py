@@ -1,4 +1,5 @@
 """Pytest configuration."""
+
 from typing import Generator
 
 import pytest
