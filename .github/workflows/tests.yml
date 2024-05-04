@@ -46,7 +46,7 @@ jobs:
           - "2024"
     runs-on: ubuntu-latest
     container:
-      image: mottosso/maya:${{maya-version}}
+      image: mottosso/maya:${{ matrix.maya-version }}
     steps:
       - uses: actions/checkout@v4
       - name: Install Dependencies
