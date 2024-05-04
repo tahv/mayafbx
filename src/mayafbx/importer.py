@@ -179,7 +179,7 @@ class FbxImportOptions(FbxOptions):
     Default to `True`.
     """
 
-    # TODO the fill_timeline options is overriden by Maya ?
+    # TODO: the fill_timeline options is overriden by Maya ?
     fill_timeline = FbxPropertyField(
         "FBXProperty Import|IncludeGrp|Animation|ExtraGrp|TimeLine",
         type=bool,

@@ -61,6 +61,9 @@ Bases
    :members:
    :undoc-members:
 
+.. autotypevar:: mayafbx.bases.T
+
+
 Enums
 -----
 

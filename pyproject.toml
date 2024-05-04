@@ -33,7 +33,7 @@ Github = "https://github.com/tahv/mayafbx"
 tests = ["pytest", "coverage"]
 style = ["ruff"]
 mypy = ["mypy", "pytest"]
-docs = ["sphinx", "furo", "myst-parser"]
+docs = ["sphinx", "furo", "myst-parser", "sphinx-toolbox"]
 dev = ["pyforce-p4[tests,style,mypy,docs]", "sphinx-autobuild"]
 
 [tool.hatch.version]

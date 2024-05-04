@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
-from typing import TYPE_CHECKING, Callable, Generic, Iterator, TypeVar, cast, overload
+from typing import TYPE_CHECKING, Callable, Generic, Iterator, TypeVar, overload
 
 from mayafbx.enums import StrEnum
 from mayafbx.utils import run_mel_command
@@ -52,7 +52,7 @@ class FbxProperty(Generic[T]):
     def get(self) -> T:
         """Get fbx property value from scene."""
         value = run_mel_command(f"{self._command} -q")
-        return self._type(value)  # type: ignore[arg-type]
+        return self._type(value)  # type: ignore[arg-type]  # type: ignore[arg-type]
 
     def set(self, value: T) -> None:
         """Set property value to scene."""

@@ -576,8 +576,8 @@ class FbxExportOptions(FbxOptions):
     # (BiNormals, VertexColor and UV) called "Modern Style".
     # See the class documentation and the ShapeAttributes sample code
     # for more information.
-    # deformation_shape_attributes = FbxPropertyField("FBXProperty Export|IncludeGrp|Animation|Deformation|ShapeAttributes", type=bool, default=False)
-    # deformation_shape_attributes_values = FbxPropertyField("FBXProperty Export|IncludeGrp|Animation|Deformation|ShapeAttributes|ShapeAttributesValues", type=str, default="Relative")  # ["Relative" "Absolute"]
+    # deformation_shape_attributes = FbxPropertyField("FBXProperty Export|IncludeGrp|Animation|Deformation|ShapeAttributes", type=bool, default=False)  # noqa: E501
+    # deformation_shape_attributes_values = FbxPropertyField("FBXProperty Export|IncludeGrp|Animation|Deformation|ShapeAttributes|ShapeAttributesValues", type=str, default="Relative")  # ["Relative" "Absolute"]  # noqa: E501
 
     curve_filter = FbxPropertyField(
         "FBXProperty Export|IncludeGrp|Animation|CurveFilter",
@@ -925,7 +925,7 @@ class FbxExportOptions(FbxOptions):
     `github comment <https://github.com/facebookincubator/FBX2glTF/issues/27#issuecomment-340110562>`_.
 
     .. _FBX and scale compensation:
-        https://help.autodesk.com/view/MAYAUL/2025/ENU/?guid=GUID-AA3B8EA4-DDFB-4B0F-9654-2BF6B8781AE7#GUID-AA3B8EA4-DDFB-4B0F-9654-2BF6B8781AE7__GUID-0604653D-C49F-47C4-8387-652D331F7F09
+        https://help.autodesk.com/view/MAYAUL/2025/ENU/?guid=GUID-AA3B8EA4-DDFB-4B0F-9654-2BF6B8781AE7#GUID-AA3B8EA4-DDFB-4B0F-9654-2BF6B8781AE7
 
     .. _Computing transformation matrices:
         https://help.autodesk.com/view/FBX/2020/ENU/?guid=FBX_Developer_Help_nodes_and_scene_graph_fbx_nodes_computing_transformation_matrix_html
