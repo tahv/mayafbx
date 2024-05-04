@@ -48,9 +48,9 @@ jobs:
     container:
       image: mottosso/maya:${{ matrix.maya-version }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Install Dependencies
-        run: mayapy -m pip install pytest
+        run: mayapy -m pip install pytest coverage
       - name: Run tests
         run: mayapy -m coverage run -p -m pytest
       - name: Upload coverage data
