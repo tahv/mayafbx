@@ -920,12 +920,9 @@ class FbxExportOptions(FbxOptions):
     and is the mode of inheritance used by joint hierarchy in Maya, also known as
     **Segment Scale Compensate**.
 
-    For more information, see `FBX and scale compensation`_,
-    `Computing transformation matrices`_ and this
+    For more information, see the section *FBX and scale compensation* 
+    in `FBX Limitations`_, `Computing transformation matrices`_ and this
     `github comment <https://github.com/facebookincubator/FBX2glTF/issues/27#issuecomment-340110562>`_.
-
-    .. _FBX and scale compensation:
-        https://help.autodesk.com/view/MAYAUL/2025/ENU/?guid=GUID-AA3B8EA4-DDFB-4B0F-9654-2BF6B8781AE7#GUID-AA3B8EA4-DDFB-4B0F-9654-2BF6B8781AE7
 
     .. _Computing transformation matrices:
         https://help.autodesk.com/view/FBX/2020/ENU/?guid=FBX_Developer_Help_nodes_and_scene_graph_fbx_nodes_computing_transformation_matrix_html

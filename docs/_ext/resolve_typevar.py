@@ -1,3 +1,8 @@
+"""Autodoc extension to resolve 'missing-reference' on 'autotypevar'.
+
+https://github.com/sphinx-doc/sphinx/issues/10785
+https://sphinx-toolbox.readthedocs.io/en/latest/extensions/more_autodoc/typevars.html
+"""
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -15,7 +20,7 @@ def resolve_type_aliases(
     node: pending_xref,
     contnode: Element,
 ) -> Element | None:
-    """Resolve :class: references to our type aliases as :data: (autotypevar)."""
+    """Try to resolve :class: references as :data:."""
     if node["refdomain"] == "py" and node["reftype"] == "class":
         return app.env.get_domain("py").resolve_xref(
             env,
@@ -29,5 +34,6 @@ def resolve_type_aliases(
     return None
 
 
-def setup(app: Sphinx):
+def setup(app: Sphinx) -> None:
+    """Setup extension."""
     app.connect("missing-reference", resolve_type_aliases)
