@@ -47,7 +47,7 @@ def run_mel_command(command: str) -> str | list[str] | int:
     """
     logger.debug("Running mel command: '%s'", command)
     try:
-        return mel.eval(command)
+        return mel.eval(command)  # type: ignore[no-any-return]
     except RuntimeError as exception:
         raise MelEvalError(command) from exception
 
@@ -87,7 +87,7 @@ def collect_fbx_properties() -> list[FbxPropDict]:
         r"\(\sVALUE:\s([^\)]+)\s\)"
         r"(?:\s+\(POSSIBLE VALUES: ([^\)]+)\s+\))?",
     )
-    result = []
+    result: list[FbxPropDict] = []
     for line in lines:
         match = regex.match(line)
         assert match, f"Failed to match line: {line}"  # noqa: S101
@@ -100,6 +100,6 @@ def collect_fbx_properties() -> list[FbxPropDict]:
         if match.group(4):
             data["possible"] = match.group(4).split()
 
-        result.append(data)
+        result.append(data)  # type: ignore[arg-type]
 
     return result

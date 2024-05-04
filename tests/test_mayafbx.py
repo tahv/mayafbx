@@ -25,24 +25,24 @@ def test_fbxproperty_default() -> None:
     """It returns default value."""
     command = "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups"
 
-    fbx_prop = mayafbx.FbxProperty(command, type=bool, default=True)
+    fbx_prop = mayafbx.FbxProperty(command, type_=bool, default=True)
     assert fbx_prop.default is True
 
-    fbx_prop = mayafbx.FbxProperty(command, type=bool, default=lambda: True)
+    fbx_prop = mayafbx.FbxProperty(command, type_=bool, default=lambda: True)
     assert fbx_prop.default is True
 
 
 def test_fbxproperty_command() -> None:
     """It returns command."""
     command = "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups"
-    fbx_prop = mayafbx.FbxProperty(command, type=bool, default=True)
+    fbx_prop = mayafbx.FbxProperty(command, type_=bool, default=True)
     assert fbx_prop.command == command
 
 
 def test_fbxproperty_get() -> None:
     """It get value from scene."""
     command = "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups"
-    fbx_prop = mayafbx.FbxProperty(command, type=bool, default=True)
+    fbx_prop = mayafbx.FbxProperty(command, type_=bool, default=True)
 
     mel.eval(f"{command} -v true")
     assert fbx_prop.get() is True
@@ -54,7 +54,7 @@ def test_fbxproperty_get() -> None:
 def test_fbxproperty_set() -> None:
     """It set value to scene."""
     command = "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups"
-    fbx_prop = mayafbx.FbxProperty(command, type=bool, default=True)
+    fbx_prop = mayafbx.FbxProperty(command, type_=bool, default=True)
 
     fbx_prop.set(value=True)
     assert mel.eval(f"{command} -q") == 1
@@ -159,12 +159,9 @@ def test_fbxexportoptions_valid_defaults() -> None:
 
 def test_fbximportoptions_valid_defaults() -> None:
     """It has valid default values."""
-    exceptions = {}
-
     options = mayafbx.FbxImportOptions()
     for prop, _ in options:
-        value = exceptions.get(prop.command, prop.get())
-        assert value == prop.default
+        assert prop.get() == prop.default
 
 
 def test_fbxexportoptions_can_be_applied() -> None:
@@ -226,20 +223,20 @@ def test_export_import_animated_cube(tmp_path: Path) -> None:
     cmds.setKeyframe(f"{cube}.translateX", time=24, value=10)
     assert cmds.keyframe(f"{cube}.translateX", query=True, keyframeCount=True) == 2
 
-    options = mayafbx.FbxExportOptions()
-    options.animation = True
+    export_options = mayafbx.FbxExportOptions()
+    export_options.animation = True
 
     filepath = tmp_path / "animated_cube.fbx"
-    mayafbx.export_fbx(filepath, options)
+    mayafbx.export_fbx(filepath, export_options)
 
     cmds.cutKey(f"{cube}.translateX", option="keys")
     assert cmds.keyframe(f"{cube}.translateX", query=True, keyframeCount=True) == 0
 
-    options = mayafbx.FbxImportOptions()
-    options.merge_mode = mayafbx.MergeMode.MERGE
-    options.animation = True
+    import_options = mayafbx.FbxImportOptions()
+    import_options.merge_mode = mayafbx.MergeMode.MERGE
+    import_options.animation = True
 
-    mayafbx.import_fbx(filepath, options)
+    mayafbx.import_fbx(filepath, import_options)
     assert cmds.keyframe(f"{cube}.translateX", query=True, keyframeCount=True) == 2
 
     key_values = cmds.keyframe(
@@ -303,27 +300,27 @@ def test_export_import_take(tmp_path: Path) -> None:
     cmds.setKeyframe(f"{cube}.translateX", time=20, value=3)
     assert cmds.keyframe(f"{cube}.translateX", query=True, keyframeCount=True) == 3
 
-    options = mayafbx.FbxExportOptions()
-    options.animation = True
-    options.delete_original_take_on_split_animation = True
+    export_options = mayafbx.FbxExportOptions()
+    export_options.animation = True
+    export_options.delete_original_take_on_split_animation = True
 
     filepath = tmp_path / "takes.fbx"
     mayafbx.export_fbx(
         filepath,
-        options,
+        export_options,
         takes=[Take("foo", 0, 10), Take("bar", 10, 20)],
     )
 
-    options = mayafbx.FbxImportOptions()
-    options.merge_mode = mayafbx.MergeMode.MERGE
-    options.animation = True
+    import_options = mayafbx.FbxImportOptions()
+    import_options.merge_mode = mayafbx.MergeMode.MERGE
+    import_options.animation = True
 
     # take 'foo'
 
     cmds.cutKey(f"{cube}.translateX", option="keys")
     assert cmds.keyframe(f"{cube}.translateX", query=True, keyframeCount=True) == 0
 
-    mayafbx.import_fbx(filepath, options, take=1)
+    mayafbx.import_fbx(filepath, import_options, take=1)
     assert cmds.keyframe(f"{cube}.translateX", query=True, keyframeCount=True) == 2
 
     key_values = cmds.keyframe(
@@ -339,7 +336,7 @@ def test_export_import_take(tmp_path: Path) -> None:
     cmds.cutKey(f"{cube}.translateX", option="keys")
     assert cmds.keyframe(f"{cube}.translateX", query=True, keyframeCount=True) == 0
 
-    mayafbx.import_fbx(filepath, options, take=2)
+    mayafbx.import_fbx(filepath, import_options, take=2)
     assert cmds.keyframe(f"{cube}.translateX", query=True, keyframeCount=True) == 2
 
     key_values = cmds.keyframe(

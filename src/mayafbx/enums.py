@@ -180,7 +180,7 @@ class FileVersion(StrEnum):
     def current_value() -> FileVersion:
         """Export version currently used by the plugin."""
         # TODO: improve to get the real default value from Maya preset.
-        return mel.eval("FBXExportFileVersion -q")
+        return mel.eval("FBXExportFileVersion -q")  # type: ignore[no-any-return]
 
 
 class MergeMode(StrEnum):

@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
-from typing import TYPE_CHECKING, Callable, Generic, Iterator, TypeVar, overload
+from typing import TYPE_CHECKING, Callable, Generic, Iterator, TypeVar, cast, overload
 
 from mayafbx.enums import StrEnum
 from mayafbx.utils import run_mel_command
@@ -27,12 +27,12 @@ class FbxProperty(Generic[T]):
     def __init__(
         self,
         command: str,
-        type: type[T],  # noqa: A002
+        type_: type[T],
         default: T | Callable[[], T],
     ) -> None:
         self._command = command
-        self._type = type
-        self._default = default
+        self._type: type[T] = type_
+        self._default: T | Callable[[], T] = default
 
     def __repr__(self) -> str:
         return (
@@ -52,7 +52,7 @@ class FbxProperty(Generic[T]):
     def get(self) -> T:
         """Get fbx property value from scene."""
         value = run_mel_command(f"{self._command} -q")
-        return self._type(value)
+        return self._type(value)  # type: ignore[arg-type]
 
     def set(self, value: T) -> None:
         """Set property value to scene."""
@@ -82,7 +82,7 @@ class FbxPropertyField(Generic[T]):
         type: type[T],  # noqa: A002
         default: T | Callable[[], T],
     ) -> None:
-        self.fbx_property = FbxProperty(command, type, default)
+        self.fbx_property: FbxProperty[T] = FbxProperty(command, type, default)
         self.name = ""
 
     def __set_name__(self, owner: type[object], name: str) -> None:

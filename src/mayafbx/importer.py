@@ -24,7 +24,7 @@ __all__ = [
 
 
 def import_fbx(
-    filename: os.PathLike,
+    filename: os.PathLike[str],
     options: FbxImportOptions,
     *,
     take: int | None = None,
