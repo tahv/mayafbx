@@ -1,0 +1,49 @@
+name: Code style
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "docs/**"
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - "docs/**"
+
+# Cancel concurent in-progress jobs or run on pull_request
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  ruff-lint:
+    name: Ruff lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install requirements
+        run: |
+          python -Im pip install --upgrade pip
+          python -Im pip install ruff
+      - name: Run Ruff linter
+        run: python -Im ruff check --output-format=github src tests
+
+  ruff-format:
+    name: Ruff format diff
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install requirements
+        run: |
+          python -Im pip install --upgrade pip
+          python -Im pip install ruff
+      - name: Run Ruff formatter
+        run: python -Im ruff format --diff src tests

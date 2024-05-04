@@ -1,0 +1,41 @@
+name: Docs
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Test build docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: install requirements
+        run: |
+          python -im pip install --upgrade pip
+          python -im pip install .[docs]
+      - name: Build docs
+        run: |
+          python -m sphinx -W -n -b html -a docs docs/_build
+
+  linkcheck:
+    name: Linkcheck
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+      - name: install requirements
+        run: |
+          python -im pip install --upgrade pip
+          python -im pip install .[docs]
+      - name: Linkcheck docs
+        run: python -m sphinx -b linkcheck -a docs docs/_build/linkcheck
