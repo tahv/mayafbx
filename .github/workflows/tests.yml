@@ -48,7 +48,7 @@ jobs:
     container:
       image: mottosso/maya:${{ matrix.maya-version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
       - name: Install Dependencies
         run: mayapy -m pip install pytest coverage
       - name: Run tests
@@ -59,6 +59,7 @@ jobs:
           name: coverage-data-${{ matrix.maya-version }}
           path: .coverage.*
           if-no-files-found: ignore
+
   coverage:
     name: Combine and report coverage
     runs-on: ubuntu-latest
