@@ -54,7 +54,7 @@ jobs:
       - name: Run tests
         run: mayapy -m coverage run -p -m pytest
       - name: Upload coverage data
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v2
         with:
           name: coverage-data-${{ matrix.maya-version }}
           path: .coverage.*
