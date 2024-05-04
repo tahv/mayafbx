@@ -73,6 +73,14 @@ show_error_codes = true
 # disallow_any_generics = true
 # implicit_reexport = false
 
+[[tool.mypy.overrides]]
+module = [
+  "maya",
+  "maya.api",
+  "maya.standalone",
+]
+ignore_missing_imports = true
+
 [tool.ruff]
 line-length = 88
 

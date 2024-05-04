@@ -1,0 +1,87 @@
+name: Tests & Mypy
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "docs/**"
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - "docs/**"
+
+jobs:
+  mypy:
+    name: Mypy ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version:
+          - "3.8"
+          - "3.9"
+          - "3.10"
+          - "3.11"
+          - "3.12"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install requirements
+        run: |
+          python -Im pip install --upgrade pip
+          python -Im pip install .[mypy]
+      - name: Run mypy
+        run: |
+          python -Im mypy src tests
+
+  tests:
+    name: Tests Maya ${{ matrix.maya-version }}
+    strategy:
+      matrix:
+        maya-version:
+          - "2022"
+          - "2023"
+          - "2024"
+    runs-on: ubuntu-latest
+    container:
+      image: mottosso/maya:${{maya-version}}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Dependencies
+        run: mayapy -m pip install pytest
+      - name: Run tests
+        run: mayapy -m coverage run -p -m pytest
+      - name: Upload coverage data
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-data-${{ matrix.maya-version }}
+          path: .coverage.*
+          if-no-files-found: ignore
+  coverage:
+    name: Combine and report coverage
+    runs-on: ubuntu-latest
+    needs: tests
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Download coverage data
+        uses: actions/download-artifact@v4
+        with:
+          pattern: coverage-data-*
+          merge-multiple: true
+      - name: Install requirements
+        run: |
+          python -Im pip install --upgrade pip
+          python -Im pip install coverage
+      - name: Combine and report
+        run: |
+          python -Im coverage combine
+          # Report in summary
+          python -Im coverage report --show-missing --skip-covered --skip-empty --format=markdown >> $GITHUB_STEP_SUMMARY
+          # Report in console
+          python -Im coverage report --show-missing --skip-covered --skip-empty
