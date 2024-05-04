@@ -61,7 +61,6 @@ exclude_lines = [
 source = ["src/", "*/src"]
 
 [tool.mypy]
-plugins = ["pydantic.mypy"]
 disallow_untyped_defs = true
 check_untyped_defs = true
 disallow_any_unimported = true
