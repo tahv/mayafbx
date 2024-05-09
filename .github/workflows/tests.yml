@@ -41,20 +41,18 @@ jobs:
     strategy:
       matrix:
         maya-version:
-          - "2022"
-          - "2023"
-          - "2024"
+          - "2025"
     runs-on: ubuntu-latest
     container:
-      image: mottosso/maya:${{ matrix.maya-version }}
+      image: tahv/mayapy:${{ matrix.maya-version }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Install Dependencies
         run: mayapy -m pip install pytest coverage
       - name: Run tests
         run: mayapy -m coverage run -p -m pytest
       - name: Upload coverage data
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-data-${{ matrix.maya-version }}
           path: .coverage.*
