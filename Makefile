@@ -4,6 +4,7 @@ venv = .venv
 sources = src tests
 
 DOCS_BUILDDIR = docs/_build
+MAYA_VERSION ?= 2025
 
 ifeq ($(OS), Windows_NT)
 python = $(venv)\Scripts\python.exe
@@ -63,10 +64,10 @@ clean:
 	rm -rf $(DOCS_BUILDDIR)
 endif
 
-.PHONY: tests  ## Run tests and coverage
+.PHONY: tests  ## Run the tests with coverage in a docker container
 tests: $(venv)
 	-docker stop mayafbx-test && docker rm mayafbx-test
-	docker build --quiet -t mayafbx .
+	docker build --build-arg MAYA_VERSION=$(MAYA_VERSION) -t mayafbx .
 	docker run --name mayafbx-test mayafbx mayapy -m coverage run -m pytest
 	docker cp mayafbx-test:/app/.coverage .coverage
 	$(python) -m coverage report --show-missing --skip-covered --skip-empty
@@ -100,9 +101,9 @@ docs: $(venv)
 serve: $(venv)
 	$(python) -m sphinx_autobuild -b html -a --watch README.md --watch src -vvv docs $(DOCS_BUILDDIR)
 
-# .PHONY: linkcheck  ## Check all external links in docs for integrity
-# linkcheck: $(venv)
-# 	$(python) -m sphinx -b linkcheck -a docs $(DOCS_BUILDDIR)/linkcheck
+.PHONY: linkcheck  ## Check all external links in docs for integrity
+linkcheck: $(venv)
+	$(python) -m sphinx -b linkcheck -a docs $(DOCS_BUILDDIR)/linkcheck
 
 .PHONY: help  ## Display this message
 ifeq ($(OS), Windows_NT)
