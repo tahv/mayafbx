@@ -576,8 +576,8 @@ class FbxExportOptions(FbxOptions):
     # (BiNormals, VertexColor and UV) called "Modern Style".
     # See the class documentation and the ShapeAttributes sample code
     # for more information.
-    # deformation_shape_attributes = FbxPropertyField("FBXProperty Export|IncludeGrp|Animation|Deformation|ShapeAttributes", type=bool, default=False)  # noqa: E501
-    # deformation_shape_attributes_values = FbxPropertyField("FBXProperty Export|IncludeGrp|Animation|Deformation|ShapeAttributes|ShapeAttributesValues", type=str, default="Relative")  # ["Relative" "Absolute"]  # noqa: E501
+    # TODO: deformation_shape_attributes = FbxPropertyField("FBXProperty Export|IncludeGrp|Animation|Deformation|ShapeAttributes", type=bool, default=False)  # noqa: E501
+    # TODO: deformation_shape_attributes_values = FbxPropertyField("FBXProperty Export|IncludeGrp|Animation|Deformation|ShapeAttributes|ShapeAttributesValues", type=str, default="Relative")  # ["Relative" "Absolute"]  # noqa: E501
 
     curve_filter = FbxPropertyField(
         "FBXProperty Export|IncludeGrp|Animation|CurveFilter",
@@ -920,7 +920,7 @@ class FbxExportOptions(FbxOptions):
     and is the mode of inheritance used by joint hierarchy in Maya, also known as
     **Segment Scale Compensate**.
 
-    For more information, see the section *FBX and scale compensation* 
+    For more information, see the section *FBX and scale compensation*
     in `FBX Limitations`_, `Computing transformation matrices`_ and this
     `github comment <https://github.com/facebookincubator/FBX2glTF/issues/27#issuecomment-340110562>`_.
 

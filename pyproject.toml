@@ -100,6 +100,8 @@ ignore = [
   "TD003",
   # F403: `import *` used; unable to detect undefined names
   "F403",
+  # FIX002: Line contains TODO, consider resolving the issue
+  "FIX002",
 ]
 unfixable = [
   # ERA001: Found commented-out code
