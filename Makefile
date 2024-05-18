@@ -1,3 +1,5 @@
+.DEFAULT_GOAL = help
+
 venv = .venv
 sources = src tests
 
