@@ -42,7 +42,7 @@ jobs:
       matrix:
         maya-version:
           - "2025"
-          # - "2024"
+          - "2024"
           - "2023"
           - "2022"
     runs-on: ubuntu-latest
