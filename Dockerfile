@@ -1,9 +1,10 @@
-ARG MAYA_VERSION=2024
-FROM mottosso/maya:$MAYA_VERSION
+ARG MAYA_VERSION=2025
+
+FROM tahv/mayapy:$MAYA_VERSION
 
 WORKDIR /app
 
-RUN mayapy -m pip install pytest coverage
+RUN mayapy -m pip install --upgrade pip && mayapy -m pip install pytest coverage
 
 COPY . .
 
