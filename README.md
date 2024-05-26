@@ -30,7 +30,7 @@ Python wrapper for Maya FBX plugin.
 
 ## Installation
 
-Available as [`mayafbx`][mayafbx-pypi] on PyPI:
+Using pip:
 
 ```bash
 python -m pip install mayafbx

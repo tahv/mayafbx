@@ -1,44 +1,49 @@
 .DEFAULT_GOAL = help
 
-venv = .venv
-sources = src tests
+VENV = .venv
+SOURCES = src tests
 
 DOCS_BUILDDIR = docs/_build
 MAYA_VERSION ?= 2025
 
+PIP_CMD = uv pip
+VENV_CMD = uv venv
+# PIP_CMD = $(PYTHON) -m pip
+# VENV_CMD = python -m venv
+
 ifeq ($(OS), Windows_NT)
-python = $(venv)\Scripts\python.exe
+python = $(VENV)\Scripts\python.exe
 else
-python = $(venv)/bin/python
+python = $(VENV)/bin/python
 endif
 
 .PHONY: uninstall  ## Remove development environment
 ifeq ($(OS), Windows_NT)
 uninstall:
-	if exist $(venv) rd /q /s $(venv)
+	if exist $(VENV) rd /q /s $(VENV)
 	for /d /r %%g in (src\*.egg-info) do rd /q /s "%%g" 2>nul || break
 else
 uninstall:
-	rm -rf $(venv)
+	rm -rf $(VENV)
 	rm -rf src/*.egg-info
 endif
 
 ifeq ($(OS), Windows_NT)
-$(venv): pyproject.toml
+$(VENV): pyproject.toml
 	@$(MAKE) --no-print-directory uninstall
-	python -m venv $(venv)
-	$(python) -m pip install --upgrade pip build --editable .[dev]
+	$(VENV_CMD) $(VENV)
+	$(PIP_CMD) install --upgrade pip build --editable .[dev]
 else
-$(venv): pyproject.toml
+$(VENV): pyproject.toml
 	@$(MAKE) --no-print-directory uninstall
-	python -m venv $(venv)
-	$(python) -m pip install --upgrade pip build --editable .[dev]
-	touch $(venv)
+	$(VENV_CMD) $(VENV)
+	$(PIP_CMD) install --upgrade pip build --editable .[dev]
+	touch $(VENV)
 endif
 
 .PHONY: install  ## Install the package and dependencies for local development
 install:
-	@$(MAKE) --no-print-directory --always-make $(venv)
+	@$(MAKE) --no-print-directory --always-make $(VENV)
 
 .PHONY: clean  ## Clear local caches and build artifacts
 ifeq ($(OS), Windows_NT)
@@ -65,45 +70,49 @@ clean:
 endif
 
 .PHONY: tests  ## Run the tests with coverage in a docker container
-tests: $(venv)
+tests: $(VENV)
 	-docker stop mayafbx-test && docker rm mayafbx-test
 	docker build --build-arg MAYA_VERSION=$(MAYA_VERSION) -t mayafbx .
-	docker run --name mayafbx-test mayafbx mayapy -m coverage run -m pytest
+	docker run --name mayafbx-test mayafbx mayapy -m coverage run -m pytest ; echo CODE: \$?
 	docker cp mayafbx-test:/app/.coverage .coverage
 	$(python) -m coverage report --show-missing --skip-covered --skip-empty
 
 .PHONY: interactive  ## Run an interactive docker container
 interactive:
-	docker build -t mayafbx .
+	docker build --build-arg MAYA_VERSION=$(MAYA_VERSION) -t mayafbx .
 	docker run --rm -it mayafbx
 
 .PHONY: lint  ## Run linter
-lint: $(venv)
-	$(python) -m ruff check $(sources)
+lint: $(VENV)
+	$(python) -m ruff check $(SOURCES)
 
 .PHONY: formatdiff  ## Show what the formatting would look like
-formatdiff: $(venv)
-	$(python) -m ruff format --diff $(sources)
+formatdiff: $(VENV)
+	$(python) -m ruff format --diff $(SOURCES)
 
 .PHONY: mypy  ## Perform type-checking
-mypy: $(venv)
-	$(python) -m mypy $(sources)
+mypy: $(VENV)
+	$(python) -m mypy $(SOURCES)
 
 .PHONY: build  ## Build package
-build: $(venv)
+build: $(VENV)
 	$(python) -m build
 
 .PHONY: docs  ## Build documentation
-docs: $(venv)
+docs: $(VENV)
 	$(python) -m sphinx -W -n -b html -a docs $(DOCS_BUILDDIR)
 
 .PHONY: serve  ## Serve documentation at http://127.0.0.1:8000
-serve: $(venv)
+serve: $(VENV)
 	$(python) -m sphinx_autobuild -b html -a --watch README.md --watch src -vvv docs $(DOCS_BUILDDIR)
 
 .PHONY: linkcheck  ## Check all external links in docs for integrity
-linkcheck: $(venv)
+linkcheck: $(VENV)
 	$(python) -m sphinx -b linkcheck -a docs $(DOCS_BUILDDIR)/linkcheck
+
+.PHONY: zip  ## Create a zip archive with source code
+zip: src/mayafbx/
+	tar -cvf mayafbx.zip --format=zip --exclude *.pyc -C src mayafbx
 
 .PHONY: help  ## Display this message
 ifeq ($(OS), Windows_NT)
