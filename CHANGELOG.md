@@ -2,32 +2,19 @@
 
 ## [unreleased]
 
-- Complete project rewrite.
-- Dropped support for Python `< 3.7`. Minimum supported Maya version is now `2022`.
-- Added `FbxExportOptions.referenced_asset_content`.
-- Renamed `FbxExportOptions.bake_animation`
-  to `FbxExportOptions.bake_complexe_animation`.
-- Renamed `FbxExportOptions.curve_filter_constant_key_reducer`
-  to `FbxExportOptions.constant_key_reducer`.
-- Renamed `FbxExportOptions.curve_filter_precision_translation`
-  to `FbxExportOptions.constant_key_reducer_translation_precision`.
-- Renamed `FbxExportOptions.curve_filter_precision_rotation`
-  to `FbxExportOptions.constant_key_reducer_rotation_precision`.
-- Renamed `FbxExportOptions.curve_filter_precision_scale`
-  to `FbxExportOptions.constant_key_reducer_scale_precision`.
-- Renamed `FbxExportOptions.curve_filter_precision_other`
-  to `FbxExportOptions.constant_key_reducer_other_precision`.
-- Renamed `FbxExportOptions.curve_filter_auto_tangents_only`
-  to `FbxExportOptions.constant_key_reducer_auto_tangents_only`.
-- Added `FbxExportOptions.pivot_to_nulls`.
-- Added `FbxExportOptions.bypass_rrs_inheritance`.
-- Removed `FbxExportOptions.selected`,
-  `selection` is now a parameter of the `export_fbx` function.
-- Renamed `FbxExportOptions.selected_hierarchy`
-  to `FbxExportOptions.include_children`.
-- Renamed `FbxExportOptions.selected_input_connections`
-  to `FbxExportOptions.input_connections`.
-
+- complete project rewrite.
+- dropped support for Python `< 3.7`. Minimum supported Maya version is now `2022`.
+- removed `FbxExportOptions.selected`, `export_fbx` takes a `selection` argument instead.
+- `export_fbx` now has an optional `takes` argument to export a list of animation takes.
+- many properties in `FbxExportOptions` and `FbxImportOptions`
+  have been renamed to stick more closely to the names in Autodesk documentation.
+  For example, `FbxExportOptions.selected_hierarchy` 
+  was renamed to `FbxExportOptions.include_children`.
+- added new properties in `FbxExportOptions`, including:
+  `referenced_asset_content`, `pivot_to_nulls` or `bypass_rrs_inheritance`.
+- all enums names have been uppercased. 
+  For example: `QuaternionInterpolation.kResampleAsEuler` 
+  was renamed `QuaternionInterpolation.RESAMPLE_AS_EULER`.
 
 ## 0.1.0 - 2021-02-14
 
