@@ -4,3 +4,4 @@
 /docs/_build
 /.python-version
 /.coverage
+/dist/
