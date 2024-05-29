@@ -5,17 +5,18 @@
 [ruff-repo]: https://github.com/astral-sh/ruff
 [mypy-repo]: https://github.com/python/mypy
 [mayafbx-workflow-tests]: https://github.com/tahv/mayafbx/actions/workflows/tests.yml
-[mayafbx-zip]: https://github.com/tahv/mayafbx/releases/latest/download/mayafbx.zip
+<!-- [mayafbx-zip]: https://github.com/tahv/mayafbx/releases/latest/download/mayafbx.zip -->
+[mayafbx-latest-release]: https://github.com/tahv/mayafbx/releases/latest
 [mayafbx-contributing]: https://mayafbx.readthedocs.io/latest/contributing.html
 
 # mayafbx
 
-> **Warning**
+> **Warning:**
 >
-> Release `1.0.0` contains API breaking changes and dropped support for python 2.
-> If you are looking for the old version, see this 
+> Release `1.0.0` include many API breaking changes and dropped Python 2 support.
+> If you are looking for the legacy version of `mayafbx`, see this 
 > [commit](https://github.com/tahv/mayafbx/tree/95d52a61bdefd84c90b9822b2ccb829da89626a8)
-> and the [`0.1.0`](https://github.com/tahv/mayafbx/releases/tag/0.1.0) release.
+> and release [`0.1.0`](https://github.com/tahv/mayafbx/releases/tag/0.1.0).
 
 [![License - MIT](https://img.shields.io/github/license/tahv/mayafbx?label=License)][mayafbx-license]
 [![Maya Version](https://img.shields.io/badge/Maya-2022%20%7C%202023%20%7C%202024%20%7C%202025-%2339a5cc?logo=autodesk&logoColor=white)][mayafbx-pypi]
@@ -26,21 +27,21 @@
 [![CI - Tests](https://img.shields.io/github/actions/workflow/status/tahv/mayafbx/tests.yml?logo=github&logoColor=white&label=Tests)][mayafbx-workflow-tests]
 [![Documentation Status](https://img.shields.io/readthedocs/mayafbx?logo=readthedocs&logoColor=white&label=Documentation)][mayafbx-documentation]
 
-Python wrapper for Maya FBX plugin.
+Python wrapper of Maya FBX plugin.
 
 ## Installation
 
-Using pip:
+Install `mayafbx` with pip.
 
 ```bash
 python -m pip install mayafbx
 ```
 
-You can also download and extract [`mayafbx.zip`][mayafbx-zip] from latest release.
+You can also download and extract `mayafbx-<version>.zip` from [latest release][mayafbx-latest-release].
 
 ## Comparison
 
-This is how you would export a fbx using Maya commands:
+Below is an example of how to export an FBX file using standard Maya commands:
 
 ```python
 from maya import mel
@@ -53,7 +54,7 @@ mel.eval("FBXProperty Export|IncludeGrp|CameraGrp|Camera -v false")
 mel.eval('FBXExport -f "C:/outfile.fbx" -s')  # '-s' for selected.
 ```
 
-And this is how you would export the same fbx using `mayafbx`:
+And here is how to achieve the same using `mayafbx`:
 
 ```python
 from mayafbx import FbxExportOptions, export_fbx
@@ -66,16 +67,12 @@ options.cameras = True
 export_fbx("C:/outfile.fbx", options, selection=True)
 ```
 
-Or like this:
+Alternatively, you can write it in a more concise way:
 
 ```python
 from mayafbx import FbxExportOptions, export_fbx
 
-options = FbxExportOptions(
-    animation=True,
-    remove_single_key=True,
-    cameras=True,
-)
+options = FbxExportOptions(animation=True, remove_single_key=True, cameras=True)
 
 export_fbx("C:/outfile.fbx", options, selection=True)
 ```
