@@ -32,12 +32,12 @@ ifeq ($(OS), Windows_NT)
 $(VENV): pyproject.toml
 	@$(MAKE) --no-print-directory uninstall
 	$(VENV_CMD) $(VENV)
-	$(PIP_CMD) install --upgrade pip build --editable .[dev]
+	$(PIP_CMD) install --editable .[dev]
 else
 $(VENV): pyproject.toml
 	@$(MAKE) --no-print-directory uninstall
 	$(VENV_CMD) $(VENV)
-	$(PIP_CMD) install --upgrade pip build --editable .[dev]
+	$(PIP_CMD) install --editable .[dev]
 	touch $(VENV)
 endif
 
@@ -96,7 +96,7 @@ mypy: $(VENV)
 
 .PHONY: build  ## Build package
 build: $(VENV)
-	$(python) -m build
+	$(python) -m hatch build -t wheel -t sdist -t zipped-directory
 
 .PHONY: docs  ## Build documentation
 docs: $(VENV)

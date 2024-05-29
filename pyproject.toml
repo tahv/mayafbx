@@ -1,6 +1,6 @@
 #:schema https://json.schemastore.org/pyproject.json
 [build-system]
-requires = ["hatchling", "hatch-vcs"]
+requires = ["hatchling", "hatch-vcs", "hatch-zipped-directory"]
 build-backend = "hatchling.build"
 
 [project]
@@ -26,15 +26,16 @@ classifiers = [
 
 [project.urls]
 Github = "https://github.com/tahv/mayafbx"
-# Changelog = "https://mayafbx.readthedocs.io/latest/changelog.html"
-# Documentation = "https://mayafbx.readthedocs.io/latest"
+Changelog = "https://mayafbx.readthedocs.io/latest/changelog.html"
+Documentation = "https://mayafbx.readthedocs.io/latest"
 
 [project.optional-dependencies]
 tests = ["pytest", "coverage"]
 style = ["ruff"]
+build = ["hatch"]
 mypy = ["mypy", "pytest"]
 docs = ["sphinx", "furo", "myst-parser", "sphinx-toolbox"]
-dev = ["pyforce-p4[tests,style,mypy,docs]", "sphinx-autobuild"]
+dev = ["mayafbx[tests,style,mypy,docs,build]", "sphinx-autobuild"]
 
 [tool.hatch.version]
 source = "vcs"
@@ -42,7 +43,9 @@ source = "vcs"
 [tool.hatch.version.raw-options]
 local_scheme = "no-local-version"
 
-[tool.hatch.build.targets.wheel]
+[tool.hatch.build.targets.zipped-directory]
+install-name = ""
+sources = ["src"]
 packages = ["src/mayafbx"]
 
 [tool.pytest.ini_options]

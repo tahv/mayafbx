@@ -39,6 +39,20 @@ python -m pip install mayafbx
 
 You can also download and extract `mayafbx-<version>.zip` from [latest release][mayafbx-latest-release].
 
+The zip archive is created using 
+[`hatch-zipped-directory`](https://github.com/dairiki/hatch-zipped-directory) 
+and has the following structure:
+
+```text
+.
+├── LICENSE
+├── METADATA.json
+├── README.md
+└── mayafbx/
+    ├── __init__.py
+    └── ...
+```
+
 ## Comparison
 
 Below is an example of how to export an FBX file using standard Maya commands:

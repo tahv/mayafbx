@@ -23,12 +23,12 @@ jobs:
           cache: pip
       - name: Install requirements
         run: |
-          python -Im pip install --upgrade pip
-          python -Im pip install build check-wheel-contents hatch hatch-vcs
+          python -m pip install --upgrade pip
+          python -m pip install check-wheel-contents hatch hatch-vcs
       - name: Build package
         id: build
         run: |
-          python -Im build
+          python -m hatch build -t wheel -t sdist -t zipped-directory
           echo "version=$(python -m hatchling version)" | tee -a "$GITHUB_OUTPUT"
       - name: Check wheel content
         run: check-wheel-contents dist/*.whl
@@ -40,12 +40,15 @@ jobs:
           echo -e '<details open><summary>Wheel Contents</summary>\n' >> $GITHUB_STEP_SUMMARY
           unzip -Z1 dist/*.whl | tree -a --fromfile . | sed 's/^/    /' | tee -a $GITHUB_STEP_SUMMARY
           echo -e '</details>\n' >> $GITHUB_STEP_SUMMARY
+          echo -e '<details open><summary>Zip Contents</summary>\n' >> $GITHUB_STEP_SUMMARY
+          unzip -Z1 dist/*.zip | tree -a --fromfile . | sed 's/^/    /' | tee -a $GITHUB_STEP_SUMMARY
+          echo -e '</details>\n' >> $GITHUB_STEP_SUMMARY
       - uses: actions/upload-artifact@v4
         with:
           name: dist
           path: ./dist
 
-  # Draft a new release on tagged commit on main.
+  # Draft a new draft release on tagged commit on main.
   draft-release:
     name: Draft release
     runs-on: ubuntu-latest
@@ -56,10 +59,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
       - name: Draft a new release
-        run: >
-          gh release create --draft --repo ${{ github.repository }}
-          ${{ github.ref_name }}
-          dist/*
+        run: gh release create ${{ github.ref_name }} --draft --repo ${{ github.repository }} dist/* 
         env:
           GH_TOKEN: ${{ github.token }}
 
