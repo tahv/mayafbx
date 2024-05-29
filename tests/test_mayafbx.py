@@ -263,7 +263,7 @@ def test_restore_export_preset() -> None:
 
 def test_restore_import_preset() -> None:
     """It reset scene import preset."""
-    command = "FBXProperty Import|IncludeGrp|Geometry|SmoothingGroups"
+    command = "FBXProperty Import|IncludeGrp|Geometry|UnlockNormals"
 
     assert mel.eval(f"{command} -q") == 0
 
