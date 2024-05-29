@@ -10,7 +10,7 @@
 API Reference
 =============
 
-Official Maya 2025 Documentation:
+Official Maya documentation (2025):
    - `FBX Export MEL commands`_
    - `FBX Export options`_
    - `FBX Import MEL commands`_
@@ -31,7 +31,8 @@ Export
    :member-order: bysource
    :show-inheritance:
 
-.. autoclass:: mayafbx.utils.Take
+.. autonamedtuple:: mayafbx.utils.Take
+   :members:
 
 Import
 ------
