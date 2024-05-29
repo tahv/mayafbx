@@ -1,4 +1,5 @@
 <!-- [mayafbx-documentation]: https://mayafbx.readthedocs.io/latest -->
+[mayafbx-documentation]: https://github.com/tahv/mayafbx
 [mayafbx-license]: https://github.com/tahv/mayafbx/blob/main/LICENSE
 [mayafbx-repo]: https://github.com/tahv/mayafbx
 [mayafbx-pypi]: https://pypi.org/project/mayafbx
