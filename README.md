@@ -1,13 +1,13 @@
-[mayafbx-documentation]: https://mayafbx.readthedocs.io/latest
+<!-- [mayafbx-documentation]: https://mayafbx.readthedocs.io/latest -->
 [mayafbx-license]: https://github.com/tahv/mayafbx/blob/main/LICENSE
 [mayafbx-repo]: https://github.com/tahv/mayafbx
 [mayafbx-pypi]: https://pypi.org/project/mayafbx
 [ruff-repo]: https://github.com/astral-sh/ruff
 [mypy-repo]: https://github.com/python/mypy
 [mayafbx-workflow-tests]: https://github.com/tahv/mayafbx/actions/workflows/tests.yml
-<!-- [mayafbx-zip]: https://github.com/tahv/mayafbx/releases/latest/download/mayafbx.zip -->
 [mayafbx-latest-release]: https://github.com/tahv/mayafbx/releases/latest
-[mayafbx-contributing]: https://mayafbx.readthedocs.io/latest/contributing.html
+<!-- [mayafbx-contributing]: https://mayafbx.readthedocs.io/latest/contributing.html -->
+[mayafbx-contributing]: https://github.com/tahv/mayafbx
 
 # mayafbx
 
@@ -25,7 +25,7 @@
 [![Linter - Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v1.json)][ruff-repo]
 [![Types - Mypy](https://img.shields.io/badge/Types-Mypy-blue.svg)][mypy-repo]
 [![CI - Tests](https://img.shields.io/github/actions/workflow/status/tahv/mayafbx/tests.yml?logo=github&logoColor=white&label=Tests)][mayafbx-workflow-tests]
-[![Documentation Status](https://img.shields.io/readthedocs/mayafbx?logo=readthedocs&logoColor=white&label=Documentation)][mayafbx-documentation]
+<!-- [![Documentation Status](https://img.shields.io/readthedocs/mayafbx?logo=readthedocs&logoColor=white&label=Documentation)][mayafbx-documentation] -->
 
 Python wrapper of Maya FBX plugin.
 
