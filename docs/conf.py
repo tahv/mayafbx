@@ -27,6 +27,7 @@ extensions = [
     "sphinx.ext.napoleon",       # dosctring, google style
     "sphinx.ext.intersphinx",    # cross-projects references
     "sphinx_toolbox.more_autodoc.typevars",
+    "sphinx_toolbox.more_autodoc.autonamedtuple",
     "autodoc_fbxpropertyfield",  # docstring, FbxPropertyField
     "resolve_typevar",           # fix 'missing-reference' on TypeVar
 ]
@@ -53,5 +54,3 @@ autodoc_default_options = {
 
 html_theme = "furo"
 html_title = "mayafbx"
-
-

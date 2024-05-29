@@ -35,8 +35,13 @@ class Take(NamedTuple):
     """FBX take description."""
 
     name: str
+    """Take name."""
+
     start: int
+    """Start frame."""
+
     end: int
+    """End frame."""
 
 
 def run_mel_command(command: str) -> str | list[str] | int:

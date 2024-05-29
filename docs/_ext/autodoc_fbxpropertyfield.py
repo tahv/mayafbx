@@ -5,6 +5,7 @@ from typing import Any, cast
 
 from sphinx.application import Sphinx
 from sphinx.ext.autodoc import AttributeDocumenter
+from sphinx.ext.autodoc.mock import _MockObject
 
 
 class FbxPropertyFieldDocumenter(AttributeDocumenter):
@@ -43,14 +44,17 @@ class FbxPropertyFieldDocumenter(AttributeDocumenter):
         try:
             default = fbx_prop.default
         except Exception:
-            # TODO: log
-            pass
+            return
+
+        if isinstance(default, _MockObject):
+            return
+
+        if isinstance(default, Enum):
+            default = f"{default.__class__.__name__}.{default.name}"
         else:
-            if isinstance(default, Enum):
-                default = f"{default.__class__.__name__}.{default.name}"
-            else:
-                default = repr(default)
-            self.add_line(f"   :value: {default}", source_name)
+            default = repr(default)
+
+        self.add_line(f"   :value: {default}", source_name)
 
 
 def setup(app: Sphinx) -> None:
