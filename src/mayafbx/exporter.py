@@ -128,7 +128,7 @@ class FbxExportOptions(FbxOptions):
     """
 
     smoothing_groups = FbxPropertyField(
-        command="FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups",
+        command="FBXExportSmoothingGroups",
         type=bool,
         default=False,
     )
