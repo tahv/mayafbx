@@ -6,7 +6,7 @@ import logging
 import re
 from typing import TYPE_CHECKING, NamedTuple
 
-from maya import mel
+from maya import cmds, mel
 from maya.api import OpenMaya, OpenMayaAnim
 
 from mayafbx.exceptions import MelEvalError
@@ -42,6 +42,11 @@ class Take(NamedTuple):
 
     end: int
     """End frame."""
+
+
+def get_maya_version() -> int:
+    """Returns maya version."""
+    return int(cmds.about(version=True))
 
 
 def run_mel_command(command: str) -> str | list[str] | int:

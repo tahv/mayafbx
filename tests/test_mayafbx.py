@@ -20,6 +20,8 @@ from mayafbx.utils import (
 if TYPE_CHECKING:
     from pathlib import Path
 
+    from pytest import MonkeyPatch
+
 
 def test_fbxproperty_default() -> None:
     """It returns default value."""
@@ -61,6 +63,69 @@ def test_fbxproperty_set() -> None:
 
     fbx_prop.set(value=False)
     assert mel.eval(f"{command} -q") == 0
+
+
+def test_fbxproperty_is_available(monkeypatch: MonkeyPatch) -> None:
+    """It returns wether or not the property is available for current version."""
+    fbx_prop = mayafbx.FbxProperty(
+        "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups",
+        type_=bool,
+        default=True,
+        available=(2022, 2024),
+    )
+
+    monkeypatch.setattr("mayafbx.bases.get_maya_version", lambda: 2021)
+    assert fbx_prop.is_available() is False
+
+    monkeypatch.setattr("mayafbx.bases.get_maya_version", lambda: 2022)
+    assert fbx_prop.is_available() is True
+
+    monkeypatch.setattr("mayafbx.bases.get_maya_version", lambda: 2023)
+    assert fbx_prop.is_available() is True
+
+    monkeypatch.setattr("mayafbx.bases.get_maya_version", lambda: 2024)
+    assert fbx_prop.is_available() is False
+
+    monkeypatch.setattr("mayafbx.bases.get_maya_version", lambda: 2025)
+    assert fbx_prop.is_available() is False
+
+
+def test_fbxproperty_get_available(monkeypatch: MonkeyPatch) -> None:
+    """It get the correct value when available and ``None`` when not available."""
+    fbx_prop = mayafbx.FbxProperty(
+        "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups",
+        type_=bool,
+        default=True,
+        available=(2022, 2024),
+    )
+
+    monkeypatch.setattr("mayafbx.bases.get_maya_version", lambda: 2023)
+    assert isinstance(fbx_prop.get(), bool)
+
+    monkeypatch.setattr("mayafbx.bases.get_maya_version", lambda: 2019)
+    assert fbx_prop.get() is None
+
+
+def test_fbxproperty_set_available(monkeypatch: MonkeyPatch) -> None:
+    """It set the value when available and skip when not."""
+    command = "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups"
+    fbx_prop = mayafbx.FbxProperty(
+        command,
+        type_=bool,
+        default=True,
+        available=(2022, 2024),
+    )
+
+    monkeypatch.setattr("mayafbx.bases.get_maya_version", lambda: 2023)
+    fbx_prop.set(False)
+    assert mel.eval(f"{command} -q") == 0
+
+    fbx_prop.set(True)
+    assert mel.eval(f"{command} -q") == 1
+
+    monkeypatch.setattr("mayafbx.bases.get_maya_version", lambda: 2019)
+    fbx_prop.set(False)
+    assert mel.eval(f"{command} -q") == 1
 
 
 def test_fbxoptions_from_scene() -> None:

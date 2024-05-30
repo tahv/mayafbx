@@ -6,7 +6,7 @@ from contextlib import contextmanager
 from typing import TYPE_CHECKING, Callable, Generic, Iterator, TypeVar, overload
 
 from mayafbx.enums import StrEnum
-from mayafbx.utils import run_mel_command
+from mayafbx.utils import get_maya_version, logger, run_mel_command
 
 if TYPE_CHECKING:
     from typing_extensions import Self
@@ -28,17 +28,30 @@ class FbxProperty(Generic[T]):
     def __init__(
         self,
         command: str,
+        *,
         type_: type[T],
         default: T | Callable[[], T],
+        available: tuple[int | None, int | None] = (None, None),
     ) -> None:
         self._command = command
         self._type: type[T] = type_
         self._default: T | Callable[[], T] = default
+        self._available = available
 
     def __repr__(self) -> str:
         return (
             f"{self.__class__.__name__}(command={self._command!r}, type={self._type!r})"
-        )
+        )  # pragma: no cover
+
+    def is_available(self) -> bool:
+        """Property is available in current Maya version."""
+        maya_version = get_maya_version()
+        added_version, removed_version = self._available
+        if added_version is not None and maya_version < added_version:
+            return False
+        if removed_version is not None and maya_version >= removed_version:
+            return False
+        return True
 
     @property
     def command(self) -> str:
@@ -50,13 +63,25 @@ class FbxProperty(Generic[T]):
         """Default value."""
         return self._default() if callable(self._default) else self._default
 
-    def get(self) -> T:
-        """Get fbx property value from scene."""
+    def get(self) -> T | None:
+        """Get fbx property value from scene.
+
+        Returns ``None`` if property is not availble in current Maya version.
+        """
+        if not self.is_available():
+            return None
         value = run_mel_command(f"{self._command} -q")
         return self._type(value)  # type: ignore[arg-type]  # type: ignore[arg-type]
 
     def set(self, value: T) -> None:
         """Set property value to scene."""
+        if not self.is_available():
+            logger.debug(
+                "Property not available in this version of Maya, skipping set: '%s'",
+                self._command,
+            )
+            return
+
         if issubclass(self._type, bool):
             value_ = {True: "true", False: "false"}[bool(value)]
         elif issubclass(self._type, str):
@@ -82,8 +107,14 @@ class FbxPropertyField(Generic[T]):
         *,
         type: type[T],  # noqa: A002
         default: T | Callable[[], T],
+        available: tuple[int | None, int | None] = (None, None),
     ) -> None:
-        self.fbx_property: FbxProperty[T] = FbxProperty(command, type, default)
+        self.fbx_property: FbxProperty[T] = FbxProperty(
+            command,
+            type_=type,
+            default=default,
+            available=available,
+        )
         self.name = ""
 
     def __set_name__(self, owner: type[object], name: str) -> None:
@@ -100,7 +131,7 @@ class FbxPropertyField(Generic[T]):
         obj: object | None,
         objtype: type[object] | None = None,
     ) -> FbxPropertyField[T] | T:
-        if obj is None:
+        if obj is None:  # pragma: no cover
             return self
         return obj.__dict__.get(self.name) or self.fbx_property.default
 
@@ -137,7 +168,10 @@ class FbxOptions:
         self = cls()
         for descriptor in self.__class__.__dict__.values():
             if isinstance(descriptor, FbxPropertyField):
-                descriptor.__set__(self, descriptor.fbx_property.get())
+                value = descriptor.fbx_property.get()
+                if value is None:
+                    continue
+                descriptor.__set__(self, value)
         return self
 
     def __iter__(self) -> Iterator[tuple[FbxProperty, object]]:

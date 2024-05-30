@@ -83,21 +83,23 @@ class FbxImportOptions(FbxOptions):
     Mel Command:
         ``FBXImportMode``
     """
-    
-    # TODO: not available in maya 2022
-    # smoothing_groups = FbxPropertyField(
-    #     "FBXProperty Import|IncludeGrp|Geometry|SmoothingGroups",
-    #     type=bool,
-    #     default=False,
-    # )
-    # """Import Smoothing Groups.
-    #
-    # Note:
-    #     FBX polygon objects with smooth edge normals will reimport into Maya
-    #     with incorrect normal information unless you activate
-    #     `FbxExportOptions.smoothing_groups` on export,
-    #     and this option on import.
-    # """
+
+    smoothing_groups = FbxPropertyField(
+        "FBXProperty Import|IncludeGrp|Geometry|SmoothingGroups",
+        type=bool,
+        default=False,
+        available=(2022, None),
+    )
+    """Import Smoothing Groups.
+
+    Note:
+        FBX polygon objects with smooth edge normals will reimport into Maya
+        with incorrect normal information unless you activate
+        `FbxExportOptions.smoothing_groups` on export,
+        and this option on import.
+
+    - Added in Maya 2022.
+    """
 
     unlock_normals = FbxPropertyField(
         "FBXProperty Import|IncludeGrp|Geometry|UnlockNormals",
