@@ -1,6 +1,6 @@
 # Changelog
 
-## [unreleased]
+## 1.0.0 - 2024-05-30
 
 - complete project rewrite.
 - dropped support for Python `< 3.7`. Minimum supported Maya version is now `2022`.
