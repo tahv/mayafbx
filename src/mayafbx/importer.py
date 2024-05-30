@@ -92,13 +92,13 @@ class FbxImportOptions(FbxOptions):
     )
     """Import Smoothing Groups.
 
+    - Added in Maya 2024.
+
     Note:
         FBX polygon objects with smooth edge normals will reimport into Maya
         with incorrect normal information unless you activate
         `FbxExportOptions.smoothing_groups` on export,
         and this option on import.
-
-    - Added in Maya 2022.
     """
 
     unlock_normals = FbxPropertyField(
