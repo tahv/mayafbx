@@ -20,7 +20,7 @@ from mayafbx.utils import (
 if TYPE_CHECKING:
     from pathlib import Path
 
-    from pytest import MonkeyPatch
+    from pytest import MonkeyPatch  # noqa: PT013
 
 
 def test_fbxproperty_default() -> None:

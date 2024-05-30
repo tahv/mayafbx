@@ -38,10 +38,12 @@ class FbxProperty(Generic[T]):
         self._default: T | Callable[[], T] = default
         self._available = available
 
-    def __repr__(self) -> str:
-        return (
-            f"{self.__class__.__name__}(command={self._command!r}, type={self._type!r})"
-        )  # pragma: no cover
+    def __repr__(self) -> str:  # pragma: no cover
+        properties = (
+            f"command={self._command!r}",
+            f"rype={self._type!r}",
+        )
+        return f"{self.__class__.__name__}({', '.join(properties)})"
 
     def is_available(self) -> bool:
         """Property is available in current Maya version."""
