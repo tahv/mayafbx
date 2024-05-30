@@ -88,7 +88,7 @@ class FbxImportOptions(FbxOptions):
         "FBXProperty Import|IncludeGrp|Geometry|SmoothingGroups",
         type=bool,
         default=False,
-        available=(2022, None),
+        available=(2023, None),
     )
     """Import Smoothing Groups.
 

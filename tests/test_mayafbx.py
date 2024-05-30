@@ -226,6 +226,8 @@ def test_fbximportoptions_valid_defaults() -> None:
     """It has valid default values."""
     options = mayafbx.FbxImportOptions()
     for prop, _ in options:
+        if not prop.is_available():
+            continue
         assert prop.get() == prop.default
 
 

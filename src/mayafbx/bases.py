@@ -47,11 +47,11 @@ class FbxProperty(Generic[T]):
 
     def is_available(self) -> bool:
         """Property is available in current Maya version."""
-        maya_version = get_maya_version()
-        added_version, removed_version = self._available
-        if added_version is not None and maya_version < added_version:
+        current_version = get_maya_version()
+        version_added, version_removed = self._available
+        if version_added is not None and current_version < version_added:
             return False
-        if removed_version is not None and maya_version >= removed_version:
+        if version_removed is not None and current_version >= version_removed:
             return False
         return True
 
