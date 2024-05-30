@@ -1,4 +1,7 @@
 *.pyc
-/venv
+/.venv/
 .pytest_cache/
-docs/build
+/docs/_build
+/.python-version
+/.coverage
+/dist/
