@@ -138,10 +138,10 @@ import_fbx(filepath, options)
 
 ## Documentation
 
-See mayafbx [documentation]([mayafbx-documentation]) for more details.
+See mayafbx [documentation][mayafbx-documentation] for more details.
 
 ## Contributing
 
 For guidance on setting up a development environment and contributing to the project,
-see the [contributing]([mayafbx-contributing]) section.
+see the [contributing][mayafbx-contributing] section.
 
