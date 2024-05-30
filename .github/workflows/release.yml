@@ -76,6 +76,7 @@ jobs:
       id-token: write
     steps:
       - uses: actions/download-artifact@v4
+      - run: rm dist/*.zip
       - name: Upload package to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
 
@@ -92,6 +93,7 @@ jobs:
       id-token: write
     steps:
       - uses: actions/download-artifact@v4
+      - run: rm dist/*.zip
       - name: Upload package to Test PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
