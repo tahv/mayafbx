@@ -33,7 +33,7 @@ __all__ = (
 
 
 def export_fbx(
-    filename: os.PathLike,
+    filename: os.PathLike[str],
     options: FbxExportOptions,
     *,
     selection: bool = False,
