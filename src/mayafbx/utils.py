@@ -74,10 +74,11 @@ def collect_fbx_properties() -> list[FbxPropDict]:
     """Dump the output of 'FBXProperties' command to a list of dict.
 
     Each item in returned list contain the following data:
-        - 'path': Property path.
-        - 'type': Property type.
-        - 'value': Current value applied to the scene.
-        - 'possible': A `list` of possible values. Only included for enum properties.
+
+    - path: Property path.
+    - type: Property type.
+    - value: Current value applied to the scene.
+    - possible: A `list` of possible values. Only included for enum properties.
     """
 
     def callback(message: str, _: int, data: list) -> bool:

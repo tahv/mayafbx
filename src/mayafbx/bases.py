@@ -102,7 +102,7 @@ class FbxProperty(Generic[T]):
 class FbxPropertyField(Generic[T]):
     """Access a value for a `FbxProperty` on a class like a python `property`."""
 
-    # TODO: example
+    # TODO(tga): example
     def __init__(
         self,
         command: str,

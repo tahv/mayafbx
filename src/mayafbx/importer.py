@@ -182,7 +182,7 @@ class FbxImportOptions(FbxOptions):
     Default to `True`.
     """
 
-    # TODO: the fill_timeline options is overriden by Maya ?
+    # TODO(tga): the fill_timeline options is overridden by Maya ?
     fill_timeline = FbxPropertyField(
         "FBXProperty Import|IncludeGrp|Animation|ExtraGrp|TimeLine",
         type=bool,
@@ -447,7 +447,7 @@ class FbxImportOptions(FbxOptions):
     Only evaluated if `sampling_rate` is set to `SamplingRate.CUSTOM`.
     """
 
-    # TODO: documentation
+    # TODO(tga): documentation
     curve_filter = FbxPropertyField(
         "FBXProperty Import|IncludeGrp|Animation|CurveFilter",
         type=bool,

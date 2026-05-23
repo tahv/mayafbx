@@ -463,7 +463,7 @@ class FbxExportOptions(FbxOptions):
     """Bake start frame.
 
     Default to the **Animation Start Time** as set in the Ranger Slider UI
-    at the time this class was instanciated.
+    at the time this class was instantiated.
 
     Require `bake_complexe_animation`.
 
@@ -479,7 +479,7 @@ class FbxExportOptions(FbxOptions):
     """Bake end frame.
 
     Default to the **Animation End Time** as set in the Ranger Slider UI
-    at the time this class was instanciated.
+    at the time this class was instantiated.
 
     Require `bake_complexe_animation`.
 
@@ -571,13 +571,13 @@ class FbxExportOptions(FbxOptions):
         ``FBXExportShapes``
     """
 
-    # TODO: ShapeAttribues have been added in FBX SDK 2020:
+    # TODO(tga): ShapeAttributes have been added in FBX SDK 2020:
     # The FbxShape class has been expanded to handle more channels
     # (BiNormals, VertexColor and UV) called "Modern Style".
     # See the class documentation and the ShapeAttributes sample code
     # for more information.
-    # TODO: deformation_shape_attributes = FbxPropertyField("FBXProperty Export|IncludeGrp|Animation|Deformation|ShapeAttributes", type=bool, default=False)  # noqa: E501
-    # TODO: deformation_shape_attributes_values = FbxPropertyField("FBXProperty Export|IncludeGrp|Animation|Deformation|ShapeAttributes|ShapeAttributesValues", type=str, default="Relative")  # ["Relative" "Absolute"]  # noqa: E501
+    # TODO(tga): deformation_shape_attributes = FbxPropertyField("FBXProperty Export|IncludeGrp|Animation|Deformation|ShapeAttributes", type=bool, default=False)  # noqa: E501
+    # TODO(tga): deformation_shape_attributes_values = FbxPropertyField("FBXProperty Export|IncludeGrp|Animation|Deformation|ShapeAttributes|ShapeAttributesValues", type=str, default="Relative")  # ["Relative" "Absolute"]  # noqa: E501
 
     curve_filter = FbxPropertyField(
         "FBXProperty Export|IncludeGrp|Animation|CurveFilter",
@@ -711,7 +711,7 @@ class FbxExportOptions(FbxOptions):
 
     Use `selection_set_name_as_point_cache` to select an appropriate set to export.
 
-    Defaul to `False`.
+    Default to `False`.
 
     Mel Command:
         ``FBXExportCacheFile``
@@ -896,7 +896,7 @@ class FbxExportOptions(FbxOptions):
     Default to `True`.
     """
 
-    # TODO: documentation
+    # TODO(tga): documentation
     pivot_to_nulls = FbxPropertyField(
         "FBXProperty Export|IncludeGrp|PivotToNulls",
         type=bool,

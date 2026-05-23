@@ -179,7 +179,7 @@ class FileVersion(StrEnum):
     @staticmethod
     def current_value() -> FileVersion:
         """Export version currently used by the plugin."""
-        # TODO: improve to get the real default value from Maya preset.
+        # TODO(tga): improve to get the real default value from Maya preset.
         return mel.eval("FBXExportFileVersion -q")  # type: ignore[no-any-return]
 
 
