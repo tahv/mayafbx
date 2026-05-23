@@ -51,7 +51,7 @@ class FbxProperty(Generic[_T]):
         version_added, version_removed = self._available
         if version_added is not None and current_version < version_added:
             return False
-        if version_removed is not None and current_version >= version_removed:
+        if version_removed is not None and current_version >= version_removed:  # noqa: SIM103
             return False
         return True
 
@@ -68,7 +68,7 @@ class FbxProperty(Generic[_T]):
     def get(self) -> _T | None:
         """Get fbx property value from scene.
 
-        Returns ``None`` if property is not availble in current Maya version.
+        Returns ``None`` if property is not available in current Maya version.
         """
         if not self.is_available():
             return None
