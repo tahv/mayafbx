@@ -18,19 +18,19 @@ if sys.version_info < (3, 11):
 else:
     from enum import StrEnum
 
-__all__ = [
-    "NurbsSurfaceAs",
-    "QuaternionInterpolation",
-    "ConvertUnit",
-    "UpAxis",
+__all__ = (
     "AxisConversionMethod",
+    "ConvertUnit",
     "FileFormat",
     "FileVersion",
+    "ForcedFileAxis",
     "MergeMode",
+    "NurbsSurfaceAs",
+    "QuaternionInterpolation",
     "SamplingRate",
     "SkeletonDefinition",
-    "ForcedFileAxis",
-]
+    "UpAxis",
+)
 
 
 class NurbsSurfaceAs(StrEnum):

@@ -11,13 +11,13 @@ from mayafbx.utils import get_maya_version, logger, run_mel_command
 if TYPE_CHECKING:
     from typing_extensions import Self
 
-__all__ = [
-    "FbxProperty",
+__all__ = (
     "FbxOptions",
+    "FbxProperty",
     "FbxPropertyField",
-    "apply_options",
     "applied_options",
-]
+    "apply_options",
+)
 
 T = TypeVar("T", bool, str, float, int, StrEnum)
 

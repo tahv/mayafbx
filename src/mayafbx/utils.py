@@ -26,9 +26,7 @@ if TYPE_CHECKING:
         possible: list[str]
 
 
-__all__ = [
-    "Take",
-]
+__all__ = ("Take",)
 
 
 class Take(NamedTuple):

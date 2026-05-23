@@ -16,11 +16,11 @@ from mayafbx.enums import (
 )
 from mayafbx.utils import logger
 
-__all__ = [
+__all__ = (
+    "FbxImportOptions",
     "import_fbx",
     "restore_import_preset",
-    "FbxImportOptions",
-]
+)
 
 
 def import_fbx(

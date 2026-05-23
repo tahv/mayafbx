@@ -25,11 +25,11 @@ from mayafbx.utils import (
     run_mel_command,
 )
 
-__all__ = [
+__all__ = (
+    "FbxExportOptions",
     "export_fbx",
     "restore_export_preset",
-    "FbxExportOptions",
-]
+)
 
 
 def export_fbx(
