@@ -1,13 +1,10 @@
 ARG MAYA_VERSION=latest
-
 FROM tahv/mayapy:$MAYA_VERSION
-
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+RUN ln -s /lib/x86_64-linux-gnu/libreadline.so.8 /lib/x86_64-linux-gnu/libreadline.so.7
+ENV UV_PYTHON=/usr/autodesk/maya/bin/mayapy
+ENV SETUPTOOLS_SCM_PRETEND_VERSION=0.0.0
 WORKDIR /app
-
-RUN mayapy -m pip install --upgrade pip && mayapy -m pip install pytest coverage
-
 COPY . .
-
-RUN mayapy -m pip install --editable .
-
+RUN uv export --group dev --no-hashes | uv pip install --system -r -
 CMD ["mayapy", "-ic", "import maya.standalone; maya.standalone.initialize(); from maya import cmds; cmds.loadPlugin('fbxmaya')"]
