@@ -195,7 +195,7 @@ def apply_options(options: FbxOptions) -> None:
 @contextmanager
 def applied_options(options: FbxOptions) -> Iterator[None]:
     """Apply ``options`` to scene during context."""
-    backup = options.from_scene()
+    backup = options.__class__.from_scene()
     apply_options(options)
     yield
     apply_options(backup)
