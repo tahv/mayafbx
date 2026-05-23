@@ -249,6 +249,7 @@ def test_run_mel_command_raise_exception() -> None:
         run_mel_command("invalid")
 
 
+@pytest.mark.skip("calling 'FBXProperties' crashes mayapy")
 def test_collect_fbx_properties_returns_list_of_fbx_properties() -> None:
     """It returns a list of FBXProperty dict."""
     data = collect_fbx_properties()
