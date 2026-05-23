@@ -19,23 +19,23 @@ __all__ = (
     "apply_options",
 )
 
-T = TypeVar("T", bool, str, float, int, StrEnum)
+_T = TypeVar("_T", bool, str, float, int, StrEnum)
 
 
-class FbxProperty(Generic[T]):
+class FbxProperty(Generic[_T]):
     """Wrapper of a ``FBXProperty`` mel command."""
 
     def __init__(
         self,
         command: str,
         *,
-        type_: type[T],
-        default: T | Callable[[], T],
+        type_: type[_T],
+        default: _T | Callable[[], _T],
         available: tuple[int | None, int | None] = (None, None),
     ) -> None:
         self._command = command
-        self._type: type[T] = type_
-        self._default: T | Callable[[], T] = default
+        self._type: type[_T] = type_
+        self._default: _T | Callable[[], _T] = default
         self._available = available
 
     def __repr__(self) -> str:  # pragma: no cover
@@ -61,11 +61,11 @@ class FbxProperty(Generic[T]):
         return self._command
 
     @property
-    def default(self) -> T:
+    def default(self) -> _T:
         """Default value."""
         return self._default() if callable(self._default) else self._default
 
-    def get(self) -> T | None:
+    def get(self) -> _T | None:
         """Get fbx property value from scene.
 
         Returns ``None`` if property is not availble in current Maya version.
@@ -75,7 +75,7 @@ class FbxProperty(Generic[T]):
         value = run_mel_command(f"{self._command} -q")
         return self._type(value)  # type: ignore[arg-type]  # type: ignore[arg-type]
 
-    def set(self, value: T) -> None:
+    def set(self, value: _T) -> None:
         """Set property value to scene."""
         if not self.is_available():
             logger.debug(
@@ -99,7 +99,7 @@ class FbxProperty(Generic[T]):
         run_mel_command(" ".join(args))
 
 
-class FbxPropertyField(Generic[T]):
+class FbxPropertyField(Generic[_T]):
     """Access a value for a `FbxProperty` on a class like a python `property`."""
 
     # TODO(tga): example
@@ -107,11 +107,11 @@ class FbxPropertyField(Generic[T]):
         self,
         command: str,
         *,
-        type: type[T],  # noqa: A002
-        default: T | Callable[[], T],
+        type: type[_T],  # noqa: A002
+        default: _T | Callable[[], _T],
         available: tuple[int | None, int | None] = (None, None),
     ) -> None:
-        self.fbx_property: FbxProperty[T] = FbxProperty(
+        self.fbx_property: FbxProperty[_T] = FbxProperty(
             command,
             type_=type,
             default=default,
@@ -123,21 +123,21 @@ class FbxPropertyField(Generic[T]):
         self.name = name
 
     @overload
-    def __get__(self, obj: None, objtype: None) -> FbxPropertyField[T]: ...
+    def __get__(self, obj: None, objtype: None) -> FbxPropertyField[_T]: ...
 
     @overload
-    def __get__(self, obj: object, objtype: type[object]) -> T: ...
+    def __get__(self, obj: object, objtype: type[object]) -> _T: ...
 
     def __get__(
         self,
         obj: object | None,
         objtype: type[object] | None = None,
-    ) -> FbxPropertyField[T] | T:
+    ) -> FbxPropertyField[_T] | _T:
         if obj is None:  # pragma: no cover
             return self
         return obj.__dict__.get(self.name) or self.fbx_property.default
 
-    def __set__(self, obj: object, value: T) -> None:
+    def __set__(self, obj: object, value: _T) -> None:
         obj.__dict__[self.name] = value
 
 
