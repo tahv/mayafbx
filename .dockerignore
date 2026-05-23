@@ -1,6 +1,16 @@
 /.venv
 __pycache__
+.pytest_cache/
 *.egg-info
 *.pyc
 /dist
 /.mypy_cache
+/docs
+/.coverage
+/dist/
+/ignore/
+.DS_Store
+.git
+.github
+.ruff_cache
+.rumdl_cache
