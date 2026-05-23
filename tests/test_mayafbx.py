@@ -212,13 +212,13 @@ def test_applied_options() -> None:
 def test_fbxexportoptions_valid_defaults() -> None:
     """It has valid default values."""
     exceptions = {
-        # End frame is reset to 48 when calling 'FBXResetExport'.
-        "FBXProperty Export|IncludeGrp|Animation|BakeComplexAnimation|BakeFrameEnd": get_anim_control_end_time(),  # noqa: E501
+        # end frame is reset to 48 when calling 'FBXResetExport'
+        "FBXProperty Export|IncludeGrp|Animation|BakeComplexAnimation|BakeFrameEnd": get_anim_control_end_time,  # noqa: E501
     }
 
     options = mayafbx.FbxExportOptions()
     for prop, _ in options:
-        value = exceptions.get(prop.command, prop.get())
+        value = exceptions.get(prop.command, prop.get)()
         assert value == prop.default
 
 
