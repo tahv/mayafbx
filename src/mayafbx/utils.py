@@ -81,7 +81,7 @@ def collect_fbx_properties() -> list[FbxPropDict]:
     - possible: A `list` of possible values. Only included for enum properties.
     """
 
-    def callback(message: str, _: int, data: list) -> bool:
+    def callback(message: str, _: int, data: list[str]) -> bool:
         data.append(message)
         return True
 
