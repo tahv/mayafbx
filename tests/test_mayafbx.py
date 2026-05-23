@@ -66,7 +66,7 @@ def test_fbxproperty_set() -> None:
 
 
 def test_fbxproperty_is_available(monkeypatch: MonkeyPatch) -> None:
-    """It returns wether or not the property is available for current version."""
+    """It returns whether or not the property is available for current version."""
     fbx_prop = mayafbx.FbxProperty(
         "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups",
         type_=bool,
@@ -170,7 +170,7 @@ def test_fbxoptions_iter() -> None:
 
     properties = list(TestOptions())
     assert len(properties) == 2
-    # TODO: test are expected properties
+    # TODO(tga): test are expected properties
 
 
 def test_apply_options() -> None:
@@ -238,7 +238,7 @@ def test_fbxexportoptions_can_be_applied() -> None:
 
 
 def test_fbximportoptions_can_be_applied() -> None:
-    """It can apply default `FbxImprotOptions`."""
+    """It can apply default `FbxImportOptions`."""
     options = mayafbx.FbxImportOptions()
     mayafbx.apply_options(options)
 
@@ -258,7 +258,7 @@ def test_collect_fbx_properties_returns_list_of_fbx_properties() -> None:
 
 
 def test_export_selected_model(tmp_path: Path) -> None:
-    """I export only selected model."""
+    """It export only selected model."""
     cube_1 = cmds.polyCube()[0]
     cube_2 = cmds.polyCube()[0]
 
