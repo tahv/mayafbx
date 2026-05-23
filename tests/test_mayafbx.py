@@ -192,6 +192,26 @@ def test_apply_options() -> None:
     assert mel.eval(f"{command} -q") == 0
 
 
+def test_fbxoptions_get_set() -> None:
+    """It can get and set instance option."""
+
+    class TestOptions(mayafbx.FbxOptions):
+        smoothing_groups = mayafbx.FbxPropertyField(
+            "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups",
+            type=bool,
+            default=False,
+        )
+
+    options = TestOptions()
+    assert options.smoothing_groups is False
+
+    options.smoothing_groups = True
+    assert options.smoothing_groups is True
+
+    options.smoothing_groups = False
+    assert options.smoothing_groups is False
+
+
 def test_applied_options() -> None:
     """It apply FBXProperties in option instance during context."""
     command = "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups"
