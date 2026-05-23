@@ -19,10 +19,6 @@ Changelog = "https://mayafbx.readthedocs.io/latest/changelog.html"
 Documentation = "https://mayafbx.readthedocs.io/latest"
 Source = "https://github.com/tahv/mayafbx"
 
-[build-system]
-requires = ["hatch-vcs", "hatch-zipped-directory", "hatchling"]
-build-backend = "hatchling.build"
-
 [dependency-groups]
 dev = [
   "coverage>=7.2.7",
@@ -36,20 +32,9 @@ dev = [
   "types-maya>=0.4.0",
 ]
 
-[tool.hatch]
-version.source = "vcs"
-version.raw-options.local_scheme = "no-local-version"
-build.targets.zipped-directory.install-name = ""
-build.targets.zipped-directory.sources = ["src"]
-build.targets.zipped-directory.packages = ["src/mayafbx"]
-
-[tool.pytest.ini_options]
-addopts = [
-  "--doctest-modules",
-  "--durations-min=0.05",
-  "--durations=0",
-]
-testpaths = ["src", "tests"]
+[build-system]
+requires = ["hatch-vcs", "hatch-zipped-directory", "hatchling"]
+build-backend = "hatchling.build"
 
 [tool.coverage.run]
 source = ["src/"]
@@ -68,10 +53,25 @@ exclude_lines = [
 [tool.coverage.paths]
 source = ["src/", "*/src"]
 
+[tool.hatch]
+version.source = "vcs"
+version.raw-options.local_scheme = "no-local-version"
+build.targets.zipped-directory.install-name = ""
+build.targets.zipped-directory.sources = ["src"]
+build.targets.zipped-directory.packages = ["src/mayafbx"]
+
 [tool.mypy]
 strict = true
 mypy_path = ["src"]
 files = ["src", "tests"]
+
+[tool.pytest.ini_options]
+addopts = [
+  "--doctest-modules",
+  "--durations-min=0.05",
+  "--durations=0",
+]
+testpaths = ["src", "tests"]
 
 [tool.ruff]
 lint.select = ["ALL"]
