@@ -96,3 +96,15 @@ lint.per-file-ignores."docs/_ext/*.py" = [
   "S101",  # Use of `assert` detected
   "PLC0415",  # `import` should be at the top-level of a file
 ]
+
+[tool.rumdl]
+line_length = 80
+flavor = "standard"
+MD013.reflow = true
+MD013.reflow-mode = "semantic-line-breaks"
+# per-file-ignores."changelog.d/*.md" = [
+#   "MD041",  # First line in file should be a level 1 heading
+# ]
+# per-file-ignores."CONTRIBUTING.md" = [
+#   "MD033",  # Inline HTML found
+# ]
