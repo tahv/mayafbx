@@ -135,7 +135,10 @@ class FbxPropertyField(Generic[_T]):
     ) -> FbxPropertyField[_T] | _T:
         if obj is None:  # pragma: no cover
             return self
-        return obj.__dict__.get(self.name) or self.fbx_property.default
+        value = obj.__dict__.get(self.name)
+        if value is None:
+            value = self.fbx_property.default
+        return value
 
     def __set__(self, obj: object, value: _T) -> None:
         obj.__dict__[self.name] = value
