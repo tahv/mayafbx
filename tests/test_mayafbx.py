@@ -4,10 +4,11 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import mayafbx
 import pytest
 from maya import cmds, mel
 from maya.api import OpenMaya
+
+import mayafbx
 from mayafbx.exceptions import MelEvalError
 from mayafbx.exporter import get_export_takes, set_export_takes
 from mayafbx.utils import (
