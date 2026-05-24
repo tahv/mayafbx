@@ -3,6 +3,7 @@
 https://github.com/sphinx-doc/sphinx/issues/10785
 https://sphinx-toolbox.readthedocs.io/en/latest/extensions/more_autodoc/typevars.html
 """
+
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
