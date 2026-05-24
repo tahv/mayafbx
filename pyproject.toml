@@ -17,7 +17,7 @@ dynamic = ["version"]
 [project.urls]
 Changelog = "https://mayafbx.readthedocs.io/latest/changelog.html"
 Documentation = "https://mayafbx.readthedocs.io/latest"
-Source = "https://github.com/tahv/mayafbx"
+Source = "https://gitlab.com/tahv/mayafbx"
 
 [dependency-groups]
 dev = [
@@ -36,22 +36,19 @@ dev = [
 requires = ["hatch-vcs", "hatch-zipped-directory", "hatchling"]
 build-backend = "hatchling.build"
 
-[tool.coverage.run]
-source = ["src/"]
-branch = true
-
-[tool.coverage.report]
-show_missing = true
-skip_covered = true
-exclude_lines = [
+[tool.coverage]
+run.source = ["src/"]
+run.branch = true
+report.show_missing = true
+report.skip_covered = true
+report.exclude_lines = [
   "# pragma: no cover",
   "if (False|0|TYPE_CHECKING):",
   "if __name__ == ['\"]__main__['\"]:",
-  "@overload",  # https://github.com/nedbat/coveragepy/issues/970
+  # Protocol: beginning of line or colon + elipsis + comment or eol
+  '(^|:) +\.{3}( *#|$)',
 ]
-
-[tool.coverage.paths]
-source = ["src/", "*/src"]
+path.source = ["src/", "*/src"]
 
 [tool.hatch]
 version.source = "vcs"
@@ -102,9 +99,3 @@ line_length = 80
 flavor = "standard"
 MD013.reflow = true
 MD013.reflow-mode = "semantic-line-breaks"
-# per-file-ignores."changelog.d/*.md" = [
-#   "MD041",  # First line in file should be a level 1 heading
-# ]
-# per-file-ignores."CONTRIBUTING.md" = [
-#   "MD033",  # Inline HTML found
-# ]
