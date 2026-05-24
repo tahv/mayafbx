@@ -429,7 +429,7 @@ class FbxExportOptions(FbxOptions):
         ``FBXExportQuaternion``
     """
 
-    bake_complexe_animation = FbxPropertyField(
+    bake_complex_animation = FbxPropertyField(
         command="FBXProperty Export|IncludeGrp|Animation|BakeComplexAnimation",
         type=bool,
         default=False,
@@ -465,7 +465,7 @@ class FbxExportOptions(FbxOptions):
     Default to the **Animation Start Time** as set in the Ranger Slider UI
     at the time this class was instantiated.
 
-    Require `bake_complexe_animation`.
+    Require `bake_complex_animation`.
 
     Mel Command:
         ``FBXExportBakeComplexStart``
@@ -481,7 +481,7 @@ class FbxExportOptions(FbxOptions):
     Default to the **Animation End Time** as set in the Ranger Slider UI
     at the time this class was instantiated.
 
-    Require `bake_complexe_animation`.
+    Require `bake_complex_animation`.
 
     Mel Command:
         ``FBXExportBakeComplexEnd``
@@ -499,14 +499,14 @@ class FbxExportOptions(FbxOptions):
 
     Default to ``1``.
 
-    Require `bake_complexe_animation`.
+    Require `bake_complex_animation`.
 
     Mel Command:
         ``FBXExportBakeComplexStep``
     """
 
-    # TODO: Is `bake_resample_all` automatically set to True when
-    # `bake_complexe_animation` is set to True ?
+    # TODO(tga): Is `bake_resample_all` automatically set to True when
+    # `bake_complex_animation` is set to True ?
 
     bake_resample_all = FbxPropertyField(
         "FBXProperty Export|IncludeGrp|Animation|BakeComplexAnimation|ResampleAnimationCurves",  # noqa: E501
@@ -515,7 +515,7 @@ class FbxExportOptions(FbxOptions):
     )
     """Bake even the **supported** animated elements.
 
-    This is unlike `bake_complexe_animation`
+    This is unlike `bake_complex_animation`
     which selectively bakes unsupported elements only.
 
     Default to `False`.
@@ -756,7 +756,7 @@ class FbxExportOptions(FbxOptions):
         If you export your scene with the intention of importing it
         into a package that does not support these constraints (such as 3ds Max),
         bake the animation first.
-        See `bake_complexe_animation` and `bake_resample_all` for more information.
+        See `bake_complex_animation` and `bake_resample_all` for more information.
 
     Default to `False`.
 
