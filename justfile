@@ -43,18 +43,30 @@ build:
     uvx check-wheel-contents dist/*.whl
 
 # Run an interactive docker container
-interactive version="2025":
-    docker build \
-        --platform linux/amd64 \
-        --tag "mayafbx:dev-{{ version }}" \
-        --build-arg MAYA_VERSION={{ version }} \
-        .
-    docker run -it --rm "mayafbx:dev-{{ version }}"
+[arg("maya", long="maya")]
+interactive maya="2025":
+    @just docker-build {{ maya }}
+    docker run -it --rm "mayafbx:dev-{{ maya }}"
 
-test version="2025":
+# Run test suite
+[arg("maya", long="maya")]
+test maya="2025" *args:
+    @just docker-build {{ maya }}
+    docker run --rm "mayafbx:dev-{{ maya }}" mayapy -m pytest {{ args }}
+
+# Run test suite and report coverage
+[arg("maya", long="maya")]
+coverage maya="2025" *args:
+    @just docker-build {{ maya }}
+    docker run --rm "mayafbx:dev-{{ maya }}" sh -c " \
+        mayapy -m coverage run --parallel -m pytest {{ args }} \
+        && mayapy -m coverage combine \
+        && mayapy -m coverage report"
+
+[private]
+docker-build maya="2025":
     docker build \
         --platform linux/amd64 \
-        --tag "mayafbx:dev-{{ version }}" \
-        --build-arg MAYA_VERSION={{ version }} \
+        --tag "mayafbx:dev-{{ maya }}" \
+        --build-arg MAYA_VERSION={{ maya }} \
         .
-    docker run --rm "mayafbx:dev-{{ version }}" mayapy -m pytest -vv --color yes
