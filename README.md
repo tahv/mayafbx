@@ -23,7 +23,6 @@ pip install mayafbx
 
 You can also download and extract `mayafbx-<version>.zip` from
 [latest release](https://gitlab.com/tahv/mayafbx/-/releases).
-
 The zip archive is created using
 [`hatch-zipped-directory`](https://github.com/dairiki/hatch-zipped-directory)
 and has the following structure:
