@@ -30,6 +30,7 @@ from mayafbx.importer import (
     import_fbx,
     restore_import_preset,
 )
+from mayafbx.utils import Take
 
 __all__ = (
     "AxisConversionMethod",
@@ -47,6 +48,7 @@ __all__ = (
     "QuaternionInterpolation",
     "SamplingRate",
     "SkeletonDefinition",
+    "Take",
     "UpAxis",
     "applied_options",
     "apply_options",
