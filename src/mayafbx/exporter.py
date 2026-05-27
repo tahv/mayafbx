@@ -21,8 +21,10 @@ from mayafbx.utils import (
     Take,
     get_anim_control_end_time,
     get_anim_control_start_time,
+    get_export_takes,
     logger,
     run_mel_command,
+    set_export_takes,
 )
 
 __all__ = (
@@ -74,41 +76,6 @@ def restore_export_preset() -> None:
     Values are restored by loading the "Autodesk Media & Entertainment" export preset.
     """
     run_mel_command("FBXResetExport")
-
-
-def get_export_takes() -> list[Take]:
-    """Get a list of export takes from ``FBXExportSplitAnimationIntoTakes`` command."""
-    output = run_mel_command("FBXExportSplitAnimationIntoTakes -q")
-    if output == 0:
-        return []
-
-    takes: list[Take] = []
-    for line in cast("list[str]", output):
-        name, start, end = line.split()
-        _, _, name = name.partition("=")
-        _, _, start = start.partition("=")
-        _, _, end = end.partition("=")
-        takes.append(Take(name=name, start=int(start), end=int(end)))
-
-    return takes
-
-
-def set_export_takes(takes: list[Take]) -> None:
-    """Set export takes using ``FBXExportSplitAnimationIntoTakes`` command.
-
-    Warning:
-        All existing export takes will be cleared beforehand.
-
-    Raises:
-        RuntimeError: Take end frame < start frame.
-    """
-    run_mel_command("FBXExportSplitAnimationIntoTakes -c")  # clear takes
-    for take in takes:
-        if take.end < take.start:
-            message = f"Take end ({take.end}) < Take start ({take.start})"
-            raise RuntimeError(message)
-        cmd = f"FBXExportSplitAnimationIntoTakes -v {take.name} {take.start} {take.end}"
-        run_mel_command(cmd)
 
 
 @contextmanager
