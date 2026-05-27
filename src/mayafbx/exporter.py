@@ -64,7 +64,7 @@ def export_fbx(
             raise RuntimeError(msg)
         command += ["-s"]
 
-    with applied_options(options), applied_export_takes(takes):
+    with applied_options(options), _applied_export_takes(takes):
         run_mel_command(" ".join(command))
 
     logger.info("Exported %s to '%s'", "selection" if selection else "scene", path)
@@ -79,7 +79,7 @@ def restore_export_preset() -> None:
 
 
 @contextmanager
-def applied_export_takes(takes: list[Take]) -> Generator[None, None, None]:
+def _applied_export_takes(takes: list[Take]) -> Generator[None, None, None]:
     """Apply export takes during context."""
     backup = get_export_takes()
     set_export_takes(takes)
