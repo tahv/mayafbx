@@ -1,12 +1,5 @@
 """Python wrapper for the FBX plugin of Maya."""
 
-from mayafbx.bases import (
-    FbxOptions,
-    FbxProperty,
-    FbxPropertyField,
-    applied_options,
-    apply_options,
-)
 from mayafbx.enums import (
     AxisConversionMethod,
     ConvertUnit,
@@ -37,9 +30,6 @@ __all__ = (
     "ConvertUnit",
     "FbxExportOptions",
     "FbxImportOptions",
-    "FbxOptions",
-    "FbxProperty",
-    "FbxPropertyField",
     "FileFormat",
     "FileVersion",
     "ForcedFileAxis",
@@ -50,8 +40,6 @@ __all__ = (
     "SkeletonDefinition",
     "Take",
     "UpAxis",
-    "applied_options",
-    "apply_options",
     "export_fbx",
     "import_fbx",
     "restore_export_preset",
