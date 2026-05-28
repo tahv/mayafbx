@@ -1,0 +1,94 @@
+/* Mark external links as such in nav */
+:root {
+  /* https://lucide.dev/icons/square-arrow-out-up-right */
+  --icon-lucide-square-arrow-out-up-right: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-square-arrow-out-up-right-icon lucide-square-arrow-out-up-right"><path d="M21 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6"/><path d="m21 3-9 9"/><path d="M15 3h6v6"/></svg>');
+}
+a.md-nav__link[href^="https:"]::after {
+  mask-image: var(--icon-lucide-square-arrow-out-up-right);
+  background: var(--md-default-fg-color);
+  opacity: 0.6;
+  height: 1em;
+  width: 1em;
+  margin-top: auto;
+  margin-bottom: auto;
+  content: ' ';
+}
+
+/* Admonition: version-added */
+:root {
+  /* https://lucide.dev/icons/square-plus */
+  --icon-lucide-square-plus: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.29 21.29a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42l-8.704-8.704A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414"/><path d="M5 16v6"/><path d="M8 19H2"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>');
+}
+
+.md-typeset .admonition.version-added,
+.md-typeset details.version-added {
+  background-color: #89ff441a;
+}
+.md-typeset .version-added > .admonition-title::before,
+.md-typeset .version-added > summary::before {
+  background-color: #89ff44;
+  mask-image: var(--icon-lucide-square-plus);
+}
+
+/* Admonition: version-removed */
+:root {
+  /* https://lucide.dev/icons/square-x */
+  --icon-lucide-tag-x: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.29 21.29a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42l-8.704-8.704A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414" /><path d="m3 17 4 4"/><path d="m7 17-4 4"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>');
+}
+
+.md-typeset .admonition.version-removed,
+.md-typeset details.version-removed {
+  background-color: #ff5d441a;
+}
+.md-typeset .version-removed > .admonition-title::before,
+.md-typeset .version-removed > summary::before {
+  background-color: #ff5d44;
+  mask-image: var(--icon-lucide-tag-x);
+}
+
+/* Admonition: version-changed */
+:root {
+  /* https://lucide.dev/icons/square-pen */
+  --icon-lucide-tag: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-tag-icon lucide-tag"><path d="M12.586 2.586A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l8.704 8.704a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>');
+}
+.md-typeset .admonition.version-changed,
+.md-typeset details.version-changed {
+  background-color: #4489ff1a;
+}
+.md-typeset .version-changed > .admonition-title::before,
+.md-typeset .version-changed > summary::before {
+  background-color: #4489ff;
+  mask-image: var(--icon-lucide-tag);
+}
+
+/* Admonition: version-deprecated */
+:root {
+  /* https://lucide.dev/icons/square-minus */
+  --icon-lucide-tag-minus: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M11.29 21.29a2.426 2.426 0 0 0 3.42 0l6.58-6.58a2.426 2.426 0 0 0 0-3.42l-8.704-8.704A2 2 0 0 0 11.172 2H4a2 2 0 0 0-2 2v7.172a2 2 0 0 0 .586 1.414l2.4 2.4"/><path d="M8 19H2"/><circle cx="7.5" cy="7.5" r=".5" fill="currentColor"/></svg>');
+}
+.md-typeset .admonition.version-deprecated,
+.md-typeset details.version-deprecated {
+  background-color: #ffba441a;
+}
+.md-typeset .version-deprecated > .admonition-title::before,
+.md-typeset .version-deprecated > summary::before {
+  background-color: #ffba44;
+  mask-image: var(--icon-lucide-tag-minus);
+}
+
+/* Admonition: disclosure */
+:root {
+  /* https://lucide.dev/icons/chevron-up-down */
+  --icon-lucide-chevron-up-down: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevrons-up-down-icon lucide-chevrons-up-down"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>');
+}
+.md-typeset details.disclosure {
+  background: transparent;
+  border: 1px solid var(--md-code-bg-color);
+}
+.md-typeset details.disclosure > summary::before {
+  background-color: var(--md-default-fg-color--light);
+  mask-image: var(--icon-lucide-chevron-up-down);
+}
+.md-typeset details.disclosure > summary::after {
+  background-color: var(--md-default-fg-color--light);
+}

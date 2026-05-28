@@ -1,0 +1,127 @@
+[project]
+site_name = "mayafbx"
+site_description = "Python wrapper for Autodesk Maya FBX plugin"
+site_author = "Thibaud Gambier"
+site_url = "https://mayafbx.readthedocs.io"
+copyright = "&copy 2026, Thibaud Gambier"
+nav = [
+  { "Home" = "index.md" },
+  { "API Reference" = "api.md" },
+  { "Meta" = [
+    { "PyPI" = "https://pypi.org/project/mayafbx" },
+    { "Changelog" = "https://gitlab.com/tahv/mayafbx/-/blob/main/CHANGELOG.md" },
+    { "Contributing" = "https://gitlab.com/tahv/mayafbx/-/blob/main/CONTRIBUTING.md" },
+    { "Releases" = "https://gitlab.com/tahv/mayafbx/-/releases" },
+  ] },
+]
+repo_url = "https://gitlab.com/tahv/mayafbx"
+repo_name = "tahv/mayafbx"
+extra_css = ["stylesheets/extra.css"]
+use_directory_urls = true
+
+# tombi: lint.rules.table-key-required.disabled = true
+[project.theme]
+# custom_dir = "docs/overrides"
+# favicon = "assets/favicon.svg"
+language = "en"
+features = [
+  "content.tabs.link",  # sync content tabs that have the same titles
+  "navigation.indexes",  # `index.md` at the beginning of a navigation section are attached to the section
+  "navigation.path",  # render a breadcrumb navigation above the title of each page
+  "navigation.sections",  # render top-level sections as groups in the sidebar
+  "navigation.top",  # back-to-top button
+  "navigation.tracking",  # update the URL in the address bar with the active anchor
+  "search.highlight",  # highlight search result occurrences
+]
+icon.logo = "lucide/blocks"
+icon.repo = "fontawesome/brands/git-alt"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to light mode"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/git-alt"
+link = "https://gitlab.com/tahv/menuet"
+
+# tombi: lint.rules.type-mismatch.disabled = true
+[project.markdown_extensions]
+# [project.markdown_extensions.github-callouts]
+
+[project.markdown_extensions.toc]
+permalink = true
+
+# https://facelessuser.github.io/pymdown-extensions/extensions/blocks/plugins/admonition/
+[project.markdown_extensions.pymdownx.blocks.admonition]
+types = [
+  "example",
+  "note",
+  "tip",
+  "version-added",
+  "version-changed",
+  "version-removed",
+  "version-deprecated",
+  "warning",
+  "disclosure",
+]
+
+[project.markdown_extensions.pymdownx.blocks.details]
+
+[project.markdown_extensions.pymdownx.blocks.tab]
+alternate_style = true
+
+[project.markdown_extensions.pymdownx.blocks.html]
+
+# syntax highlighting for code blocks
+# https://facelessuser.github.io/pymdown-extensions/extensions/highlight/
+[project.markdown_extensions.pymdownx.highlight]
+anchor_linenums = true
+line_spans = "__span"
+pygments_lang_class = true
+
+# inline code highlighter
+# https://facelessuser.github.io/pymdown-extensions/extensions/inlinehilite/
+[project.markdown_extensions.pymdownx.inlinehilite]
+
+# insert markdown or HTML snippets into another markdown file
+# https://facelessuser.github.io/pymdown-extensions/extensions/snippets/
+[project.markdown_extensions.pymdownx.snippets]
+
+[project.markdown_extensions.pymdownx.superfences]
+
+# tombi: lint.rules.type-mismatch.disabled = true
+[project.plugins.mkdocstrings]
+custom_templates = "docs/templates"
+
+[project.plugins.mkdocstrings.handlers.python]
+paths = ["src"]
+inventories = ["https://docs.python.org/3/objects.inv"]
+
+[project.plugins.mkdocstrings.handlers.python.options]
+docstring_style = "google"
+heading_level = 1
+inherited_members = true
+show_source = false
+show_symbol_type_toc = true
+show_symbol_type_heading = true
+show_signature_annotations = true
+separate_signature = true
+show_if_no_docstring = true
+line_length = 80
+merge_init_into_class = true
+show_root_members_full_path = false
+show_labels = false
+signature_crossrefs = true
+show_bases = false
+show_root_heading = true
+annotations_path = "source"
+docstring_section_style = "list"
+extensions = ["docs/fbx_property_field/__init__.py:FbxPropertyField"]

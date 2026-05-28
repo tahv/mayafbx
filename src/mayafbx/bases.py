@@ -1,5 +1,3 @@
-"""Base classes and functions."""
-
 from __future__ import annotations
 
 from contextlib import contextmanager
@@ -23,7 +21,7 @@ _T = TypeVar("_T", bool, str, float, int, StrEnum)
 
 
 class FbxProperty(Generic[_T]):
-    """Wrapper of a ``FBXProperty`` mel command."""
+    """Wrapper of a `FBXProperty` mel command."""
 
     def __init__(
         self,
@@ -117,7 +115,7 @@ class FbxPropertyField(Generic[_T]):
             default=default,
             available=available,
         )
-        self.name = ""
+        self.name: str = ""
 
     def __set_name__(self, owner: type[object], name: str) -> None:
         self.name = name
@@ -147,8 +145,8 @@ class FbxPropertyField(Generic[_T]):
 class FbxOptions:
     """Base class for declaring and manipulating a collection of `FbxProperty`.
 
-    Example::
-
+    Example:
+        ```python
         import mayafbx
 
         class MyFbxOptionClass(mayafbx.FbxOptions):
@@ -161,6 +159,7 @@ class FbxOptions:
 
         options = MyFbxOptions()
         options.triangulate = True
+        ```
     """
 
     def __init__(self, **kwargs: object) -> None:
@@ -187,14 +186,14 @@ class FbxOptions:
 
 
 def apply_options(options: FbxOptions) -> None:
-    """Apply ``options`` to scene."""
+    """Apply `options` to scene."""
     for prop, value in options:
         prop.set(value)
 
 
 @contextmanager
 def applied_options(options: FbxOptions) -> Iterator[None]:
-    """Apply ``options`` to scene during context."""
+    """Apply `options` to scene during context."""
     backup = options.__class__.from_scene()
     apply_options(options)
     yield

@@ -13,17 +13,13 @@ sync:
 nvim *args:
     uv run -- nvim {{ args }}
 
-# Build documentation
-docs:
-	uv run -m sphinx -W -n -b html -a docs site
-
 # Serve documentation on http://127.0.0.1:8000
 serve:
-  uv run -m sphinx_autobuild -b html -a --watch README.md --watch src -vvv docs site
+  uv run -m zensical serve
 
-# Check all external links in docs for integrity
-linkcheck:
-  uv run -m sphinx -b linkcheck -a docs site/linkcheck
+# Build documentation
+docs:
+  uv run zensical build --clean
 
 # Run `ruff` linter
 ruff *files:

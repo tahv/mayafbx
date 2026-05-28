@@ -1,12 +1,5 @@
-```{include} ../README.md
-```
+---
+icon: lucide/home
+---
 
-```{toctree}
-:maxdepth: 2
-:hidden:
-
-self
-reference
-changelog
-contributing
-```
+--8<-- "README.md"
