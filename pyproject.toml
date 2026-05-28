@@ -64,6 +64,15 @@ build.targets.zipped-directory.install-name = ""
 build.targets.zipped-directory.sources = ["src"]
 build.targets.zipped-directory.packages = ["src/mayafbx"]
 
+[tool.hed]
+changelog = "CHANGELOG.md"
+capture-start = '^## \[{tag}\]'
+capture-end = "^## "
+diff-url = "https://gitlab.com/tahv/mayafbx/-/compare/{prev}...{tag}"
+softbreak = true
+title = "{tag}"
+top-heading = 2
+
 [tool.mypy]
 strict = true
 mypy_path = ["src"]

@@ -33,6 +33,10 @@ fmt:
 mypy:
     uv run -m mypy
 
+# Ouptut release notes from `CHANGELOG.md` for `version`
+hed version:
+    @uvx hed --tag {{ version }}
+
 # Build package
 build:
     uvx hatch@latest build -t wheel -t sdist -t zipped-directory
