@@ -16,7 +16,7 @@ dynamic = ["version"]
 
 [project.urls]
 Changelog = "https://mayafbx.readthedocs.io/latest/changelog.html"
-Documentation = "https://mayafbx.readthedocs.io/latest"
+Documentation = "https://mayafbx.readthedocs.io"
 Source = "https://gitlab.com/tahv/mayafbx"
 
 [dependency-groups]
