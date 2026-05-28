@@ -1,5 +1,3 @@
-"""Import FBX."""
-
 from __future__ import annotations
 
 import os
@@ -29,17 +27,17 @@ def import_fbx(
     *,
     take: int | None = None,
 ) -> None:
-    """Import ``filename`` using ``options``.
+    """Import `filename` using `options`.
 
     Args:
-        filename: Path to a ``.fbx`` file.
+        filename: Path to a `.fbx` file.
         options: Import options.
         take: Specify the appropriate take number to load the corresponding take.
-            If you specify ``0``, the plugin imports no animation.
-            If you specify ``-1``, the plugin retrieves the last take in the take array.
+            If you specify `0`, the plugin imports no animation.
+            If you specify `-1`, the plugin retrieves the last take in the take array.
             The plugin considers any number of takes greater than
             the amount of takes contained in the file
-            or any negative value less than ``-1`` to be invalid.
+            or any negative value less than `-1` to be invalid.
     """
     # NOTE: The FBXImport command only accept '/'
     path = os.path.normpath(filename).replace("\\", "/")
@@ -57,16 +55,17 @@ def import_fbx(
 def restore_import_preset() -> None:
     """Restores the default values of the FBX Importer.
 
-    Values are restored by loading the "Autodesk Media & Entertainment" import preset.
+    Values are restored by loading the *"Autodesk Media & Entertainment"* import preset.
     """
     run_mel_command("FBXResetImport")
 
 
 class FbxImportOptions(FbxOptions):
-    """Wrapper for ``FBXProperty Import|...`` and ``FBXImport...`` mel commands.
+    """Wrapper for `FBXProperty Import|*` and `FBXImport*` mel commands.
 
     The fields documentation are from the official Maya documentation
-    for `FBX Import MEL commands`_ and `FBX Import options`_.
+    for [FBX Import MEL commands](https://help.autodesk.com/view/MAYAUL/2025/ENU/?guid=GUID-699CDF74-3D64-44B0-967E-7427DF800290)
+    and [FBX Import options](https://help.autodesk.com/view/MAYAUL/2025/ENU/?guid=GUID-0CD41066-4C27-48AE-9776-366DB11B4FDF)
     """
 
     merge_mode = FbxPropertyField(
@@ -76,12 +75,7 @@ class FbxImportOptions(FbxOptions):
     )
     """How to import the content of your file into the host application.
 
-    Default to `MergeMode.MERGE`.
-
-    See `MergeMode` for possible values.
-
-    Mel Command:
-        ``FBXImportMode``
+    Mel Command: `FBXImportMode`.
     """
 
     smoothing_groups = FbxPropertyField(
@@ -92,13 +86,12 @@ class FbxImportOptions(FbxOptions):
     )
     """Import Smoothing Groups.
 
-    - Added in Maya 2024.
+    Added in Maya 2024.
 
-    Note:
-        FBX polygon objects with smooth edge normals will reimport into Maya
-        with incorrect normal information unless you activate
-        `FbxExportOptions.smoothing_groups` on export,
-        and this option on import.
+    FBX polygon objects with smooth edge normals will reimport into Maya
+    with incorrect normal information unless you activate
+    [FbxExportOptions.smoothing_groups][mayafbx.FbxExportOptions.smoothing_groups]
+    on export, and this option on import.
     """
 
     unlock_normals = FbxPropertyField(
@@ -108,16 +101,11 @@ class FbxImportOptions(FbxOptions):
     )
     """Recomputes the normals on the objects using Maya internal algorithms.
 
-    Note:
-        - Normals are automatically unlocked for all deformed geometry imported
-          into Maya.
-        - Locked normals can create shading issues for geometry if a deformer is
-          applied after import. Unlocking geometry normals resolves this.
+    - Normals are automatically unlocked for all deformed geometry imported into Maya.
+    - Locked normals can create shading issues for geometry if a deformer is
+      applied after import. Unlocking geometry normals resolves this.
 
-    Default to `False`.
-
-    Mel Command:
-        ``FBXImportUnlockNormals``
+    Mel Command: `FBXImportUnlockNormals`.
     """
 
     hard_edges = FbxPropertyField(
@@ -131,18 +119,15 @@ class FbxImportOptions(FbxOptions):
     The Maya FBX plug-in then determines if the edges connected to each
     vertex are hard edges or smooth edges, based on their normals.
 
-    Use this when `FbxExportOptions.hard_edges` was set to `True` on export.
+    Use this when [FbxExportOptions.hard_edges][mayafbx.FbxExportOptions.hard_edges]
+    was set to `True` on export.
 
-    Default to `False`.
+    - Using this option permanently alters any UV maps applied to geometry.
+    - The plug-in properly re-assigns the UVs to the newly split geometry.
+    - There is a limitation in regards to UVs, when importing this geometry
+      into an empty Maya scene, as it may result in incorrect UV assignments.
 
-    Note:
-        - Using this option permanently alters any UV maps applied to geometry.
-        - The plug-in properly re-assigns the UVs to the newly split geometry.
-        - There is a limitation in regards to UVs, when importing this geometry
-          into an empty Maya scene, as it may result in incorrect UV assignments.
-
-    Mel Command:
-        ``FBXImportHardEdges``
+    Mel Command: `FBXImportHardEdges`.
     """
 
     blind_data = FbxPropertyField(
@@ -155,9 +140,8 @@ class FbxImportOptions(FbxOptions):
     Blind data is information stored with polygons which is not used by Maya,
     but might be useful to the platform to which you export to.
 
-    Default to `True`.
-
-    See `FbxExportOptions.blind_data` for more information.
+    See [FbxExportOptions.blind_data][mayafbx.FbxExportOptions.blind_data]
+    for more information.
     """
 
     remove_bad_polys = FbxPropertyField(
@@ -168,8 +152,6 @@ class FbxImportOptions(FbxOptions):
     """Remove degenerate polygons from the mesh object.
 
     Remove two-sided polygons, single vertex polygons, and so on.
-
-    Default to `True`.
     """
 
     animation = FbxPropertyField(
@@ -177,10 +159,7 @@ class FbxImportOptions(FbxOptions):
         default=True,
         type=bool,
     )
-    """Import animation.
-
-    Default to `True`.
-    """
+    """Import animation."""
 
     # TODO(tga): the fill_timeline options is overridden by Maya ?
     fill_timeline = FbxPropertyField(
@@ -190,10 +169,7 @@ class FbxImportOptions(FbxOptions):
     )
     """Update the application timeline by the animation range in the incoming FBX file.
 
-    Default to `False`.
-
-    Mel Command:
-        ``FBXImportFillTimeline``
+    Mel Command: `FBXImportFillTimeline`.
     """
 
     bake_animation_layers = FbxPropertyField(
@@ -205,10 +181,7 @@ class FbxImportOptions(FbxOptions):
 
     If you disable this option, all the layers in the FBX file will be imported.
 
-    Default to `True`.
-
-    Mel Command:
-        ``FBXImportMergeAnimationLayers``
+    Mel Command: `FBXImportMergeAnimationLayers`.
     """
 
     optical_markers = FbxPropertyField(
@@ -226,11 +199,9 @@ class FbxImportOptions(FbxOptions):
     However, the Maya FBX plug-in converts optical data into a cloud of
     static null objects in Maya.
 
-    Default to `False`.
-
     Note:
         If your optical data originates from MotionBuilder, you can set the
-        state of all optical markers to ``Done`` in MotionBuilder which lets you
+        state of all optical markers to `Done` in MotionBuilder which lets you
         import the animation data as curves in Maya.
     """
 
@@ -243,12 +214,7 @@ class FbxImportOptions(FbxOptions):
 
     Compensates differences between Maya and MotionBuilder quaternions.
 
-    Default to `QuaternionInterpolation.RESAMPLE_AS_EULER`.
-
-    See `QuaternionInterpolation` for possible values.
-
-    Mel Command:
-        ``FBXImportQuaternion``
+    Mel Command: `FBXImportQuaternion`.
     """
 
     protect_driven_keys = FbxPropertyField(
@@ -269,10 +235,7 @@ class FbxImportOptions(FbxOptions):
     - If `False`, the driven keys are discarded and the incoming animation
       is applied to the driven channels.
 
-    Default to `False`.
-
-    Mel Command:
-        ``FBXImportProtectDrivenKeys``
+    Mel Command: `FBXImportProtectDrivenKeys`.
     """
 
     deforming_elements_to_joint = FbxPropertyField(
@@ -284,8 +247,6 @@ class FbxImportOptions(FbxOptions):
 
     If `False`, elements other than joints being used to deform are converted
     to locators.
-
-    Default to `True`.
 
     Note:
         This option was originally provided because Maya did not support locator
@@ -304,19 +265,20 @@ class FbxImportOptions(FbxOptions):
     and the rotate axis of the original node.
 
     The look-up is done by name
-    as the pre-rotation node's name contains the ``__Pre_`` suffix,
-    while the post-rotation node's name has a ``__Post_`` suffix.
+    as the pre-rotation node's name contains the `__Pre_` suffix,
+    while the post-rotation node's name has a `__Post_` suffix.
 
     Activate this option when you import older (pre-MotionBuilder 5.5)
     FBX files that contain an animated joint hierarchy,
     for example, an animated character.
 
     Note:
-        When `merge_mode` is set to `MergeMode.UPDATE_ANIMATION` or `MergeMode.MERGE`
+        When [merge_mode][FbxImportOptions.merge_mode] is set to
+        [MergeMode.UPDATE_ANIMATION][mayafbx.MergeMode.UPDATE_ANIMATION]
+        or [MergeMode.MERGE][mayafbx.MergeMode.MERGE]
         this option is automatically set to `True`.
 
-    Mel Command:
-        ``FBXImportMergeBackNullPivots``
+    Mel Command: `FBXImportMergeBackNullPivots`
     """
 
     point_cache = FbxPropertyField(
@@ -327,13 +289,12 @@ class FbxImportOptions(FbxOptions):
     """Import FBX-exported geometry cache data during the FBX import process.
 
     The Maya FBX plug-in generates three files when you export Geometry cache files
-    using FBX: an FBX file, an XML file and an MCX file.
+    using FBX: an FBX, XML and MCX file.
 
     The plug-in stores XML and MCX files in a subfolder named after the FBX file
-    and has the suffix FPC (``_fpc``).
+    and has the suffix FPC (`_fpc`).
 
-    Mel Command:
-        ``FBXImportCacheFile``
+    Mel Command: `FBXImportCacheFile`.
     """
 
     deformation = FbxPropertyField(
@@ -341,10 +302,7 @@ class FbxImportOptions(FbxOptions):
         type=bool,
         default=True,
     )
-    """Import Skin and Blend Shape deformatons.
-
-    Default to `True`.
-    """
+    """Import Skin and Blend Shape deformatons."""
 
     deformaton_skins = FbxPropertyField(
         "FBXProperty Import|IncludeGrp|Animation|Deformation|Skins",
@@ -353,12 +311,9 @@ class FbxImportOptions(FbxOptions):
     )
     """Import Skinning.
 
-    Default to `True`.
+    Requires [deformation][mayafbx.FbxImportOptions.deformation].
 
-    Require `deformation`.
-
-    Mel Command:
-        ``FBXImportSkins``
+    Mel Command: `FBXImportSkins`.
     """
 
     deformation_shapes = FbxPropertyField(
@@ -368,12 +323,9 @@ class FbxImportOptions(FbxOptions):
     )
     """Import Blend Shapes.
 
-    Default to `True`.
+    Requires [deformation][mayafbx.FbxImportOptions.deformation].
 
-    Require `deformation`.
-
-    Mel Command:
-        ``FBXImportShapes``
+    Mel Command: `FBXImportShapes`.
     """
 
     deformation_normalize_weights = FbxPropertyField(
@@ -384,14 +336,12 @@ class FbxImportOptions(FbxOptions):
     """Normalize weight assignment.
 
     Pre-Normalize weights to ensure that every vertex on a skinned mesh has a
-    weight no less than a total of ``1.0``.
+    weight no less than a total of `1.0`.
 
     You can have many joints that influence a single vertex, however, the
-    percentage of each deforming joint always equals a sum total of ``1.0``.
+    percentage of each deforming joint always equals a sum total of `1.0`.
 
-    Default to `False`.
-
-    Require `deformation`.
+    Requires [deformation][mayafbx.FbxImportOptions.deformation].
     """
 
     keep_attributes_locked = FbxPropertyField(
@@ -403,8 +353,6 @@ class FbxImportOptions(FbxOptions):
 
     Use when you import an FBX file that contains animation onto an object that
     has locked channels.
-
-    Default to `False`.
     """
 
     sampling_rate = FbxPropertyField(
@@ -414,12 +362,7 @@ class FbxImportOptions(FbxOptions):
     )
     """The source used by the plugin to resample keyframes data.
 
-    Default to `SamplingRate.SCENE`.
-
-    See `SamplingRate` for possible values.
-
-    Mel Command:
-        ``FBXImportResamplingRateSource``
+    Mel Command: `FBXImportResamplingRateSource`
     """
 
     set_maya_framerate = FbxPropertyField(
@@ -429,10 +372,7 @@ class FbxImportOptions(FbxOptions):
     )
     """Overwrite Maya frame rate with incoming FBX frame rate.
 
-    Default to `False`.
-
-    Mel Command:
-        ``FBXImportSetMayaFrameRate``
+    Mel Command: `FBXImportSetMayaFrameRate`.
     """
 
     custom_sampling_rate = FbxPropertyField(
@@ -442,9 +382,8 @@ class FbxImportOptions(FbxOptions):
     )
     """Custom rate to resample keyframes data.
 
-    Default to ``30.0``.
-
-    Only evaluated if `sampling_rate` is set to `SamplingRate.CUSTOM`.
+    Only evaluated if [sampling_rate][mayafbx.FbxExportOptions.sampling_rate]
+    is [SamplingRate.CUSTOM][mayafbx.SamplingRate.CUSTOM].
     """
 
     # TODO(tga): documentation
@@ -462,16 +401,14 @@ class FbxImportOptions(FbxOptions):
     """Import supported constraints contained in the FBX file to Maya.
 
     FBX support the following constraints:
-        - Point
-        - Aim
-        - Orient
-        - Parent,
-        - IK handle (including Pole vector)
 
-    Default to `True`.
+    - Point
+    - Aim
+    - Orient
+    - Parent,
+    - IK handle (including Pole vector)
 
-    Mel Command:
-        ``FBXImportConstraints``
+    Mel Command: `FBXImportConstraints`.
     """
 
     skeleton_definition = FbxPropertyField(
@@ -483,12 +420,7 @@ class FbxImportOptions(FbxOptions):
 
     Useful if you are importing from MotionBuilder, which supports characters.
 
-    Default to `SkeletonDefinition.HUMAN_IK`.
-
-    See `SkeletonDefinition` for possible values.
-
-    Mel Command:
-        ``FBXImportSkeletonType``
+    Mel Command: `FBXImportSkeletonType`.
     """
 
     cameras = FbxPropertyField(
@@ -498,10 +430,7 @@ class FbxImportOptions(FbxOptions):
     )
     """Import cameras.
 
-    Default to `True`.
-
-    Mel Command:
-        ``FBXImportCameras``
+    Mel Command: `FBXImportCameras`.
     """
 
     lights = FbxPropertyField(
@@ -511,15 +440,9 @@ class FbxImportOptions(FbxOptions):
     )
     """bool: Import lights.
 
-    FBX support the following lights:
-        - Point
-        - Spot
-        - Directional
+    FBX supports Point, Spot and Directional lights types.
 
-    Default to `True`.
-
-    Mel Command:
-        ``FBXImportLights``
+    Mel Command: `FBXImportLights`.
     """
 
     audio = FbxPropertyField(
@@ -527,10 +450,7 @@ class FbxImportOptions(FbxOptions):
         type=bool,
         default=True,
     )
-    """Import audio.
-
-    Default to `True`.
-    """
+    """Import audio."""
 
     automatic_units = FbxPropertyField(
         "FBXProperty Import|AdvOptGrp|UnitsGrp|DynamicScaleConversion",
@@ -540,11 +460,8 @@ class FbxImportOptions(FbxOptions):
     """Automatically identify and convert units of the incoming file
     to match the units of the scene.
 
-    Default to `True`.
-
-    Note:
-        - This conversion affects only incoming data.
-        - This does not change the settings in Maya.
+    - This conversion affects only incoming data.
+    - This does not change the settings in Maya.
     """
 
     convert_units_to = FbxPropertyField(
@@ -557,11 +474,10 @@ class FbxImportOptions(FbxOptions):
     Affects the Scale Factor value applied to the imported data.
 
     Default to the Maya System Units,
-    as set in ``Window > Settings/Preferences > Preferences > Settings``.
+    as set in `Window > Settings/Preferences > Preferences > Settings`.
 
-    Only evaluated if `automatic_units` is `False`.
-
-    See `ConvertUnit` for possible values.
+    Only evaluated if [automatic_units][mayafbx.FbxImportOptions.automatic_units]
+    is `False`.
     """
 
     axis_conversion = FbxPropertyField(
@@ -571,10 +487,7 @@ class FbxImportOptions(FbxOptions):
     )
     """Enable axis conversion on import.
 
-    Default to `False`.
-
-    Mel Command:
-        ``FBXImportAxisConversionEnable``.
+    Mel Command: `FBXImportAxisConversionEnable`.
     """
 
     up_axis = FbxPropertyField(
@@ -585,19 +498,16 @@ class FbxImportOptions(FbxOptions):
     """Up axis conversion.
 
     Default to the the scene up axis,
-    as set in ``Window > Settings/Preferences > Preferences > Settings``.
+    as set in `Window > Settings/Preferences > Preferences > Settings`.
 
-    Only evaluated if `axis_conversion` is `True`.
+    Only evaluated if [axis_conversion][mayafbx.FbxImportOptions.axis_conversion]
+    is `True`.
 
-    See `UpAxis` for possible values.
+    - Only applies axis conversion to the root elements of the incoming scene.
+    - If you have animation on a root object that must be converted on import,
+      these animation curves are resampled to apply the proper axis conversion.
 
-    Note:
-        - Only applies axis conversion to the root elements of the incoming scene.
-        - If you have animation on a root object that must be converted on import,
-          these animation curves are resampled to apply the proper axis conversion.
-
-    Mel Command:
-        ``FBXImportUpAxis``
+    Mel Command: `FBXImportUpAxis`.
     """
 
     forced_file_axis = FbxPropertyField(
@@ -608,12 +518,7 @@ class FbxImportOptions(FbxOptions):
     """*Force* the FBX plug-in to consider the data in the file
     as if it is natively generated with the specified axis.
 
-    Default to `ForcedFileAxis.DISABLED`.
-
-    See `ForcedFileAxis` for possible values.
-
-    Mel Command:
-        ``FBXImportForcedFileAxis``
+    Mel Command: `FBXImportForcedFileAxis`.
     """
 
     show_warning_ui = FbxPropertyField(
@@ -621,10 +526,7 @@ class FbxImportOptions(FbxOptions):
         type=bool,
         default=True,
     )
-    """Show the Warning Manager dialog if something unexpected occurs during import.
-
-    Default to `True`.
-    """
+    """Show the Warning Manager dialog if something unexpected occurs during import."""
 
     generate_log = FbxPropertyField(
         "FBXProperty Import|AdvOptGrp|UI|GenerateLogData",
@@ -634,10 +536,7 @@ class FbxImportOptions(FbxOptions):
     """Generate log data.
 
     The Maya FBX plug-in stores log files with the FBX presets,
-    in ``C:\\My Documents\\Maya\\FBX\\Logs``.
+    in `C:\\My Documents\\Maya\\FBX\\Logs`.
 
-    Default to `True`.
-
-    Mel Command:
-        ``FBXImportGenerateLog``
+    Mel Command: `FBXImportGenerateLog`.
     """

@@ -1,5 +1,3 @@
-"""Package enums."""
-
 from __future__ import annotations
 
 import sys
@@ -61,22 +59,20 @@ class QuaternionInterpolation(StrEnum):
 
     Use this option when you export animation that has quaternion interpolations.
 
-    Note:
-        - This option is only compatible with applications supporting this
-          interpolation type, such as Autodesk MotionBuilder.
-        - The resulting animation will not be identical since
-          quaternion evaluations are different in Maya and MotionBuilder.
+    - This option is only compatible with applications supporting this
+      interpolation type, such as Autodesk MotionBuilder.
+    - The resulting animation will not be identical since
+      quaternion evaluations are different in Maya and MotionBuilder.
     """
 
     SET_AS_EULER = "Set As Euler Interpolation"  # "euler"
     """Changes the interpolation type of quaternion keys to a Euler type,
     without resampling the animation curves themselves.
 
-    Note:
-        - Using this option results in the same number of keys, set as Euler
-          types.
-        - The visual result will be different since it is now evaluated as a
-          Euler interpolation.
+    - Using this option results in the same number of keys, set as Euler
+      types.
+    - The visual result will be different since it is now evaluated as a
+      Euler interpolation.
     """
 
 
@@ -97,7 +93,7 @@ class ConvertUnit(StrEnum):
     def from_scene(cls) -> ConvertUnit:
         """Current Maya UI Unit.
 
-        As set in ``Window > Settings/Preferences > Preferences > Settings``.
+        As set in `Window > Settings/Preferences > Preferences > Settings`.
         """
         return {
             OpenMaya.MDistance.kMillimeters: cls.MILLIMETERS,
@@ -145,9 +141,8 @@ class AxisConversionMethod(StrEnum):
     The node contain the transformations needed to transport the data into
     the new World system.
 
-    Note:
-        If the plug-in does not detect a need for the conversion,
-        no ``Fbx_Root`` node is added.
+    If the plug-in does not detect a need for the conversion,
+    no `Fbx_Root` node is added.
     """
 
 
@@ -177,7 +172,7 @@ class FileVersion(StrEnum):
     FBX_2006 = "FBX200611"
 
     @staticmethod
-    def current_value() -> FileVersion:
+    def current_value() -> str:
         """Export version currently used by the plugin."""
         # TODO(tga): improve to get the real default value from Maya preset.
         return mel.eval("FBXExportFileVersion -q")  # type: ignore[no-any-return]
@@ -187,10 +182,7 @@ class MergeMode(StrEnum):
     """How to process imported data.
 
     For information on how the plugin handle naming conflict,
-    see `FBX plug-in renaming strategy`_
-
-    .. _FBX plug-in renaming strategy:
-        https://help.autodesk.com/view/MAYAUL/2025/ENU/?guid=GUID-3BA8A270-7DD9-46FF-979F-C93C469D43D1
+    see [FBX plug-in renaming strategy](https://help.autodesk.com/view/MAYAUL/2025/ENU/?guid=GUID-3BA8A270-7DD9-46FF-979F-C93C469D43D1).
     """
 
     ADD = "add"  # "Add"
@@ -256,12 +248,11 @@ class SamplingRate(StrEnum):
 class SkeletonDefinition(StrEnum):
     """Skeleton definition that can be used on import.
 
-    The ``FBXProperty`` command does not support FullBody IK
+    The `FBXProperty` command does not support FullBody IK
 
     Note:
-        The command ``FBXImportSkeletonType`` also support FullBody Ik but
-        running the command raise
-        ``Cannot find procedure "FBXImportSkeletonType".``
+        The command `FBXImportSkeletonType` also support FullBody Ik but
+        running the command raise `Cannot find procedure "FBXImportSkeletonType".`
     """
 
     NONE = "None"
