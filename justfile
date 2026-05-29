@@ -1,5 +1,4 @@
 set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
-set script-interpreter := ['uv', 'run', '--script']
 
 # List available recipes
 [default]
@@ -73,7 +72,7 @@ docker-build maya="2025":
         .
 
 # Generate `.github/README.md`
-[script]
+[script('uv', 'run', '--script')]
 github-readme:
   import sys, pathlib
   header = """\
