@@ -117,5 +117,6 @@ per-file-ignores."README.md" = [
   "MD041",  # First line in file should be a level 1 heading
 ]
 
-[tool.uv.dependency-groups]
-docs = { requires-python = ">=3.12" }
+[tool.uv]
+dependency-groups.docs = { requires-python = ">=3.12" }
+# sources.types-maya = { git = "https://gitlab.com/tahv/types-maya", branch = "main" }
