@@ -112,6 +112,10 @@ line_length = 80
 flavor = "standard"
 MD013.reflow = true
 MD013.reflow-mode = "semantic-line-breaks"
+per-file-ignores."README.md" = [
+  "MD033",  # Inline HTML found
+  "MD041",  # First line in file should be a level 1 heading
+]
 
 [tool.uv.dependency-groups]
 docs = { requires-python = ">=3.12" }
