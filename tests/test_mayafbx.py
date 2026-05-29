@@ -1,5 +1,3 @@
-"""Test suite for the mayafbx package."""
-
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
@@ -9,6 +7,13 @@ from maya import cmds, mel
 from maya.api import OpenMaya
 
 import mayafbx
+from mayafbx.bases import (
+    FbxOptions,
+    FbxProperty,
+    FbxPropertyField,
+    applied_options,
+    apply_options,
+)
 from mayafbx.exceptions import MelEvalError
 from mayafbx.exporter import get_export_takes, set_export_takes
 from mayafbx.utils import (
@@ -28,24 +33,24 @@ def test_fbxproperty_default() -> None:
     """It returns default value."""
     command = "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups"
 
-    fbx_prop = mayafbx.FbxProperty(command, type_=bool, default=True)
+    fbx_prop = FbxProperty(command, type_=bool, default=True)
     assert fbx_prop.default is True
 
-    fbx_prop = mayafbx.FbxProperty(command, type_=bool, default=lambda: True)
+    fbx_prop = FbxProperty(command, type_=bool, default=lambda: True)
     assert fbx_prop.default is True
 
 
 def test_fbxproperty_command() -> None:
     """It returns command."""
     command = "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups"
-    fbx_prop = mayafbx.FbxProperty(command, type_=bool, default=True)
+    fbx_prop = FbxProperty(command, type_=bool, default=True)
     assert fbx_prop.command == command
 
 
 def test_fbxproperty_get() -> None:
     """It get value from scene."""
     command = "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups"
-    fbx_prop = mayafbx.FbxProperty(command, type_=bool, default=True)
+    fbx_prop = FbxProperty(command, type_=bool, default=True)
 
     mel.eval(f"{command} -v true")
     assert fbx_prop.get() is True
@@ -57,7 +62,7 @@ def test_fbxproperty_get() -> None:
 def test_fbxproperty_set() -> None:
     """It set value to scene."""
     command = "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups"
-    fbx_prop = mayafbx.FbxProperty(command, type_=bool, default=True)
+    fbx_prop = FbxProperty(command, type_=bool, default=True)
 
     fbx_prop.set(value=True)
     assert mel.eval(f"{command} -q") == 1
@@ -68,7 +73,7 @@ def test_fbxproperty_set() -> None:
 
 def test_fbxproperty_is_available(monkeypatch: MonkeyPatch) -> None:
     """It returns whether or not the property is available for current version."""
-    fbx_prop = mayafbx.FbxProperty(
+    fbx_prop = FbxProperty(
         "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups",
         type_=bool,
         default=True,
@@ -93,7 +98,7 @@ def test_fbxproperty_is_available(monkeypatch: MonkeyPatch) -> None:
 
 def test_fbxproperty_get_available(monkeypatch: MonkeyPatch) -> None:
     """It get the correct value when available and ``None`` when not available."""
-    fbx_prop = mayafbx.FbxProperty(
+    fbx_prop = FbxProperty(
         "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups",
         type_=bool,
         default=True,
@@ -110,7 +115,7 @@ def test_fbxproperty_get_available(monkeypatch: MonkeyPatch) -> None:
 def test_fbxproperty_set_available(monkeypatch: MonkeyPatch) -> None:
     """It set the value when available and skip when not."""
     command = "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups"
-    fbx_prop = mayafbx.FbxProperty(
+    fbx_prop = FbxProperty(
         command,
         type_=bool,
         default=True,
@@ -133,8 +138,8 @@ def test_fbxoptions_from_scene() -> None:
     """It initialize FbxOptions instance from scene value."""
     command = "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups"
 
-    class TestOptions(mayafbx.FbxOptions):
-        smoothing_groups = mayafbx.FbxPropertyField(command, type=bool, default=False)
+    class TestOptions(FbxOptions):
+        smoothing_groups = FbxPropertyField(command, type=bool, default=False)
 
     mel.eval(f"{command} -v true")
     assert TestOptions.from_scene().smoothing_groups is True
@@ -147,8 +152,8 @@ def test_fbxoptions_init_kwargs() -> None:
     """It accept fields as init kwargs."""
     command = "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups"
 
-    class TestOptions(mayafbx.FbxOptions):
-        smoothing_groups = mayafbx.FbxPropertyField(command, type=bool, default=False)
+    class TestOptions(FbxOptions):
+        smoothing_groups = FbxPropertyField(command, type=bool, default=False)
 
     assert TestOptions(smoothing_groups=True).smoothing_groups is True
     assert TestOptions(smoothing_groups=False).smoothing_groups is False
@@ -157,13 +162,13 @@ def test_fbxoptions_init_kwargs() -> None:
 def test_fbxoptions_iter() -> None:
     """It iter FbxProperties in FbxOptions instance."""
 
-    class TestOptions(mayafbx.FbxOptions):
-        smoothing_groups = mayafbx.FbxPropertyField(
+    class TestOptions(FbxOptions):
+        smoothing_groups = FbxPropertyField(
             "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups",
             type=bool,
             default=False,
         )
-        hard_edges = mayafbx.FbxPropertyField(
+        hard_edges = FbxPropertyField(
             command="FBXProperty Export|IncludeGrp|Geometry|expHardEdges",
             type=bool,
             default=False,
@@ -178,25 +183,25 @@ def test_apply_options() -> None:
     """It apply FBXProperties in option instance."""
     command = "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups"
 
-    class TestOptions(mayafbx.FbxOptions):
-        smoothing_groups = mayafbx.FbxPropertyField(command, type=bool, default=False)
+    class TestOptions(FbxOptions):
+        smoothing_groups = FbxPropertyField(command, type=bool, default=False)
 
     options = TestOptions()
 
     options.smoothing_groups = True
-    mayafbx.apply_options(options)
+    apply_options(options)
     assert mel.eval(f"{command} -q") == 1
 
     options.smoothing_groups = False
-    mayafbx.apply_options(options)
+    apply_options(options)
     assert mel.eval(f"{command} -q") == 0
 
 
 def test_fbxoptions_get_set() -> None:
     """It can get and set instance option."""
 
-    class TestOptions(mayafbx.FbxOptions):
-        smoothing_groups = mayafbx.FbxPropertyField(
+    class TestOptions(FbxOptions):
+        smoothing_groups = FbxPropertyField(
             "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups",
             type=bool,
             default=False,
@@ -216,15 +221,15 @@ def test_applied_options() -> None:
     """It apply FBXProperties in option instance during context."""
     command = "FBXProperty Export|IncludeGrp|Geometry|SmoothingGroups"
 
-    class TestOptions(mayafbx.FbxOptions):
-        smoothing_groups = mayafbx.FbxPropertyField(command, type=bool, default=False)
+    class TestOptions(FbxOptions):
+        smoothing_groups = FbxPropertyField(command, type=bool, default=False)
 
     mel.eval(f"{command} -v false")
     assert mel.eval(f"{command} -q") == 0
 
     options = TestOptions()
     options.smoothing_groups = True
-    with mayafbx.applied_options(options):
+    with applied_options(options):
         assert mel.eval(f"{command} -q") == 1
 
     assert mel.eval(f"{command} -q") == 0
@@ -255,13 +260,13 @@ def test_fbximportoptions_valid_defaults() -> None:
 def test_fbxexportoptions_can_be_applied() -> None:
     """It can apply default `FbxExportOptions`."""
     options = mayafbx.FbxExportOptions()
-    mayafbx.apply_options(options)
+    apply_options(options)
 
 
 def test_fbximportoptions_can_be_applied() -> None:
     """It can apply default `FbxImportOptions`."""
     options = mayafbx.FbxImportOptions()
-    mayafbx.apply_options(options)
+    apply_options(options)
 
 
 def test_run_mel_command_raise_exception() -> None:

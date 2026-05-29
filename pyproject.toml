@@ -103,12 +103,8 @@ lint.per-file-ignores."tests/**/*" = [
   "PLC0415",  # `import` should be at the top-level of a file
   "S101",  # Use of `assert` detected
 ]
-lint.per-file-ignores."docs/**/*.py" = [
-  "INP001",  # File is part of an implicit namespace package. Add an `__init__.py`
-]
-lint.per-file-ignores."docs/_ext/*.py" = [
-  "S101",  # Use of `assert` detected
-  "PLC0415",  # `import` should be at the top-level of a file
+lint.per-file-ignores."docs/fbx_property_field/*.py" = [
+  "D104",  # Missing docstring in public package
 ]
 
 [tool.rumdl]

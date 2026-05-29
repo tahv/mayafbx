@@ -27,6 +27,7 @@ __all__ = (
     "QuaternionInterpolation",
     "SamplingRate",
     "SkeletonDefinition",
+    "StrEnum",
     "UpAxis",
 )
 

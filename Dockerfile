@@ -7,6 +7,6 @@ ENV UV_PYTHON=/usr/autodesk/maya/bin/mayapy
 ENV SETUPTOOLS_SCM_PRETEND_VERSION=0.0.0
 WORKDIR /app
 COPY . .
-RUN uv export --group dev --no-hashes | uv pip install --system -r -
+RUN uv export --only-group test --only-group types --no-hashes | uv pip install --system -r -
 ENV FORCE_COLOR=1
 CMD ["mayapy", "-ic", "import maya.standalone; maya.standalone.initialize(); from maya import cmds; cmds.loadPlugin('fbxmaya')"]

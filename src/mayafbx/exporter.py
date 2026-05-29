@@ -29,7 +29,9 @@ from mayafbx.utils import (
 __all__ = (
     "FbxExportOptions",
     "export_fbx",
+    "get_export_takes",
     "restore_export_preset",
+    "set_export_takes",
 )
 
 
