@@ -333,7 +333,7 @@ def test_export_import_animated_cube(tmp_path: Path) -> None:
     mayafbx.import_fbx(filepath, import_options)
     assert cmds.keyframe(f"{cube}.translateX", query=True, keyframeCount=True) == 2
 
-    key_values = cmds.keyframe(
+    key_values = cmds.keyframe(  # type: ignore[call-overload]
         f"{cube}.translateX",
         query=True,
         valueChange=True,
@@ -417,7 +417,7 @@ def test_export_import_take(tmp_path: Path) -> None:
     mayafbx.import_fbx(filepath, import_options, take=1)
     assert cmds.keyframe(f"{cube}.translateX", query=True, keyframeCount=True) == 2
 
-    key_values = cmds.keyframe(
+    key_values = cmds.keyframe(  # type: ignore[call-overload]
         f"{cube}.translateX",
         query=True,
         valueChange=True,
@@ -433,7 +433,7 @@ def test_export_import_take(tmp_path: Path) -> None:
     mayafbx.import_fbx(filepath, import_options, take=2)
     assert cmds.keyframe(f"{cube}.translateX", query=True, keyframeCount=True) == 2
 
-    key_values = cmds.keyframe(
+    key_values = cmds.keyframe(  # type: ignore[call-overload]
         f"{cube}.translateX",
         query=True,
         valueChange=True,
