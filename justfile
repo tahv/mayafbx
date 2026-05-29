@@ -1,4 +1,5 @@
 set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
+set script-interpreter := ['uv', 'run', '--script']
 
 # List available recipes
 [default]
@@ -70,3 +71,16 @@ docker-build maya="2025":
         --tag "mayafbx:dev-{{ maya }}" \
         --build-arg MAYA_VERSION={{ maya }} \
         .
+
+# Generate `.github/README.md`
+[script]
+github-readme:
+  import sys, pathlib
+  header = """\
+  > [!IMPORTANT]
+  > Development takes place on GitLab:
+  > [gitlab.com/tahv/mayafbx](https://gitlab.com/tahv/mayafbx).
+
+  """
+  body = pathlib.Path('README.md').read_text()
+  pathlib.Path(".github/README.md").write_text(f"{header}{body}")
