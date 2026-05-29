@@ -1,0 +1,237 @@
+# yaml-language-server: $schema=https://gitlab.com/gitlab-org/gitlab/-/raw/master/app/assets/javascripts/editor/schema/ci.json
+
+stages:
+  - test
+  - build
+  - publish
+
+# rules -----------------------------------------------------------------------
+
+.rule:merge-request-manual: &rule-merge-request-manual
+  if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  when: manual
+
+.rule:default-branch-manual: &rule-default-branch-manual
+  if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+  when: manual
+
+.rule:on-tag: &rule-on-tag
+  if: '$CI_COMMIT_TAG'
+
+# jobs ------------------------------------------------------------------------
+
+lint:
+  stage: test
+  image: ghcr.io/astral-sh/ruff:alpine
+  rules:
+    - *rule-merge-request-manual
+    - *rule-default-branch-manual
+  dependencies: []
+  interruptible: true
+  allow_failure: true
+  variables:
+    FORCE_COLOR: 1
+  script:
+    - ruff check --output-format gitlab --output-file codequality.json --exit-zero
+    - ruff check --output-format concise
+  artifacts:
+    when: always
+    reports:
+      codequality: codequality.json
+
+format:
+  stage: test
+  rules:
+    - *rule-merge-request-manual
+    - *rule-default-branch-manual
+  image: ghcr.io/astral-sh/ruff:alpine
+  dependencies: []
+  interruptible: true
+  allow_failure: true
+  variables:
+    FORCE_COLOR: 1
+  script:
+    - ruff format --check --output-format gitlab > codequality.json || true
+    - ruff format --check --output-format full
+  artifacts:
+    when: always
+    reports:
+      codequality: codequality.json
+
+test:
+  stage: test
+  image: tahv/mayapy:${MAYA_VERSION}
+  parallel:
+    matrix:
+      - MAYA_VERSION:
+        - "2022"
+        - "2025"
+  rules:
+    - *rule-merge-request-manual
+    - *rule-default-branch-manual
+  dependencies: []
+  interruptible: true
+  variables:
+    SETUPTOOLS_SCM_PRETEND_VERSION: "0.0.0" # https://github.com/ofek/hatch-vcs/issues/108
+    FORCE_COLOR: 1
+    UV_PYTHON: /usr/autodesk/maya/bin/mayapy
+  before_script:
+    - ln -s /lib/x86_64-linux-gnu/libreadline.so.8 /lib/x86_64-linux-gnu/libreadline.so.7
+    - wget -qO- https://astral.sh/uv/install.sh | sh
+    - source $HOME/.local/bin/env
+  script:
+    - uv export --only-group test --only-group types --no-hashes -o requirements.txt
+    - uv pip install --system -r requirements.txt
+    - mayapy -m coverage run --parallel -m pytest -vv --junitxml junit.xml
+  artifacts:
+    when: always
+    paths: [".coverage.*"]
+    reports:
+      junit: junit.xml
+
+coverage:
+  stage: test
+  image: ghcr.io/astral-sh/uv:python3.14-alpine
+  rules:
+    - *rule-merge-request-manual
+    - *rule-default-branch-manual
+  needs: ["test"]
+  interruptible: true
+  allow_failure: true
+  script:
+    - uvx coverage combine
+    - uvx coverage xml --fail-under=0
+    - uvx coverage report
+  coverage: '/TOTAL.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    when: always
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+
+mypy:
+  stage: test
+  rules:
+    - *rule-merge-request-manual
+    - *rule-default-branch-manual
+  image: ghcr.io/astral-sh/uv:python3.14-trixie
+  dependencies: []
+  interruptible: true
+  allow_failure: true
+  variables:
+    FORCE_COLOR: 1
+    SETUPTOOLS_SCM_PRETEND_VERSION: "0.0.0"
+    TERM: ansi # https://github.com/python/mypy/issues/13817
+  script:
+    - uv sync --no-default-groups --group types --group test
+    - uv run --no-sync -m mypy --output json > mypy-report.json || true
+    - uvx mypy-gitlab-code-quality < mypy-report.json > codequality.json
+    - uv run --no-sync -m mypy
+  artifacts:
+    when: always
+    reports:
+      codequality: codequality.json
+
+package:
+  stage: build
+  rules:
+    - *rule-on-tag
+    - <<: *rule-default-branch-manual
+      needs: []
+  image: ghcr.io/astral-sh/uv:python3.14-trixie
+  interruptible: true
+  variables:
+    ATTEST_BUILD_ARTIFACTS: true # TODO(tga): experimental
+  script: # derived from: https://github.com/hynek/build-and-inspect-python-package
+    # the '.gitignore' litters the provenance attestation
+    - uv build --clear --no-create-gitignore --out-dir dist
+    - uvx check-wheel-contents dist/*.whl
+    - uvx twine check --strict dist/*
+  artifacts:
+    paths: ["dist/"]
+
+# TODO(tga): sign package
+# https://docs.gitlab.com/user/packages/package_registry/pypi_cosign_tutorial/
+pypi:
+  stage: publish
+  rules:
+    - *rule-on-tag
+  image: ghcr.io/astral-sh/uv:alpine
+  dependencies: [package]
+  id_tokens:
+    PYPI_ID_TOKEN:
+      aud: pypi
+  script:
+    - apk update && apk add --no-cache curl jq
+    - uv publish
+
+test-pypi:
+  stage: publish
+  rules:
+    - *rule-default-branch-manual
+  image: ghcr.io/astral-sh/uv:alpine
+  dependencies: [package]
+  id_tokens:
+    TESTPYPI_ID_TOKEN:
+      aud: testpypi
+  variables:
+    UV_PUBLISH_URL: https://test.pypi.org/legacy/
+  script: uv publish
+
+generic:
+  stage: publish
+  rules:
+    - *rule-on-tag
+  image: alpine:latest
+  dependencies: [package]
+  variables:
+    PACKAGE_NAME: mayafbx
+    URL_ZIP: "$CI_API_V4_URL/projects/$CI_PROJECT_ID/packages/generic/$PACKAGE_NAME/$CI_COMMIT_TAG/$PACKAGE_NAME-$CI_COMMIT_TAG.zip"
+  id_tokens:
+    PYPI_ID_TOKEN:
+      aud: pypi
+  before_script:
+    - apk update && apk add --no-cache curl
+  script:
+    - >
+      curl --location
+      --header "JOB-TOKEN: ${CI_JOB_TOKEN}"
+      --upload-file "dists/${PACKAGE_NAME}-${CI_COMMIT_TAG}.zip" ${URL_ZIP}
+    - echo "URL_ZIP=${URL_ZIP}" >> generic.env
+  artifacts:
+    reports:
+      dotenv: generic.env
+
+gitlab-release:
+  stage: publish
+  rules:
+    - *rule-on-tag
+  needs: ["pypi", "generic"]
+  image: registry.gitlab.com/gitlab-org/cli:latest # alpine
+  variables:
+    GIT_DEPTH: 0  # find previous tag
+    PACKAGE_NAME: mayafbx
+  script:
+    - apk update && apk add --no-cache git curl
+    - curl -LsSf https://astral.sh/uv/install.sh | sh
+    - source $HOME/.local/bin/env
+    - uvx hed --softbreak --tag "$CI_COMMIT_TAG" > RELEASE.md
+    - RESPONSE=$( curl https://pypi.org/pypi/$PACKAGE_NAME/json )
+    - URL_SDIST=$( echo $RESPONSE | jq -r '.releases."$CI_COMMIT_TAG".[] | select(.packagetype=="sdist").url' )
+    - URL_WHEEL=$( echo $RESPONSE | jq -r '.releases."$CI_COMMIT_TAG".[] | select(.packagetype=="bdist_wheel").url' )
+  release:
+    tag_name: "$CI_COMMIT_TAG"
+    name: "$CI_COMMIT_TAG"
+    description: "RELEASE.md"
+    assets:
+      links:
+        - name: bdist_wheel
+          link_type: package
+          url: "$URL_WHEEL"
+        - name: sdist
+          link_type: package
+          url: "$URL_SDIST"
+        - name: zip
+          link_type: package
+          url: "$URL_ZIP"

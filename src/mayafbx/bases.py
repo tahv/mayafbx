@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from contextlib import contextmanager
-from typing import TYPE_CHECKING, Callable, Generic, Iterator, TypeVar, overload
+from typing import TYPE_CHECKING, Any, Callable, Generic, Iterator, TypeVar, overload
 
 from mayafbx.enums import StrEnum
 from mayafbx.utils import get_maya_version, logger, run_mel_command
@@ -15,6 +15,7 @@ __all__ = (
     "FbxPropertyField",
     "applied_options",
     "apply_options",
+    "run_mel_command",
 )
 
 _T = TypeVar("_T", bool, str, float, int, StrEnum)
@@ -178,7 +179,7 @@ class FbxOptions:
                 descriptor.__set__(self, value)
         return self
 
-    def __iter__(self) -> Iterator[tuple[FbxProperty, object]]:
+    def __iter__(self) -> Iterator[tuple[FbxProperty[Any], object]]:
         for descriptor in self.__class__.__dict__.values():
             if isinstance(descriptor, FbxPropertyField):
                 value = descriptor.__get__(self, type(self))
