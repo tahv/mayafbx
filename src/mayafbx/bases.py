@@ -91,7 +91,11 @@ class FbxProperty(Generic[_T]):
             value_ = str(value)
 
         args = [self._command]
-        if self._command not in {"FBXExportUpAxis", "FBXExportAxisConversionMethod"}:
+        if self._command not in {
+            "FBXExportUpAxis",
+            "FBXExportAxisConversionMethod",
+            "FBXImportScaleFactor",
+        }:
             args += ["-v"]
         args += [value_]
 

@@ -866,7 +866,7 @@ dev = [
     { name = "mkdocstrings-python", marker = "python_full_version >= '3.12'", specifier = ">=2.0.3" },
     { name = "mypy", specifier = ">=1.4.1" },
     { name = "pytest", specifier = ">=7.4.4" },
-    { name = "types-maya", specifier = ">=0.6.0" },
+    { name = "types-maya", specifier = ">=0.6.1" },
     { name = "zensical", marker = "python_full_version >= '3.12'", specifier = ">=0.0.43" },
 ]
 docs = [
@@ -880,7 +880,7 @@ test = [
 ]
 types = [
     { name = "mypy", specifier = ">=1.4.1" },
-    { name = "types-maya", specifier = ">=0.6.0" },
+    { name = "types-maya", specifier = ">=0.6.1" },
 ]
 
 [[package]]
@@ -1702,11 +1702,11 @@ wheels = [
 
 [[package]]
 name = "types-maya"
-version = "0.6.0"
+version = "0.6.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/83/8f/2533a1f8cd58a3f1fe10b93235e8a2c6c9ed174bee672b4f2f241780973a/types_maya-0.6.0.tar.gz", hash = "sha256:e6162f533936e3da3ee6891031d87091b20bfe4d165e2cac9d3dc9120b5510de", size = 412303, upload-time = "2026-05-29T18:38:14.447Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/58/c2/7fbc1adb2efada5c32573932d869dfb2cb5909dbdf50643330154ea5ba46/types_maya-0.6.1.tar.gz", hash = "sha256:655a5f541dd3a96e05b2ca7ca08eeec961b347d26bcd7e2705bfe6ef2b2e68ec", size = 412410, upload-time = "2026-06-01T19:42:31.79Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/e6/6e/243cb3f42602032872ce396c6040d5c1d0e65b312a6b54709745fc08355a/types_maya-0.6.0-py3-none-any.whl", hash = "sha256:8a8d072894d5784f71ac3b4a6cd6783f987eefba32a6a6972ae4b16aa64fa801", size = 404004, upload-time = "2026-05-29T18:38:13.07Z" },
+    { url = "https://files.pythonhosted.org/packages/06/c8/9bbe511d32816b3a6e936e20dadedda8240b1dbc8b2f762b4fa04131f5ac/types_maya-0.6.1-py3-none-any.whl", hash = "sha256:b98c2e3e0e6baab9b0e9961019f762ec5297c295b4951a3e20c7f4413b19902e", size = 404039, upload-time = "2026-06-01T19:42:30.657Z" },
 ]
 
 [[package]]

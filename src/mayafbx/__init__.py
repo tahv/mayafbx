@@ -2,7 +2,6 @@
 
 from mayafbx.enums import (
     AxisConversionMethod,
-    ConvertUnit,
     FileFormat,
     FileVersion,
     ForcedFileAxis,
@@ -23,11 +22,10 @@ from mayafbx.importer import (
     import_fbx,
     restore_import_preset,
 )
-from mayafbx.utils import Take
+from mayafbx.utils import Take, get_scale_factor
 
 __all__ = (
     "AxisConversionMethod",
-    "ConvertUnit",
     "FbxExportOptions",
     "FbxImportOptions",
     "FileFormat",
@@ -41,6 +39,7 @@ __all__ = (
     "Take",
     "UpAxis",
     "export_fbx",
+    "get_scale_factor",
     "import_fbx",
     "restore_export_preset",
     "restore_import_preset",

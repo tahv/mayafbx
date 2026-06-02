@@ -284,6 +284,26 @@ def test_collect_fbx_properties_returns_list_of_fbx_properties() -> None:
     assert "path" in data[0]
 
 
+def test_import_scale_factor(tmp_path: Path) -> None:
+    """It can scale imported scene."""
+    cube = cmds.polyCube()[0]
+    filepath = tmp_path / "selected_model.fbx"
+
+    cmds.select(cube)
+    export_options = mayafbx.FbxExportOptions()
+    mayafbx.export_fbx(filepath, export_options, selection=True)
+
+    cmds.delete(cube)
+
+    import_options = mayafbx.FbxImportOptions()
+    import_options.automatic_units = False
+    import_options.scale_factor = mayafbx.get_scale_factor("m")
+    mayafbx.import_fbx(filepath, import_options)
+
+    value = cmds.xform(cube, query=True, scale=True, worldSpace=True)  # type: ignore[call-overload]
+    assert value == [0.01, 0.01, 0.01]
+
+
 def test_export_selected_model(tmp_path: Path) -> None:
     """It export only selected model."""
     cube_1 = cmds.polyCube()[0]
@@ -449,3 +469,11 @@ def test_up_axis_from_scene() -> None:
 
     OpenMaya.MGlobal.setZAxisUp()
     assert mayafbx.UpAxis.from_scene() == mayafbx.UpAxis.Z
+
+
+def test_get_scale_factor() -> None:
+    """It return the scale factor."""
+    assert mayafbx.get_scale_factor("mm") == 10.0
+    assert mayafbx.get_scale_factor("cm") == 1.0
+    assert mayafbx.get_scale_factor("mm", "m") == 1000
+    assert mayafbx.get_scale_factor("m", "mm") == 0.001

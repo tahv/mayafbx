@@ -4,7 +4,6 @@ import os
 
 from mayafbx.bases import FbxOptions, FbxPropertyField, applied_options, run_mel_command
 from mayafbx.enums import (
-    ConvertUnit,
     ForcedFileAxis,
     MergeMode,
     QuaternionInterpolation,
@@ -464,17 +463,24 @@ class FbxImportOptions(FbxOptions):
     - This does not change the settings in Maya.
     """
 
-    convert_units_to = FbxPropertyField(
-        "FBXProperty Import|AdvOptGrp|UnitsGrp|UnitsSelector",
-        type=ConvertUnit,
-        default=ConvertUnit.from_scene,
+    scale_factor = FbxPropertyField(
+        "FBXImportScaleFactor",
+        type=float,
+        default=1.0,
     )
-    """Specify the units to which you want to convert the incoming data.
+    """Scale Factor applied to the entire incoming scene.
 
-    Affects the Scale Factor value applied to the imported data.
+    The Maya FBX plug-in compares the units used in the host application
+    with the units used in the file imported to determine the Scale Factor value.
+    The plug-in then proposes a unit conversion that matches the system units
+    in the host application.
+    The Scale Factor is the result of this calculation.
 
-    Default to the Maya System Units,
-    as set in `Window > Settings/Preferences > Preferences > Settings`.
+    For example, if you import a scene from software that used centimeters
+    as the working units to software that uses feet as units,
+    the Scale Factor will be `2.54`.
+
+    A Scale Factor is 1.0 does not apply a scale conversion.
 
     Only evaluated if [automatic_units][mayafbx.FbxImportOptions.automatic_units]
     is `False`.
