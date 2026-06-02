@@ -143,9 +143,8 @@ package:
   interruptible: true
   variables:
     ATTEST_BUILD_ARTIFACTS: true # TODO(tga): experimental
-  script: # derived from: https://github.com/hynek/build-and-inspect-python-package
-    # the '.gitignore' litters the provenance attestation
-    - uv build --clear --no-create-gitignore --out-dir dist
+  script:
+    - uvx hatch@latest build -t wheel -t sdist -t zipped-directory
     - uvx check-wheel-contents dist/*.whl
     - uvx twine check --strict dist/*
   artifacts:
