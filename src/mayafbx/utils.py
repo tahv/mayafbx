@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 import re
-from typing import TYPE_CHECKING, NamedTuple, cast
+from typing import TYPE_CHECKING, Callable, NamedTuple, cast
 
 from maya import cmds, mel
 from maya.api import OpenMaya, OpenMayaAnim
@@ -15,7 +15,9 @@ logger = logging.getLogger("mayafbx")
 
 
 if TYPE_CHECKING:
-    from typing_extensions import Required, TypedDict
+    from typing_extensions import Literal, Required, TypeAlias, TypedDict
+
+    StrDistance: TypeAlias = Literal["mm", "cm", "m", "km", "in", "ft", "yd", "mi"]
 
     class FbxPropDict(TypedDict, total=False):
         """Content of a `FBXProperties` line."""
@@ -26,7 +28,52 @@ if TYPE_CHECKING:
         possible: list[str]
 
 
-__all__ = ("Take",)
+__all__ = ("Take", "get_scale_factor")
+
+
+MDISTANCE_CONVERSION: dict[
+    OpenMaya.MDistance.Unit,
+    Callable[[OpenMaya.MDistance], float],
+] = {
+    OpenMaya.MDistance.kMillimeters: OpenMaya.MDistance.asMillimeters,
+    OpenMaya.MDistance.kCentimeters: OpenMaya.MDistance.asCentimeters,
+    OpenMaya.MDistance.kMeters: OpenMaya.MDistance.asMeters,
+    OpenMaya.MDistance.kKilometers: OpenMaya.MDistance.asKilometers,
+    OpenMaya.MDistance.kInches: OpenMaya.MDistance.asInches,
+    OpenMaya.MDistance.kFeet: OpenMaya.MDistance.asFeet,
+    OpenMaya.MDistance.kYards: OpenMaya.MDistance.asYards,
+    OpenMaya.MDistance.kMiles: OpenMaya.MDistance.asMiles,
+}
+
+
+STR_DISTANCE_TO_MDISTANCE: dict[StrDistance, OpenMaya.MDistance.Unit] = {
+    "mm": OpenMaya.MDistance.kMillimeters,
+    "cm": OpenMaya.MDistance.kCentimeters,
+    "m": OpenMaya.MDistance.kMeters,
+    "km": OpenMaya.MDistance.kKilometers,
+    "in": OpenMaya.MDistance.kInches,
+    "ft": OpenMaya.MDistance.kFeet,
+    "yd": OpenMaya.MDistance.kYards,
+    "mi": OpenMaya.MDistance.kMiles,
+}
+
+
+def get_scale_factor(to: StrDistance, from_: StrDistance = "cm") -> float:
+    """Returns scale factor, calculate `from_` unit as `to` unit.
+
+    Utility for [FbxImportOptions.scale_factor][mayafbx.FbxImportOptions.scale_factor].
+    """
+    try:
+        unit_to = STR_DISTANCE_TO_MDISTANCE[to]
+    except KeyError as exc:
+        raise ValueError(to) from exc
+
+    try:
+        unit_from = STR_DISTANCE_TO_MDISTANCE[from_]
+    except KeyError as exc:
+        raise ValueError(from_) from exc
+
+    return MDISTANCE_CONVERSION[unit_to](OpenMaya.MDistance(1, unit_from))
 
 
 class Take(NamedTuple):

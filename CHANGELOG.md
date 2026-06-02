@@ -20,6 +20,10 @@
   narrow `export_fbx` type hint
 - [`25fff6a`](https://gitlab.com/tahv/mayafbx/-/commit/25fff6a) **fix:**
   fallback to `FbxPropertyField` default only when value is `None`
+- **BREAKING refactor!:** remove `mayafbx.ConvertUnit`
+- **BREAKING refactor!:** remove `mayafbx.FbxImportOptions.convert_units_to`
+- **feat:** add `mayafbx.FbxImportOptions.scale_factor`
+- **feat:** add `mayafbx.get_scale_factor`
 
 ## [1.0.0](https://gitlab.com/tahv/mayafbx/-/releases/1.1.0) - 2024-05-30
 

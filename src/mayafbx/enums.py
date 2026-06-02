@@ -18,7 +18,6 @@ else:
 
 __all__ = (
     "AxisConversionMethod",
-    "ConvertUnit",
     "FileFormat",
     "FileVersion",
     "ForcedFileAxis",
@@ -75,38 +74,6 @@ class QuaternionInterpolation(StrEnum):
     - The visual result will be different since it is now evaluated as a
       Euler interpolation.
     """
-
-
-class ConvertUnit(StrEnum):
-    """Supported units, change the scale factor on import/export."""
-
-    MILLIMETERS = "Millimeters"
-    CENTIMETERS = "Centimeters"
-    DECIMETERS = "Decimeters"
-    METERS = "Meters"
-    KILOMETERS = "Kilometers"
-    INCHES = "Inches"
-    FEET = "Feet"
-    YARDS = "Yards"
-    MILES = "Miles"
-
-    @classmethod
-    def from_scene(cls) -> ConvertUnit:
-        """Current Maya UI Unit.
-
-        As set in `Window > Settings/Preferences > Preferences > Settings`.
-        """
-        return {
-            OpenMaya.MDistance.kMillimeters: cls.MILLIMETERS,
-            OpenMaya.MDistance.kCentimeters: cls.CENTIMETERS,
-            # NOTE: 'OpenMaya.MDistance.kDecimeters' doesn't exists
-            OpenMaya.MDistance.kMeters: cls.METERS,
-            OpenMaya.MDistance.kKilometers: cls.KILOMETERS,
-            OpenMaya.MDistance.kInches: cls.INCHES,
-            OpenMaya.MDistance.kFeet: cls.FEET,
-            OpenMaya.MDistance.kYards: cls.YARDS,
-            OpenMaya.MDistance.kMiles: cls.MILES,
-        }[OpenMaya.MDistance.uiUnit()]
 
 
 class UpAxis(StrEnum):

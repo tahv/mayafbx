@@ -799,20 +799,6 @@ class FbxExportOptions(FbxOptions):
     Mel Command: `FBXExportInputConnections`.
     """
 
-    automatic_units = FbxPropertyField(
-        "FBXProperty Export|AdvOptGrp|UnitsGrp|DynamicScaleConversion",
-        default=True,
-        type=bool,
-    )
-    """Automatically set the units of the exported file to match the units of the scene.
-
-    If `True`, the plug-in applies no conversion (scale factor of `1.0`).
-
-    If you apply this option,
-    the [convert_units_to][mayafbx.FbxExportOptions.convert_units_to]
-    option won't have any effect.
-    """
-
     up_axis = FbxPropertyField(
         "FBXProperty Export|AdvOptGrp|AxisConvGrp|UpAxis",
         type=UpAxis,
