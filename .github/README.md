@@ -28,7 +28,9 @@
 pip install mayafbx
 ```
 
-You can also download and extract `mayafbx-{version}.zip` from
+<!--
+mayafbx is also available as an archive (`mayafbx-{version}.zip`)
+that can be downloaded from the
 [latest release](https://gitlab.com/tahv/mayafbx/-/releases).
 The zip archive have is structured as follows:
 
@@ -41,6 +43,7 @@ The zip archive have is structured as follows:
     ├── __init__.py
     └── ...
 ```
+-->
 
 ## Comparison
 
