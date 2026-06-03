@@ -146,7 +146,7 @@ package:
   script:
     - uvx hatch@latest build -t wheel -t sdist -t zipped-directory
     - uvx check-wheel-contents dist/*.whl
-    - uvx twine check --strict dist/*
+    - uvx twine check --strict dist/*.whl dist/*.tar.gz
   artifacts:
     paths: ["dist/"]
 
