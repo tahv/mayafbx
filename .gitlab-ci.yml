@@ -138,7 +138,7 @@ package:
   rules:
     - *rule-on-tag
     - <<: *rule-default-branch-manual
-      needs: []
+      needs: [] # TODO(tga): https://gitlab.com/gitlab-org/gitlab/-/work_items/598353
   image: ghcr.io/astral-sh/uv:python3.14-trixie
   interruptible: true
   variables:
@@ -162,8 +162,7 @@ pypi:
     PYPI_ID_TOKEN:
       aud: pypi
   script:
-    - apk update && apk add --no-cache curl jq
-    - uv publish
+    - uv publish dist/*.whl dist/*.tar.gz
 
 test-pypi:
   stage: publish
@@ -176,7 +175,8 @@ test-pypi:
       aud: testpypi
   variables:
     UV_PUBLISH_URL: https://test.pypi.org/legacy/
-  script: uv publish
+  script:
+    - uv publish dist/*.whl dist/*.tar.gz
 
 generic:
   stage: publish
