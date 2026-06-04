@@ -484,6 +484,9 @@ class FbxImportOptions(FbxOptions):
 
     Only evaluated if [automatic_units][mayafbx.FbxImportOptions.automatic_units]
     is `False`.
+
+    The helper function [mayafbx.get_scale_factor][]
+    may be used to calculate the scale factor.
     """
 
     axis_conversion = FbxPropertyField(
