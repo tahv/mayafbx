@@ -83,3 +83,7 @@ github-readme:
   """
   body = pathlib.Path('README.md').read_text()
   pathlib.Path(".github/README.md").write_text(f"{header}{body}")
+
+# A `git log` formatted as changelog lines
+cl *args:
+    git log --abbrev=8 --pretty='- [`%h`](https://gitlab.com/tahv/mayafbx/-/commit/%h) %s' {{ args }}
