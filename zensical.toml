@@ -30,7 +30,6 @@ features = [
   "navigation.path",  # render a breadcrumb navigation above the title of each page
   "navigation.sections",  # render top-level sections as groups in the sidebar
   "navigation.top",  # back-to-top button
-  "navigation.tracking",  # update the URL in the address bar with the active anchor
   "search.highlight",  # highlight search result occurrences
 ]
 icon.logo = "lucide/blocks"
