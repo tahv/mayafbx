@@ -15,7 +15,9 @@ logger = logging.getLogger("mayafbx")
 
 
 if TYPE_CHECKING:
-    from typing_extensions import Literal, Required, TypedDict
+    from typing_extensions import Literal, Required, TypeAlias, TypedDict
+
+    StrDistance: TypeAlias = Literal["mm", "cm", "m", "km", "in", "ft", "yd", "mi"]
 
     class FbxPropDict(TypedDict, total=False):
         """Content of a `FBXProperties` line."""
@@ -44,10 +46,7 @@ MDISTANCE_CONVERSION: dict[
 }
 
 
-STR_DISTANCE_TO_MDISTANCE: dict[
-    Literal["mm", "cm", "m", "km", "in", "ft", "yd", "mi"],
-    OpenMaya.MDistance.Unit,
-] = {
+STR_DISTANCE_TO_MDISTANCE: dict[StrDistance, OpenMaya.MDistance.Unit] = {
     "mm": OpenMaya.MDistance.kMillimeters,
     "cm": OpenMaya.MDistance.kCentimeters,
     "m": OpenMaya.MDistance.kMeters,
@@ -59,10 +58,7 @@ STR_DISTANCE_TO_MDISTANCE: dict[
 }
 
 
-def get_scale_factor(
-    to: Literal["mm", "cm", "m", "km", "in", "ft", "yd", "mi"],
-    from_: Literal["mm", "cm", "m", "km", "in", "ft", "yd", "mi"] = "cm",
-) -> float:
+def get_scale_factor(to: StrDistance, from_: StrDistance) -> float:
     """Returns scale factor, calculate `from_` unit as `to` unit.
 
     Utility for [FbxImportOptions.scale_factor][mayafbx.FbxImportOptions.scale_factor].
