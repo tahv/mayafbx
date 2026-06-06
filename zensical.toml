@@ -123,4 +123,7 @@ show_bases = false
 show_root_heading = true
 annotations_path = "source"
 docstring_section_style = "list"
-extensions = ["docs/fbx_property_field/__init__.py:FbxPropertyField"]
+extensions = [
+  "docs/fbx_property_field/__init__.py:FbxPropertyField",
+  "docs/extensions/unwrap_type_alias.py:UnwrapTypeAlias",
+]
