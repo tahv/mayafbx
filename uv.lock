@@ -535,6 +535,45 @@ wheels = [
 ]
 
 [[package]]
+name = "griffe"
+version = "2.0.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "griffecli", marker = "python_full_version >= '3.12'" },
+    { name = "griffelib", marker = "python_full_version >= '3.12'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/4a/49/eb6d2935e27883af92c930ed40cc4c69bcd32c402be43b8ca4ab20510f67/griffe-2.0.2.tar.gz", hash = "sha256:c5d56326d159f274492e9bf93a9895cec101155d944caa66d0fc4e0c13751b92", size = 293757, upload-time = "2026-03-27T11:34:52.205Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/94/c0/2bb018eecf9a83c68db9cd9fffd9dab25f102ad30ed869451046e46d1187/griffe-2.0.2-py3-none-any.whl", hash = "sha256:2b31816460aee1996af26050a1fc6927a2e5936486856707f55508e4c9b5960b", size = 5141, upload-time = "2026-03-27T11:34:47.721Z" },
+]
+
+[[package]]
+name = "griffe-modernized-annotations"
+version = "1.0.8"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "griffe", marker = "python_full_version >= '3.12'" },
+    { name = "typing-extensions", version = "4.15.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/34/89/70efdbdbf5ca13cf6919368b542de78b8d0f5cca77f04f533d9f89cd9639/griffe_modernized_annotations-1.0.8.tar.gz", hash = "sha256:f4cd757260d2ebdb96d361c8ab882015955225bc3edc4713073b5a81ddad75b0", size = 8409, upload-time = "2024-08-16T10:02:48.106Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b6/54/f2defd39a3e258abda26e6c0ec0611611c5757e97d73defd64a4e917f5e9/griffe_modernized_annotations-1.0.8-py3-none-any.whl", hash = "sha256:d84b2d03d9c3127c2548f1eaa04dc3eba6cde34c0a2c4ae64f627908984e973d", size = 12158, upload-time = "2024-08-16T10:02:46.917Z" },
+]
+
+[[package]]
+name = "griffecli"
+version = "2.0.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "colorama", marker = "python_full_version >= '3.12'" },
+    { name = "griffelib", marker = "python_full_version >= '3.12'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/79/e0/6a7d661d71bb043656a109b91d84a42b5342752542074ec83b16a6eb97f0/griffecli-2.0.2.tar.gz", hash = "sha256:40a1ad4181fc39685d025e119ae2c5b669acdc1f19b705fb9bf971f4e6f6dffb", size = 56281, upload-time = "2026-03-27T11:34:50.087Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2e/e8/90d93356c88ac34c20cb5edffca68138df55ca9bbd1a06eccfbcec8fdbe5/griffecli-2.0.2-py3-none-any.whl", hash = "sha256:0d44d39e59afa81e288a3e1c3bf352cc4fa537483326ac06b8bb6a51fd8303a0", size = 9500, upload-time = "2026-03-27T11:34:48.81Z" },
+]
+
+[[package]]
 name = "griffelib"
 version = "2.0.2"
 source = { registry = "https://pypi.org/simple" }
@@ -822,6 +861,7 @@ dev = [
     { name = "coverage", version = "7.6.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.8.*'" },
     { name = "coverage", version = "7.10.7", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.9.*'" },
     { name = "coverage", version = "7.13.5", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "griffe-modernized-annotations", marker = "python_full_version >= '3.12'" },
     { name = "mkdocstrings-python", marker = "python_full_version >= '3.12'" },
     { name = "mypy", version = "1.4.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.8'" },
     { name = "mypy", version = "1.14.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.8.*'" },
@@ -836,6 +876,7 @@ dev = [
 ]
 docs = [
     { name = "black", marker = "python_full_version >= '3.12'" },
+    { name = "griffe-modernized-annotations", marker = "python_full_version >= '3.12'" },
     { name = "mkdocstrings-python", marker = "python_full_version >= '3.12'" },
     { name = "zensical", marker = "python_full_version >= '3.12'" },
 ]
@@ -863,6 +904,7 @@ types = [
 dev = [
     { name = "black", marker = "python_full_version >= '3.12'", specifier = ">=26.5.1" },
     { name = "coverage", specifier = ">=7.2.7" },
+    { name = "griffe-modernized-annotations", marker = "python_full_version >= '3.12'", specifier = "==1.0.8" },
     { name = "mkdocstrings-python", marker = "python_full_version >= '3.12'", specifier = ">=2.0.3" },
     { name = "mypy", specifier = ">=1.4.1" },
     { name = "pytest", specifier = ">=7.4.4" },
@@ -871,6 +913,7 @@ dev = [
 ]
 docs = [
     { name = "black", marker = "python_full_version >= '3.12'", specifier = ">=26.5.1" },
+    { name = "griffe-modernized-annotations", marker = "python_full_version >= '3.12'", specifier = "==1.0.8" },
     { name = "mkdocstrings-python", marker = "python_full_version >= '3.12'", specifier = ">=2.0.3" },
     { name = "zensical", marker = "python_full_version >= '3.12'", specifier = ">=0.0.43" },
 ]

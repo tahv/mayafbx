@@ -28,6 +28,7 @@ dev = [
 docs = [
   "black>=26.5.1",
   "mkdocstrings-python>=2.0.3",
+  "griffe-modernized-annotations==1.0.8",
   "zensical>=0.0.43",
 ]
 test = [
