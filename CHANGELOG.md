@@ -5,7 +5,8 @@
 - [`d7f50ba3`](https://gitlab.com/tahv/mayafbx/-/commit/d7f50ba3) **docs:** do
   not update url while scrolling
 - [`0cc549b1`](https://gitlab.com/tahv/mayafbx/-/commit/0cc549b1) **docs:** adds
-  link to `get_scale_factor` in `FbxImportOptions.scale_factor`
+- [`be37b4f2`](https://gitlab.com/tahv/mayafbx/-/commit/be37b4f2) **docs:**
+  unwrap `StrDistance` TypeAlias into Literal.
 
 ## [2.0.0](https://gitlab.com/tahv/mayafbx/-/releases/2.0.0) - 2026-06-02
 
