@@ -69,6 +69,7 @@ test:
   rules:
     - *rule-merge-request-manual
     - *rule-default-branch-manual
+    - *rule-on-tag
   dependencies: []
   interruptible: true
   variables:
