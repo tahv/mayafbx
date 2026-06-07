@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [2.0.1](https://gitlab.com/tahv/mayafbx/-/releases/2.0.1) - 2026-06-07
+
 - [`d7f50ba3`](https://gitlab.com/tahv/mayafbx/-/commit/d7f50ba3) **docs:** do
   not update url while scrolling
 - [`0cc549b1`](https://gitlab.com/tahv/mayafbx/-/commit/0cc549b1) **docs:** adds
